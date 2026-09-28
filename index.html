@@ -290,7 +290,6 @@
           <div class="form-group">
             <label>نام مشتری</label>
             <input type="text" id="appointmentName" placeholder="مثلاً: سارا احمدی" autocomplete="off">
-            <div id="nameSuggestions" style="display:none;background:white;border:2px solid #f8bbd0;border-radius:10px;margin-top:5px;max-height:150px;overflow-y:auto;"></div>
           </div>
           <div class="grid-2" style="gap:10px;">
             <div class="form-group"><label>ساعت</label><input type="text" id="appointmentTime" placeholder="مثلاً 14:30" inputmode="numeric"></div>
@@ -1006,7 +1005,6 @@ function addAppointment() {
   const note = document.getElementById('appointmentNote').value.trim();
   const amount = parseFloat(document.getElementById('appointmentAmount').value) || 0;
 
-  // Get checked services
   const serviceCheckboxes = document.querySelectorAll('#appointmentServiceBox input[type="checkbox"]:checked');
   const services = Array.from(serviceCheckboxes).map(cb => cb.value);
 
@@ -1106,7 +1104,6 @@ function openEdit(type, id) {
   if (type === 'appointment') {
     title.textContent = '✏️ ویرایش نوبت';
 
-    // Build checkboxes for services
     const serviceOptions = ['اسپایکی','والیوم','کلاسیک','قهوه ای','خط چشمی','لیفت مژه','لیفت ابرو','مژه و ابرو','ریمو'];
     const itemServices = item.services || (item.service ? item.service.split(' + ') : []);
 
