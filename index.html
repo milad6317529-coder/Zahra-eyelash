@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>خدمات اکستنشن مژه زهرا مطهری</title>
- <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -182,10 +182,35 @@
   .week-event.appointment { background: #6a1b9a; }
   .week-day.today .week-event { background: rgba(255,255,255,0.25); }
 
-  /* Finance Selector */
   .finance-selector { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; background: linear-gradient(135deg, #fce4ec, #f3e5f5); padding: 12px; border-radius: 14px; }
   .finance-selector select { flex: 1; min-width: 100px; padding: 9px 10px; border: 2px solid #f8bbd0; border-radius: 10px; font-family: inherit; font-size: 13px; background: white; color: #6a1b9a; font-weight: bold; -webkit-appearance: none; }
   .finance-selector button { padding: 9px 14px; font-size: 13px; }
+
+  .service-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: white;
+    font-size: 12px;
+    color: #6a1b9a;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #fce4ec;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .service-check:hover { background: #fce4ec; }
+  .service-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #ad1457;
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
 
   .developer-signature {
     text-align: center;
@@ -272,15 +297,18 @@
             <div class="form-group"><label>مبلغ (تومان)</label><input type="number" id="appointmentAmount" placeholder="مثلاً: 500000" inputmode="numeric"></div>
           </div>
           <div class="form-group">
-            <label>نوع خدمات</label>
-            <select id="appointmentService">
-              <option>اکستنشن مژه کلاسیک</option>
-              <option>اکستنشن مژه والیوم</option>
-              <option>اکستنشن مژه هیبرید</option>
-              <option>لیفت و لمینت مژه</option>
-              <option>رنگ و مش مژه</option>
-              <option>ترمیم مژه</option>
-            </select>
+            <label>نوع خدمات (می‌تونی چند تا انتخاب کنی)</label>
+            <div id="appointmentServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">
+              <label class="service-check"><input type="checkbox" value="اسپایکی"> اسپایکی</label>
+              <label class="service-check"><input type="checkbox" value="والیوم"> والیوم</label>
+              <label class="service-check"><input type="checkbox" value="کلاسیک"> کلاسیک</label>
+              <label class="service-check"><input type="checkbox" value="قهوه ای"> قهوه ای</label>
+              <label class="service-check"><input type="checkbox" value="خط چشمی"> خط چشمی</label>
+              <label class="service-check"><input type="checkbox" value="لیفت مژه"> لیفت مژه</label>
+              <label class="service-check"><input type="checkbox" value="لیفت ابرو"> لیفت ابرو</label>
+              <label class="service-check"><input type="checkbox" value="مژه و ابرو"> مژه و ابرو</label>
+              <label class="service-check"><input type="checkbox" value="ریمو"> ریمو</label>
+            </div>
           </div>
           <div class="form-group">
             <label>وضعیت پرداخت</label>
@@ -974,23 +1002,29 @@ function renderExpenseHTML(e) {
 function addAppointment() {
   const name = document.getElementById('appointmentName').value.trim();
   const time = document.getElementById('appointmentTime').value.trim();
-  const service = document.getElementById('appointmentService').value;
   const payment = document.getElementById('appointmentPayment').value;
   const note = document.getElementById('appointmentNote').value.trim();
   const amount = parseFloat(document.getElementById('appointmentAmount').value) || 0;
 
+  // Get checked services
+  const serviceCheckboxes = document.querySelectorAll('#appointmentServiceBox input[type="checkbox"]:checked');
+  const services = Array.from(serviceCheckboxes).map(cb => cb.value);
+
   if (!name) { showToast('⚠️ نام مشتری را وارد کنید'); return; }
+  if (services.length === 0) { showToast('⚠️ حداقل یه خدمات انتخاب کنید'); return; }
 
   const hInfo = getHolidayInfo(selJY, selJM, selJD);
   if (hInfo.isHoliday && !confirm('این روز تعطیل است (' + hInfo.title + '). مطمئنی؟')) return;
 
   const code = getCustomerCode(name);
+  const service = services.join(' + ');
 
   data.appointments.push({
     id: Date.now().toString() + Math.random().toString(36).slice(2,6),
     key: jalaliKey(selJY, selJM, selJD),
     jy: selJY, jm: selJM, jd: selJD,
     name, time, service, payment, note, amount, code,
+    services: services,
     repairStatus: null, repairLateDays: null,
     createdAt: Date.now()
   });
@@ -1002,6 +1036,7 @@ function addAppointment() {
   document.getElementById('appointmentTime').value = '';
   document.getElementById('appointmentAmount').value = '';
   document.getElementById('appointmentNote').value = '';
+  document.querySelectorAll('#appointmentServiceBox input[type="checkbox"]').forEach(cb => cb.checked = false);
 
   showToast('✅ نوبت ثبت شد');
 }
@@ -1070,15 +1105,25 @@ function openEdit(type, id) {
 
   if (type === 'appointment') {
     title.textContent = '✏️ ویرایش نوبت';
+
+    // Build checkboxes for services
+    const serviceOptions = ['اسپایکی','والیوم','کلاسیک','قهوه ای','خط چشمی','لیفت مژه','لیفت ابرو','مژه و ابرو','ریمو'];
+    const itemServices = item.services || (item.service ? item.service.split(' + ') : []);
+
+    let serviceBoxHTML = '<div id="editServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">';
+    serviceOptions.forEach(s => {
+      const isChecked = itemServices.includes(s) || (item.service === s);
+      serviceBoxHTML += '<label class="service-check"><input type="checkbox" value="' + s + '" ' + (isChecked ? 'checked' : '') + '> ' + s + '</label>';
+    });
+    serviceBoxHTML += '</div>';
+
     body.innerHTML =
       '<div class="form-group"><label>نام مشتری</label><input type="text" id="editName" value="' + escapeHtml(item.name) + '"></div>' +
       '<div class="grid-2" style="gap:10px;">' +
         '<div class="form-group"><label>ساعت</label><input type="text" id="editTime" value="' + (item.time||'') + '" placeholder="14:30"></div>' +
         '<div class="form-group"><label>مبلغ</label><input type="number" id="editAmount" value="' + (item.amount||0) + '" inputmode="numeric"></div>' +
       '</div>' +
-      '<div class="form-group"><label>خدمات</label><select id="editService">' +
-        ['اکستنشن مژه کلاسیک','اکستنشن مژه والیوم','اکستنشن مژه هیبرید','لیفت و لمینت مژه','رنگ و مش مژه','ترمیم مژه'].map(s => '<option ' + (s===item.service?'selected':'') + '>' + s + '</option>').join('') +
-      '</select></div>' +
+      '<div class="form-group"><label>خدمات (می‌تونی چند تا انتخاب کنی)</label>' + serviceBoxHTML + '</div>' +
       '<div class="form-group"><label>وضعیت پرداخت</label><select id="editPayment">' +
         '<option value="pending" ' + (item.payment==='pending'?'selected':'') + '>در انتظار</option>' +
         '<option value="paid" ' + (item.payment==='paid'?'selected':'') + '>پرداخت شده</option>' +
@@ -1111,10 +1156,15 @@ function saveEdit() {
   if (!item) return;
 
   if (editingItem.type === 'appointments') {
+    const editCheckboxes = document.querySelectorAll('#editServiceBox input[type="checkbox"]:checked');
+    const editServices = Array.from(editCheckboxes).map(cb => cb.value);
+    if (editServices.length === 0) { showToast('⚠️ حداقل یه خدمات انتخاب کنید'); return; }
+
     item.name = document.getElementById('editName').value.trim();
     item.time = document.getElementById('editTime').value.trim();
     item.amount = parseFloat(document.getElementById('editAmount').value) || 0;
-    item.service = document.getElementById('editService').value;
+    item.services = editServices;
+    item.service = editServices.join(' + ');
     item.payment = document.getElementById('editPayment').value;
     item.note = document.getElementById('editNote').value.trim();
     item.code = getCustomerCode(item.name);
