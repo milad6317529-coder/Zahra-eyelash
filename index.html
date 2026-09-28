@@ -249,13 +249,6 @@
       <div id="repairAlertList"></div>
     </div>
 
-    <div class="grid-4" style="margin-bottom: 20px;">
-      <div class="stat-card income"><div class="stat-label">دریافتی این ماه</div><div class="stat-value" id="dashIncome">۰ تومان</div></div>
-      <div class="stat-card expense"><div class="stat-label">خرج این ماه</div><div class="stat-value" id="dashExpense">۰ تومان</div></div>
-      <div class="stat-card profit"><div class="stat-label">سود این ماه</div><div class="stat-value" id="dashProfit">۰ تومان</div></div>
-      <div class="stat-card pending-amount"><div class="stat-label">در انتظار پرداخت</div><div class="stat-value" id="dashPending">۰ تومان</div></div>
-    </div>
-
     <div class="grid-2">
       <div class="card">
         <div class="card-title">📅 تقویم</div>
@@ -754,7 +747,6 @@ function renderCalendar() {
 
   renderSelectedDayItems();
   renderWeekView();
-  renderDashboardStats();
   renderRepairAlert();
   renderWeeklyRepairs();
 }
@@ -1381,16 +1373,6 @@ function renderWeeklyRepairs() {
 }
 
 // ==================== Finance ====================
-function renderDashboardStats() {
-  const income = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM && a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
-  const expense = data.expenses.filter(e => e.jy === currentJY && e.jm === currentJM).reduce((s, e) => s + (e.amount || 0), 0);
-  const pending = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM && a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
-
-  document.getElementById('dashIncome').textContent = money(income);
-  document.getElementById('dashExpense').textContent = money(expense);
-  document.getElementById('dashProfit').textContent = money(income - expense);
-  document.getElementById('dashPending').textContent = money(pending);
-}
 
 function renderFinance() {
   document.getElementById('financeMonthLabel').textContent = `— ${persianMonths[currentJM-1]} ${currentJY}`;
