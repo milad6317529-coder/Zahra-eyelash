@@ -149,9 +149,9 @@
   .search-box input { width: 100%; padding: 12px 16px; border: 2px solid #f8bbd0; border-radius: 14px; font-size: 14px; font-family: inherit; background: white; }
   .search-box input:focus { outline: none; border-color: #ad1457; }
 
-  .customer-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 2px solid #f8bbd0; }
+  .customer-card { background: white; border-radius: 16px; padding: 14px; margin-bottom: 10px; border: 2px solid #f8bbd0; }
   .customer-card .cname { font-weight: bold; color: #6a1b9a; font-size: 15px; margin-bottom: 6px; }
-  .customer-card .cinfo { font-size: 12px; color: #666; line-height: 1.8; }
+  .customer-card .cinfo { font-size: 12px; color: #666; line-height: 1.9; }
   .history-item { background: #fff9fb; border-radius: 10px; padding: 10px; margin-top: 8px; font-size: 12px; border-right: 3px solid #ad1457; }
   .history-item .hdate { font-weight: bold; color: #6a1b9a; margin-bottom: 3px; }
 
@@ -242,9 +242,7 @@
     border-color: transparent;
     box-shadow: 0 4px 12px rgba(173,20,87,0.3);
   }
-  .radio-card {
-    transition: all 0.2s;
-  }
+  .radio-card { transition: all 0.2s; }
   .radio-card:has(input:checked) {
     background: linear-gradient(135deg, #fce4ec, #f8bbd0) !important;
     border-color: #ad1457 !important;
@@ -445,6 +443,17 @@
     </div>
   </div>
 
+  <!-- CUSTOMER PROFILE PAGE -->
+  <div class="page" id="customerProfilePage">
+    <div class="card">
+      <div class="card-title">
+        <span onclick="backToCustomers()" style="cursor:pointer;font-size:20px;color:#ad1457;padding:0 8px;">←</span>
+        <span id="customerProfileName" style="font-size:16px;"></span>
+      </div>
+      <div id="customerProfileContent"></div>
+    </div>
+  </div>
+
   <!-- REPAIRS PAGE -->
   <div class="page" id="repairsPage">
     <div class="card">
@@ -556,7 +565,7 @@
 <!-- Reschedule Repair Modal -->
 <div class="modal-overlay" id="repairModal">
   <div class="modal" style="max-width:560px;">
-    <h3>🔧 ویرایش ترمیم</h3>
+    <h3>⏰ ترمیم جدید</h3>
 
     <div id="repairInfoBox" style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:14px;padding:14px;margin-bottom:18px;font-size:13px;line-height:1.9;color:#6a1b9a;">
     </div>
@@ -564,9 +573,9 @@
     <div class="form-group">
       <label>⏰ چند روز دیرتر آمد؟</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button type="button" class="days-btn" onclick="setRepairDays(0)" data-days="0">امروز</button>
+        <button type="button" class="days-btn active" onclick="setRepairDays(0)" data-days="0">امروز</button>
         <button type="button" class="days-btn" onclick="setRepairDays(1)" data-days="1">۱ روز</button>
-        <button type="button" class="days-btn active" onclick="setRepairDays(3)" data-days="3">۳ روز</button>
+        <button type="button" class="days-btn" onclick="setRepairDays(3)" data-days="3">۳ روز</button>
         <button type="button" class="days-btn" onclick="setRepairDays(5)" data-days="5">۵ روز</button>
         <button type="button" class="days-btn" onclick="setRepairDays(7)" data-days="7">۷ روز</button>
         <input type="number" id="repairDaysCustom" placeholder="دلخواه" min="0" max="90" style="flex:1;min-width:80px;padding:8px 12px;border:2px solid #f8bbd0;border-radius:10px;font-family:inherit;font-size:13px;background:#fff9fb;text-align:center;" oninput="clearDaysBtns()">
@@ -576,10 +585,10 @@
     <div class="form-group">
       <label>🎯 نوبت جدید ثبت بشه؟</label>
       <div style="display:flex;gap:10px;">
-        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:2px solid #f8bbd0;border-radius:12px;background:white;cursor:pointer;font-weight:bold;color:#6a1b9a;font-size:13px;transition:all 0.2s;" class="radio-card">
+        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:2px solid #f8bbd0;border-radius:12px;background:white;cursor:pointer;font-weight:bold;color:#6a1b9a;font-size:13px;" class="radio-card">
           <input type="radio" name="createNew" value="yes" checked onchange="toggleNewApptSection(true)" style="accent-color:#ad1457;"> بله
         </label>
-        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:2px solid #f8bbd0;border-radius:12px;background:white;cursor:pointer;font-weight:bold;color:#6a1b9a;font-size:13px;transition:all 0.2s;" class="radio-card">
+        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:2px solid #f8bbd0;border-radius:12px;background:white;cursor:pointer;font-weight:bold;color:#6a1b9a;font-size:13px;" class="radio-card">
           <input type="radio" name="createNew" value="no" onchange="toggleNewApptSection(false)" style="accent-color:#ad1457;"> فقط دیرتر ثبت کن
         </label>
       </div>
@@ -604,7 +613,7 @@
       </div>
 
       <div class="form-group">
-        <label>🎯 خدمات (چند تا می‌تونی انتخاب کنی)</label>
+        <label>🎯 خدمات (پیش‌فرض از نوبت قبلیه، می‌تونی عوض کنی)</label>
         <div id="repairServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">
           <label class="service-check"><input type="checkbox" value="اسپایکی"> اسپایکی</label>
           <label class="service-check"><input type="checkbox" value="والیوم"> والیوم</label>
@@ -1044,7 +1053,7 @@ function renderAppointmentHTML(a) {
   }
 
   const rd = getRepairDate(a);
-  const isRepairDue = isExtensionService(a) && a.repairStatus !== 'came' && a.repairStatus !== 'late' && a.repairStatus !== 'missed' && diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]) <= 7;
+  const isRepairDue = isExtensionService(a) && !a.repairStatus && diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]) <= 7;
 
   return `
     <div class="item appointment ${a.payment === 'paid' ? 'paid' : a.payment === 'unpaid' ? 'unpaid' : 'pending'} ${isRepairDue ? 'repair-due' : ''}">
@@ -1062,11 +1071,11 @@ function renderAppointmentHTML(a) {
       </div>
       <div class="item-actions">
         ${isRepairDue ? `
-          <button class="btn btn-sm btn-success" onclick="markRepair('${a.id}','came')">✓ آمد</button>
-          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${a.id}')">⏰ ویرایش</button>
+          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${a.id}')">⏰ ترمیم</button>
+          <button class="btn btn-sm btn-delete" onclick="markRepair('${a.id}','missed')">❌ نیامد</button>
         ` : ''}
-        <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️ ویرایش</button>
-        <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}')">🗑️ حذف</button>
+        <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
+        <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}')">🗑️</button>
       </div>
     </div>
   `;
@@ -1353,7 +1362,7 @@ function saveEdit() {
 function getRepairsForDate(jy, jm, jd) {
   return data.appointments.filter(a => {
     if (!isExtensionService(a)) return false;
-    if (a.repairStatus === 'came' || a.repairStatus === 'late' || a.repairStatus === 'missed') return false;
+    if (a.repairStatus) return false;
     const rd = getRepairDate(a);
     return rd[0] === jy && rd[1] === jm && rd[2] === jd;
   });
@@ -1368,7 +1377,9 @@ function markRepair(id, status) {
   renderWeeklyRepairs();
   if (document.getElementById('repairsPage').classList.contains('active')) renderRepairs();
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
-  showToast(status === 'came' ? '✅ ترمیم انجام شد' : 'ثبت شد');
+  if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
+
+  showToast(status === 'missed' ? '❌ نیامد ثبت شد' : '✅ ثبت شد');
 }
 
 // ==================== Reschedule Repair Modal ====================
@@ -1383,10 +1394,11 @@ function rescheduleRepair(id) {
   document.getElementById('repairInfoBox').innerHTML = `
     <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
     📅 اکستنشن: ${formatJalali(a.jy, a.jm, a.jd)}<br>
-    🔧 موعد فعلی ترمیم: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b>
+    🔧 موعد فعلی ترمیم: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b><br>
+    💅 خدمات قبلی: <b>${escapeHtml(a.service)}</b>
   `;
 
-  setRepairDays(3);
+  setRepairDays(0);
   document.getElementById('repairDaysCustom').value = '';
 
   document.querySelector('input[name="createNew"][value="yes"]').checked = true;
@@ -1395,10 +1407,15 @@ function rescheduleRepair(id) {
   document.getElementById('repairNewDate').value = currentStr;
   updateRepairDateHint();
 
-  document.getElementById('repairNewTime').value = '14:30';
-  document.getElementById('repairNewAmount').value = '';
+  document.getElementById('repairNewTime').value = a.time || '14:30';
+  document.getElementById('repairNewAmount').value = a.amount || '';
 
-  document.querySelectorAll('#repairServiceBox input[type="checkbox"]').forEach(cb => cb.checked = false);
+  // Auto-check previous services
+  const prevServices = a.services || (a.service ? a.service.split(' + ') : []);
+  document.querySelectorAll('#repairServiceBox input[type="checkbox"]').forEach(cb => {
+    cb.checked = prevServices.includes(cb.value);
+  });
+
   document.getElementById('repairNewPayment').value = 'pending';
 
   document.getElementById('repairNewDate').oninput = updateRepairDateHint;
@@ -1424,7 +1441,7 @@ function getRepairDaysFromForm() {
   if (!isNaN(custom) && custom >= 0) return custom;
   const activeBtn = document.querySelector('.days-btn.active');
   if (activeBtn) return parseInt(activeBtn.dataset.days);
-  return 3;
+  return 0;
 }
 
 function updateRepairDateHint() {
@@ -1461,8 +1478,14 @@ function submitRepairModal() {
     return;
   }
 
-  a.repairStatus = 'late';
-  a.repairLateDays = daysLate;
+  // If days = 0, it means came today
+  if (daysLate === 0) {
+    a.repairStatus = 'came';
+    a.repairLateDays = 0;
+  } else {
+    a.repairStatus = 'late';
+    a.repairLateDays = daysLate;
+  }
 
   const createNew = document.querySelector('input[name="createNew"]:checked').value === 'yes';
 
@@ -1523,7 +1546,8 @@ function submitRepairModal() {
     if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
     if (document.getElementById('notesPage').classList.contains('active')) renderAllNotes();
 
-    showToast(`✅ ثبت شد — نوبت جدید برای ${formatJalali(jy, jm, jd)}`);
+    const statusText = daysLate === 0 ? 'امروز' : `${daysLate} روز دیرتر`;
+    showToast(`✅ ${statusText} ثبت شد + نوبت جدید برای ${formatJalali(jy, jm, jd)}`);
   } else {
     save();
     closeRepairModal();
@@ -1534,7 +1558,8 @@ function submitRepairModal() {
     if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
     if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
 
-    showToast(`✅ ${daysLate} روز دیرتر ثبت شد`);
+    const statusText = daysLate === 0 ? 'ترمیم امروز انجام شد' : `${daysLate} روز دیرتر ثبت شد`;
+    showToast(`✅ ${statusText}`);
   }
 }
 
@@ -1545,7 +1570,7 @@ function renderRepairAlert() {
 
   data.appointments.forEach(a => {
     if (!isExtensionService(a)) return;
-    if (a.repairStatus === 'came' || a.repairStatus === 'late' || a.repairStatus === 'missed') return;
+    if (a.repairStatus) return;
 
     const rd = getRepairDate(a);
     const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
@@ -1569,8 +1594,8 @@ function renderRepairAlert() {
         </div>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;">
-        <button class="btn btn-sm btn-success" onclick="markRepair('${x.a.id}','came')">آمد</button>
-        <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ویرایش</button>
+        <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
+        <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
       </div>
     </div>
   `).join('');
@@ -1616,8 +1641,8 @@ function renderRepairs() {
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
           ${!x.a.repairStatus ? `
-            <button class="btn btn-sm btn-success" onclick="markRepair('${x.a.id}','came')">✓ آمد</button>
-            <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ویرایش / دیر آمد</button>
+            <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
+            <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
           ` : ''}
         </div>
       </div>
@@ -1647,7 +1672,7 @@ function renderWeeklyRepairs() {
   const repairs = [];
   data.appointments.forEach(a => {
     if (!isExtensionService(a)) return;
-    if (a.repairStatus === 'came' || a.repairStatus === 'late' || a.repairStatus === 'missed') return;
+    if (a.repairStatus) return;
 
     const rd = getRepairDate(a);
     const diffFromStart = diffDaysJalali(startDay[0], startDay[1], startDay[2], rd[0], rd[1], rd[2]);
@@ -1690,8 +1715,8 @@ function renderWeeklyRepairs() {
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-success" onclick="markRepair('${x.a.id}','came')">✓ آمد</button>
-          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ویرایش / دیر آمد</button>
+          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
+          <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
         </div>
       </div>
     `;
@@ -1781,46 +1806,142 @@ function renderCustomers() {
   names.sort();
   c.innerHTML = names.map(name => {
     const appts = byName[name].sort((a, b) => {
-      if (a.jy !== b.jy) return a.jy - b.jy;
-      if (a.jm !== b.jm) return a.jm - b.jm;
-      return a.jd - b.jd;
+      if (a.jy !== b.jy) return b.jy - a.jy;
+      if (a.jm !== b.jm) return b.jm - a.jm;
+      return b.jd - a.jd;
     });
 
     const code = appts[0].code || '—';
     const totalVisits = appts.length;
     const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
-    const first = appts[0];
-    const last = appts[appts.length - 1];
+    const last = appts[0];
 
     let nextRepair = null;
-    const lastExt = [...appts].reverse().find(a => isExtensionService(a));
-    if (lastExt && lastExt.repairStatus !== 'came' && lastExt.repairStatus !== 'late') {
+    const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
+    if (lastExt) {
       nextRepair = getRepairDate(lastExt);
     }
 
     return `
-      <div class="customer-card">
+      <div class="customer-card" onclick="openCustomerProfile('${escapeHtml(name)}')" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(173,20,87,0.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
         <div class="cname">💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span></div>
         <div class="cinfo">
-          📊 تعداد مراجعات: <b>${totalVisits}</b> بار<br>
-          💰 کل پرداختی: <b>${money(totalPaid)}</b><br>
-          📅 اولین مراجعه: ${formatJalali(first.jy, first.jm, first.jd)}<br>
+          📊 تعداد مراجعات: <b>${totalVisits}</b> بار &nbsp;|&nbsp; 💰 کل پرداختی: <b>${money(totalPaid)}</b><br>
           📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
-          ${nextRepair ? `<br>🔧 ترمیم بعدی: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
+          ${nextRepair ? `&nbsp;|&nbsp; 🔧 ترمیم بعدی: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
         </div>
-        <div style="margin-top:10px;font-weight:bold;color:#6a1b9a;font-size:12px;">📜 سابقه کامل:</div>
-        ${appts.map(a => `
-          <div class="history-item">
-            <div class="hdate">📅 ${formatJalali(a.jy, a.jm, a.jd)} ${a.time ? '— ⏰ ' + a.time : ''}</div>
-            <div>${escapeHtml(a.service)} ${a.amount ? '— 💵 ' + money(a.amount) : ''}</div>
-            ${a.repairStatus === 'came' ? '<div style="color:#2e7d32;">🔧 ترمیم انجام شد</div>' : ''}
-            ${a.repairStatus === 'late' ? `<div style="color:#ef6c00;">🔧 ترمیم ${a.repairLateDays} روز دیرتر انجام شد</div>` : ''}
-            ${a.repairStatus === 'missed' ? '<div style="color:#c62828;">🔧 ترمیم انجام نشد</div>' : ''}
-          </div>
-        `).join('')}
+        <div style="margin-top:10px;text-align:center;font-size:11px;color:#ad1457;font-weight:bold;">👆 برای دیدن سابقه کامل کلیک کن</div>
       </div>
     `;
   }).join('');
+}
+
+function openCustomerProfile(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('customerProfilePage').classList.add('active');
+
+  document.getElementById('customerProfileName').textContent = `💅 ${name}`;
+
+  const appts = data.appointments.filter(a => a.name.trim() === name.trim()).sort((a, b) => {
+    if (a.jy !== b.jy) return b.jy - a.jy;
+    if (a.jm !== b.jm) return b.jm - a.jm;
+    return b.jd - a.jd;
+  });
+
+  const code = appts[0]?.code || '—';
+  const totalVisits = appts.length;
+  const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
+  const totalPending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
+  const totalUnpaid = appts.filter(a => a.payment === 'unpaid').reduce((s, a) => s + (a.amount || 0), 0);
+  const first = appts[appts.length - 1];
+  const last = appts[0];
+
+  const nextRepairInfo = (() => {
+    const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
+    if (lastExt) {
+      const rd = getRepairDate(lastExt);
+      return formatJalali(rd[0], rd[1], rd[2]);
+    }
+    return null;
+  })();
+
+  document.getElementById('customerProfileContent').innerHTML = `
+    <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:16px;padding:16px;margin-bottom:18px;">
+      <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:10px;">
+        💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
+      </div>
+      <div style="font-size:13px;line-height:2;color:#666;">
+        📊 تعداد مراجعات: <b>${totalVisits}</b> بار<br>
+        💰 کل پرداختی: <b style="color:#2e7d32;">${money(totalPaid)}</b><br>
+        ${totalPending > 0 ? `⏳ در انتظار: <b style="color:#ef6c00;">${money(totalPending)}</b><br>` : ''}
+        ${totalUnpaid > 0 ? `❌ پرداخت نشده: <b style="color:#c62828;">${money(totalUnpaid)}</b><br>` : ''}
+        📅 اولین مراجعه: ${formatJalali(first.jy, first.jm, first.jd)}<br>
+        📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
+        ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
+      </div>
+    </div>
+
+    <div style="font-weight:bold;color:#ad1457;font-size:15px;margin-bottom:12px;">📜 سابقه کامل مراجعات:</div>
+
+    ${appts.map(a => {
+      const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
+                           a.payment === 'unpaid' ? '<span class="badge badge-unpaid">✗ پرداخت نشد</span>' :
+                           '<span class="badge badge-pending">⏳ در انتظار</span>';
+
+      const hInfo = getHolidayInfo(a.jy, a.jm, a.jd);
+      const holidayBadge = hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${hInfo.title}</span>` : '';
+
+      let repairInfo = '';
+      if (isExtensionService(a)) {
+        if (a.repairStatus === 'came') {
+          repairInfo = `<div style="color:#2e7d32;font-size:12px;margin-top:4px;">🔧 ترمیم: انجام شد</div>`;
+        } else if (a.repairStatus === 'late') {
+          repairInfo = `<div style="color:#ef6c00;font-size:12px;margin-top:4px;">🔧 ترمیم: ${a.repairLateDays} روز دیرتر انجام شد</div>`;
+        } else if (a.repairStatus === 'missed') {
+          repairInfo = `<div style="color:#c62828;font-size:12px;margin-top:4px;">🔧 ترمیم: نیامد</div>`;
+        } else {
+          const rd = getRepairDate(a);
+          const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
+          if (diff < 0) {
+            repairInfo = `<div style="color:#c62828;font-size:12px;margin-top:4px;">🔧 ترمیم: ${Math.abs(diff)} روز از موعد گذشته (موعد: ${formatJalali(rd[0], rd[1], rd[2])})</div>`;
+          } else {
+            repairInfo = `<div style="color:#ef6c00;font-size:12px;margin-top:4px;">🔔 ترمیم بعدی: ${formatJalali(rd[0], rd[1], rd[2])} (${diff === 0 ? 'امروز' : diff + ' روز دیگر'})</div>`;
+          }
+        }
+      }
+
+      return `
+        <div class="item appointment ${a.payment === 'paid' ? 'paid' : a.payment === 'unpaid' ? 'unpaid' : 'pending'}" style="margin-bottom:12px;">
+          <div class="item-content">
+            <div class="title">
+              📅 ${formatJalali(a.jy, a.jm, a.jd)}
+              ${a.time ? `<span style="font-size:11px;color:#ad1457;">⏰ ${a.time}</span>` : ''}
+              ${holidayBadge}
+              ${paymentBadge}
+            </div>
+            <div class="detail"><b>${escapeHtml(a.service)}</b></div>
+            ${a.amount ? `<div class="detail">💵 ${money(a.amount)}</div>` : ''}
+            ${a.note ? `<div class="detail" style="font-style:italic;">📝 ${escapeHtml(a.note)}</div>` : ''}
+            ${repairInfo}
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
+            <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}'); setTimeout(()=>openCustomerProfile('${escapeHtml(name)}'), 200);">🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function backToCustomers() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('customersPage').classList.add('active');
+  const btns = document.querySelectorAll('.menu-btn');
+  if (btns[4]) btns[4].classList.add('active');
+  renderCustomers();
 }
 
 // ==================== Week View ====================
