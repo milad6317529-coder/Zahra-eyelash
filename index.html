@@ -99,7 +99,6 @@
   .item.appointment { border-right-color: #6a1b9a; background: linear-gradient(135deg, #fff9fb, #f3e5f5); }
   .item.paid { border-right-color: #2e7d32; background: linear-gradient(135deg, #f1f8e9, #f9fbe7); }
   .item.pending { border-right-color: #ef6c00; background: linear-gradient(135deg, #fff8e1, #fff3e0); }
-  .item.unpaid { border-right-color: #c62828; background: linear-gradient(135deg, #ffebee, #fce4ec); }
   .item.repair-due { border-right-color: #ff6f00; background: linear-gradient(135deg, #fff3e0, #ffe0b2); box-shadow: 0 0 0 2px #ffb74d; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -111,7 +110,6 @@
 
   .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; }
   .badge-paid { background: #c8e6c9; color: #2e7d32; }
-  .badge-unpaid { background: #ffcdd2; color: #c62828; }
   .badge-pending { background: #ffe0b2; color: #ef6c00; }
   .badge-code { background: #e1bee7; color: #6a1b9a; font-family: monospace; }
   .badge-holiday { background: #f8bbd0; color: #ad1457; }
@@ -148,6 +146,13 @@
   .search-box { position: relative; margin-bottom: 15px; }
   .search-box input { width: 100%; padding: 12px 16px; border: 2px solid #f8bbd0; border-radius: 14px; font-size: 14px; font-family: inherit; background: white; }
   .search-box input:focus { outline: none; border-color: #ad1457; }
+
+  /* Finance Filters */
+  .finance-filters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; background: linear-gradient(135deg, #fce4ec, #f3e5f5); padding: 12px; border-radius: 14px; }
+  @media (max-width: 850px) { .finance-filters { grid-template-columns: 1fr; } }
+  .finance-filters .form-group { margin: 0; }
+  .finance-filters label { font-size: 12px; color: #6a1b9a; margin-bottom: 4px; }
+  .finance-filters input, .finance-filters select { padding: 8px 10px; font-size: 13px; }
 
   .customer-card { background: white; border-radius: 16px; padding: 14px; margin-bottom: 10px; border: 2px solid #f8bbd0; }
   .customer-card .cname { font-weight: bold; color: #6a1b9a; font-size: 15px; margin-bottom: 6px; }
@@ -191,10 +196,7 @@
     font-family: 'Tahoma', sans-serif;
     letter-spacing: 0.5px;
   }
-  .developer-signature span {
-    font-weight: bold;
-    color: #6a1b9a;
-  }
+  .developer-signature span { font-weight: bold; color: #6a1b9a; }
 
   .service-check {
     display: flex;
@@ -314,7 +316,7 @@
           </div>
           <div class="grid-2" style="gap:10px;">
             <div class="form-group"><label>ساعت</label><input type="time" id="appointmentTime"></div>
-            <div class="form-group"><label>مبلغ (تومان)</label><input type="number" id="appointmentAmount" placeholder="مثلاً: 500000"></div>
+            <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="appointmentAmount" placeholder="مثلاً: 500,000" inputmode="numeric"></div>
           </div>
           <div class="form-group">
             <label>نوع خدمات (می‌تونی چند تا انتخاب کنی)</label>
@@ -335,7 +337,6 @@
             <select id="appointmentPayment">
               <option value="pending">در انتظار پرداخت</option>
               <option value="paid">پرداخت شده</option>
-              <option value="unpaid">پرداخت نشده</option>
             </select>
           </div>
           <div class="form-group"><label>توضیحات (اختیاری)</label><textarea id="appointmentNote" placeholder="توضیحات..."></textarea></div>
@@ -350,7 +351,7 @@
 
         <div class="tab-content" id="expenseTab">
           <div class="form-group"><label>عنوان خرج</label><input type="text" id="expenseTitle" placeholder="مثلاً: خرید چسب مژه"></div>
-          <div class="form-group"><label>مبلغ (تومان)</label><input type="number" id="expenseAmount" placeholder="مثلاً: 200000"></div>
+          <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="expenseAmount" placeholder="مثلاً: 200,000" inputmode="numeric"></div>
           <button class="btn btn-full" onclick="addExpense()">ثبت خرج</button>
         </div>
       </div>
@@ -415,6 +416,37 @@
   <div class="page" id="financePage">
     <div class="card">
       <div class="card-title">💰 گزارش مالی <span id="financeMonthLabel"></span></div>
+
+      <div class="finance-filters">
+        <div class="form-group">
+          <label>🔍 اسم مشتری</label>
+          <input type="text" id="finFilterName" placeholder="جستجوی نام..." oninput="renderFinance()">
+        </div>
+        <div class="form-group">
+          <label>💅 نوع خدمات</label>
+          <select id="finFilterService" onchange="renderFinance()">
+            <option value="">همه خدمات</option>
+            <option value="اسپایکی">اسپایکی</option>
+            <option value="والیوم">والیوم</option>
+            <option value="کلاسیک">کلاسیک</option>
+            <option value="قهوه ای">قهوه ای</option>
+            <option value="خط چشمی">خط چشمی</option>
+            <option value="لیفت مژه">لیفت مژه</option>
+            <option value="لیفت ابرو">لیفت ابرو</option>
+            <option value="مژه و ابرو">مژه و ابرو</option>
+            <option value="ریمو">ریمو</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>💰 وضعیت پرداخت</label>
+          <select id="finFilterPayment" onchange="renderFinance()">
+            <option value="">همه</option>
+            <option value="paid">پرداخت شده</option>
+            <option value="pending">در انتظار پرداخت</option>
+          </select>
+        </div>
+      </div>
+
       <div class="grid-4">
         <div class="stat-card income"><div class="stat-label">کل دریافتی</div><div class="stat-value" id="finIncome">۰</div></div>
         <div class="stat-card expense"><div class="stat-label">کل خرج</div><div class="stat-value" id="finExpense">۰</div></div>
@@ -608,7 +640,7 @@
         </div>
         <div class="form-group">
           <label>💵 مبلغ (تومان)</label>
-          <input type="number" id="repairNewAmount" placeholder="0" inputmode="numeric">
+          <input type="text" id="repairNewAmount" placeholder="0" inputmode="numeric">
         </div>
       </div>
 
@@ -635,7 +667,6 @@
         <select id="repairNewPayment">
           <option value="pending">در انتظار پرداخت</option>
           <option value="paid">پرداخت شده</option>
-          <option value="unpaid">پرداخت نشده</option>
         </select>
       </div>
     </div>
@@ -771,6 +802,29 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(t._timeout);
   t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ==================== Number Formatting ====================
+function parseNum(str) {
+  if (!str) return 0;
+  const cleaned = String(str).replace(/[^\d]/g, '');
+  return parseInt(cleaned) || 0;
+}
+
+function formatInputNum(inputEl) {
+  const raw = inputEl.value.replace(/[^\d]/g, '');
+  if (raw === '') {
+    inputEl.value = '';
+    return;
+  }
+  const num = parseInt(raw) || 0;
+  inputEl.value = num.toLocaleString('en-US');
+}
+
+function setupAmountInput(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => formatInputNum(el));
 }
 
 // ==================== Holiday Detection ====================
@@ -1029,7 +1083,6 @@ function renderSelectedDayItems() {
 // ==================== Render Item HTML ====================
 function renderAppointmentHTML(a) {
   const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
-                       a.payment === 'unpaid' ? '<span class="badge badge-unpaid">✗ پرداخت نشد</span>' :
                        '<span class="badge badge-pending">⏳ در انتظار</span>';
 
   let repairInfo = '';
@@ -1056,7 +1109,7 @@ function renderAppointmentHTML(a) {
   const isRepairDue = isExtensionService(a) && !a.repairStatus && diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]) <= 7;
 
   return `
-    <div class="item appointment ${a.payment === 'paid' ? 'paid' : a.payment === 'unpaid' ? 'unpaid' : 'pending'} ${isRepairDue ? 'repair-due' : ''}">
+    <div class="item appointment ${a.payment === 'paid' ? 'paid' : 'pending'} ${isRepairDue ? 'repair-due' : ''}">
       <div class="item-content">
         <div class="title">
           💅 ${escapeHtml(a.name)}
@@ -1098,7 +1151,7 @@ function renderNoteHTML(n) {
 
 function renderExpenseHTML(e) {
   return `
-    <div class="item unpaid">
+    <div class="item pending">
       <div class="item-content">
         <div class="title">💸 ${escapeHtml(e.title)}</div>
         <div class="detail">مبلغ: <b>${money(e.amount)}</b></div>
@@ -1164,7 +1217,7 @@ function addAppointment() {
   const time = document.getElementById('appointmentTime').value;
   const payment = document.getElementById('appointmentPayment').value;
   const note = document.getElementById('appointmentNote').value.trim();
-  const amount = parseFloat(document.getElementById('appointmentAmount').value) || 0;
+  const amount = parseNum(document.getElementById('appointmentAmount').value);
 
   const serviceCheckboxes = document.querySelectorAll('#appointmentServiceBox input[type="checkbox"]:checked');
   const services = Array.from(serviceCheckboxes).map(cb => cb.value);
@@ -1225,7 +1278,7 @@ function addNote() {
 
 function addExpense() {
   const title = document.getElementById('expenseTitle').value.trim();
-  const amount = parseFloat(document.getElementById('expenseAmount').value) || 0;
+  const amount = parseNum(document.getElementById('expenseAmount').value);
   if (!title || !amount) { showToast('⚠️ عنوان و مبلغ را وارد کنید'); return; }
 
   data.expenses.push({
@@ -1283,7 +1336,7 @@ function openEdit(type, id) {
       <div class="form-group"><label>نام مشتری</label><input type="text" id="editName" value="${escapeHtml(item.name)}"></div>
       <div class="grid-2" style="gap:10px;">
         <div class="form-group"><label>ساعت</label><input type="time" id="editTime" value="${item.time||''}"></div>
-        <div class="form-group"><label>مبلغ</label><input type="number" id="editAmount" value="${item.amount||0}"></div>
+        <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
       </div>
       <div class="form-group">
         <label>خدمات (می‌تونی چند تا انتخاب کنی)</label>
@@ -1294,11 +1347,13 @@ function openEdit(type, id) {
         <select id="editPayment">
           <option value="pending" ${item.payment==='pending'?'selected':''}>در انتظار پرداخت</option>
           <option value="paid" ${item.payment==='paid'?'selected':''}>پرداخت شده</option>
-          <option value="unpaid" ${item.payment==='unpaid'?'selected':''}>پرداخت نشده</option>
         </select>
       </div>
       <div class="form-group"><label>توضیحات</label><textarea id="editNote">${escapeHtml(item.note||'')}</textarea></div>
     `;
+
+    // Setup amount formatting after modal render
+    setTimeout(() => setupAmountInput('editAmount'), 50);
   } else if (type === 'note') {
     title.textContent = '✏️ ویرایش یادداشت';
     body.innerHTML = `
@@ -1309,8 +1364,10 @@ function openEdit(type, id) {
     title.textContent = '✏️ ویرایش خرج';
     body.innerHTML = `
       <div class="form-group"><label>عنوان</label><input type="text" id="editTitle" value="${escapeHtml(item.title)}"></div>
-      <div class="form-group"><label>مبلغ</label><input type="number" id="editAmount" value="${item.amount||0}"></div>
+      <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
     `;
+
+    setTimeout(() => setupAmountInput('editAmount'), 50);
   }
 
   document.getElementById('editModal').classList.add('show');
@@ -1333,7 +1390,7 @@ function saveEdit() {
 
     item.name = document.getElementById('editName').value.trim();
     item.time = document.getElementById('editTime').value;
-    item.amount = parseFloat(document.getElementById('editAmount').value) || 0;
+    item.amount = parseNum(document.getElementById('editAmount').value);
     item.services = editServices;
     item.service = editServices.join(' + ');
     item.payment = document.getElementById('editPayment').value;
@@ -1344,7 +1401,7 @@ function saveEdit() {
     item.text = document.getElementById('editText').value.trim();
   } else if (editingItem.type === 'expenses') {
     item.title = document.getElementById('editTitle').value.trim();
-    item.amount = parseFloat(document.getElementById('editAmount').value) || 0;
+    item.amount = parseNum(document.getElementById('editAmount').value);
   }
 
   save();
@@ -1408,7 +1465,7 @@ function rescheduleRepair(id) {
   updateRepairDateHint();
 
   document.getElementById('repairNewTime').value = a.time || '14:30';
-  document.getElementById('repairNewAmount').value = a.amount || '';
+  document.getElementById('repairNewAmount').value = a.amount ? a.amount.toLocaleString('en-US') : '';
 
   // Auto-check previous services
   const prevServices = a.services || (a.service ? a.service.split(' + ') : []);
@@ -1419,6 +1476,9 @@ function rescheduleRepair(id) {
   document.getElementById('repairNewPayment').value = 'pending';
 
   document.getElementById('repairNewDate').oninput = updateRepairDateHint;
+
+  // Setup amount formatting
+  setTimeout(() => setupAmountInput('repairNewAmount'), 50);
 
   document.getElementById('repairModal').classList.add('show');
 }
@@ -1478,7 +1538,6 @@ function submitRepairModal() {
     return;
   }
 
-  // If days = 0, it means came today
   if (daysLate === 0) {
     a.repairStatus = 'came';
     a.repairLateDays = 0;
@@ -1516,7 +1575,7 @@ function submitRepairModal() {
     }
 
     const time = document.getElementById('repairNewTime').value || '14:30';
-    const amount = parseFloat(document.getElementById('repairNewAmount').value) || 0;
+    const amount = parseNum(document.getElementById('repairNewAmount').value);
     const payment = document.getElementById('repairNewPayment').value;
 
     data.appointments.push({
@@ -1621,8 +1680,8 @@ function renderRepairs() {
     let statusBadge = '', boxClass = '';
     if (x.a.repairStatus === 'came') { statusBadge = '<span class="badge badge-paid">✓ ترمیم انجام شد</span>'; boxClass = 'done'; }
     else if (x.a.repairStatus === 'late') { statusBadge = `<span class="badge badge-pending">⏰ ${x.a.repairLateDays} روز دیرتر آمد</span>`; boxClass = 'done'; }
-    else if (x.a.repairStatus === 'missed') { statusBadge = '<span class="badge badge-unpaid">✗ نیامد</span>'; boxClass = 'overdue'; }
-    else if (x.diff < 0) { statusBadge = '<span class="badge badge-unpaid">⚠️ از موعد گذشته</span>'; boxClass = 'overdue'; }
+    else if (x.a.repairStatus === 'missed') { statusBadge = '<span class="badge badge-pending" style="background:#ffcdd2;color:#c62828;">✗ نیامد</span>'; boxClass = 'overdue'; }
+    else if (x.diff < 0) { statusBadge = '<span class="badge badge-pending" style="background:#ffcdd2;color:#c62828;">⚠️ از موعد گذشته</span>'; boxClass = 'overdue'; }
     else if (x.diff <= 7) { statusBadge = `<span class="badge badge-pending">🔔 ${x.diff === 0 ? 'امروز' : x.diff + ' روز دیگر'}</span>`; }
     else { statusBadge = `<span class="badge badge-code">${x.diff} روز مانده</span>`; }
 
@@ -1650,7 +1709,7 @@ function renderRepairs() {
   }).join('');
 }
 
-// ==================== Weekly Repairs (Thursday to Thursday) ====================
+// ==================== Weekly Repairs ====================
 function getLastThursday(fromJY, fromJM, fromJD) {
   let [jy, jm, jd] = [fromJY, fromJM, fromJD];
   let dow = getDayOfWeekJalali(jy, jm, jd);
@@ -1694,7 +1753,7 @@ function renderWeeklyRepairs() {
   list.innerHTML = repairs.map(x => {
     let statusBadge = '', boxClass = '';
     if (x.todayDiff < 0) {
-      statusBadge = `<span class="badge badge-unpaid">⚠️ ${Math.abs(x.todayDiff)} روز گذشته</span>`;
+      statusBadge = `<span class="badge badge-pending" style="background:#ffcdd2;color:#c62828;">⚠️ ${Math.abs(x.todayDiff)} روز گذشته</span>`;
       boxClass = 'overdue';
     } else if (x.todayDiff === 0) {
       statusBadge = `<span class="badge badge-pending">🔔 امروز</span>`;
@@ -1727,29 +1786,45 @@ function renderWeeklyRepairs() {
 function renderFinance() {
   document.getElementById('financeMonthLabel').textContent = `— ${persianMonths[currentJM-1]} ${currentJY}`;
 
-  const appts = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM);
+  const filterName = (document.getElementById('finFilterName').value || '').trim().toLowerCase();
+  const filterService = document.getElementById('finFilterService').value;
+  const filterPayment = document.getElementById('finFilterPayment').value;
+
+  let appts = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM);
   const exps = data.expenses.filter(e => e.jy === currentJY && e.jm === currentJM);
+
+  // Apply filters
+  if (filterName) {
+    appts = appts.filter(a => a.name.toLowerCase().includes(filterName));
+  }
+  if (filterService) {
+    appts = appts.filter(a => {
+      if (a.services && Array.isArray(a.services)) return a.services.includes(filterService);
+      return a.service && a.service.includes(filterService);
+    });
+  }
+  if (filterPayment) {
+    appts = appts.filter(a => a.payment === filterPayment);
+  }
 
   const income = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
   const expense = exps.reduce((s, e) => s + (e.amount || 0), 0);
   const pending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
-  const unpaid = appts.filter(a => a.payment === 'unpaid').reduce((s, a) => s + (a.amount || 0), 0);
 
   document.getElementById('finIncome').textContent = money(income);
   document.getElementById('finExpense').textContent = money(expense);
   document.getElementById('finProfit').textContent = money(income - expense);
-  document.getElementById('finPending').textContent = money(pending + unpaid);
+  document.getElementById('finPending').textContent = money(pending);
 
   const ac = document.getElementById('financeAppointments');
   if (!appts.length) {
-    ac.innerHTML = `<div class="empty-state"><span class="icon">💵</span>نوبتی ثبت نشده</div>`;
+    ac.innerHTML = `<div class="empty-state"><span class="icon">💵</span>نوبتی با این فیلتر پیدا نشد</div>`;
   } else {
     ac.innerHTML = appts.sort((a,b) => a.jd - b.jd).map(a => {
       const badge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
-                    a.payment === 'unpaid' ? '<span class="badge badge-unpaid">✗ پرداخت نشد</span>' :
                     '<span class="badge badge-pending">⏳ در انتظار</span>';
       return `
-        <div class="item ${a.payment === 'paid' ? 'paid' : a.payment === 'unpaid' ? 'unpaid' : 'pending'}">
+        <div class="item ${a.payment === 'paid' ? 'paid' : 'pending'}">
           <div class="item-content">
             <div class="title">${escapeHtml(a.name)} ${badge}</div>
             <div class="detail">📅 ${formatJalali(a.jy, a.jm, a.jd)} — ${escapeHtml(a.service)}</div>
@@ -1766,7 +1841,7 @@ function renderFinance() {
     ec.innerHTML = `<div class="empty-state"><span class="icon">💸</span>خرجی ثبت نشده</div>`;
   } else {
     ec.innerHTML = exps.sort((a,b) => a.jd - b.jd).map(e => `
-      <div class="item unpaid">
+      <div class="item pending">
         <div class="item-content">
           <div class="title">${escapeHtml(e.title)}</div>
           <div class="detail">📅 ${formatJalali(e.jy, e.jm, e.jd)}</div>
@@ -1853,7 +1928,6 @@ function openCustomerProfile(name) {
   const totalVisits = appts.length;
   const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
   const totalPending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
-  const totalUnpaid = appts.filter(a => a.payment === 'unpaid').reduce((s, a) => s + (a.amount || 0), 0);
   const first = appts[appts.length - 1];
   const last = appts[0];
 
@@ -1875,7 +1949,6 @@ function openCustomerProfile(name) {
         📊 تعداد مراجعات: <b>${totalVisits}</b> بار<br>
         💰 کل پرداختی: <b style="color:#2e7d32;">${money(totalPaid)}</b><br>
         ${totalPending > 0 ? `⏳ در انتظار: <b style="color:#ef6c00;">${money(totalPending)}</b><br>` : ''}
-        ${totalUnpaid > 0 ? `❌ پرداخت نشده: <b style="color:#c62828;">${money(totalUnpaid)}</b><br>` : ''}
         📅 اولین مراجعه: ${formatJalali(first.jy, first.jm, first.jd)}<br>
         📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
         ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
@@ -1886,7 +1959,6 @@ function openCustomerProfile(name) {
 
     ${appts.map(a => {
       const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
-                           a.payment === 'unpaid' ? '<span class="badge badge-unpaid">✗ پرداخت نشد</span>' :
                            '<span class="badge badge-pending">⏳ در انتظار</span>';
 
       const hInfo = getHolidayInfo(a.jy, a.jm, a.jd);
@@ -1912,7 +1984,7 @@ function openCustomerProfile(name) {
       }
 
       return `
-        <div class="item appointment ${a.payment === 'paid' ? 'paid' : a.payment === 'unpaid' ? 'unpaid' : 'pending'}" style="margin-bottom:12px;">
+        <div class="item appointment ${a.payment === 'paid' ? 'paid' : 'pending'}" style="margin-bottom:12px;">
           <div class="item-content">
             <div class="title">
               📅 ${formatJalali(a.jy, a.jm, a.jd)}
