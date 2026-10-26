@@ -729,8 +729,32 @@
 
     <div class="msg-buttons">
       <button class="btn btn-ghost" onclick="closeMessageModal()">انصراف</button>
-      <button class="btn btn-msg" onclick="copyMessage()">📋 کپی متن</button>
-      <button class="btn btn-success" onclick="sendWhatsApp()">💬 ارسال به واتساپ</button>
+      <button class="btn btn-msg" onclick="copyMessage()">📋 کپی</button>
+    </div>
+    <div class="msg-buttons">
+      <button class="btn" style="background:linear-gradient(135deg,#25d366,#128c7e);" onclick="sendWhatsApp()">💬 واتساپ</button>
+      <button class="btn" style="background:linear-gradient(135deg,#42a5f5,#1565c0);" onclick="sendSMS()">📱 پیامک (SMS)</button>
+    </div>
+  </div>
+</div>
+
+<!-- SMS Phone Number Modal -->
+<div class="modal-overlay" id="smsPhoneModal" style="z-index:1100;">
+  <div class="modal" style="max-width:420px;">
+    <h3>📱 ارسال پیامک</h3>
+
+    <div class="msg-info-box" style="margin-bottom:14px;">
+      شماره موبایل مشتری رو وارد کن. بعد از تأیید، اپ پیام‌رسان گوشی باز می‌شه با متن آماده.
+    </div>
+
+    <div class="form-group">
+      <label>شماره موبایل</label>
+      <input type="tel" id="smsPhoneInput" placeholder="0912 345 6789" inputmode="tel" style="text-align:center;font-family:monospace;font-size:16px;letter-spacing:1px;" onkeydown="if(event.key==='Enter') confirmSendSMS()">
+    </div>
+
+    <div class="msg-buttons">
+      <button class="btn btn-ghost" onclick="closeSMSModal()">انصراف</button>
+      <button class="btn" style="background:linear-gradient(135deg,#42a5f5,#1565c0);" onclick="confirmSendSMS()">📱 ارسال</button>
     </div>
   </div>
 </div>
@@ -1940,7 +1964,61 @@ function sendWhatsApp() {
   const encoded = encodeURIComponent(text);
   window.open('https://wa.me/?text=' + encoded, '_blank');
 }
+function sendSMS() {
+  const text = document.getElementById('msgText').value;
+  if (!text) return;
 
+  // Create a temporary modal to ask for phone number
+  const phoneInput = document.getElementById('smsPhoneInput');
+  const smsModal = document.getElementById('smsPhoneModal');
+  if (smsModal && phoneInput) {
+    phoneInput.value = '';
+    smsModal.classList.add('show');
+    setTimeout(() => phoneInput.focus(), 100);
+  } else {
+    // Fallback: direct sms: link without number
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const separator = isIOS ? '&' : '?';
+    window.location.href = 'sms:' + separator + 'body=' + encodeURIComponent(text);
+  }
+}
+
+function confirmSendSMS() {
+  const phone = document.getElementById('smsPhoneInput').value.trim().replace(/[^\d+]/g, '');
+  const text = document.getElementById('msgText').value;
+
+  if (!phone) {
+    showToast('⚠️ شماره رو وارد کن');
+    return;
+  }
+
+  // Normalize phone for Iran (if starts with 0 or nothing, add +98)
+  let normalizedPhone = phone;
+  if (phone.startsWith('0')) {
+    normalizedPhone = '+98' + phone.substring(1);
+  } else if (phone.startsWith('9') && phone.length === 10) {
+    normalizedPhone = '+98' + phone;
+  } else if (!phone.startsWith('+')) {
+    normalizedPhone = '+98' + phone;
+  }
+
+  // Detect iOS vs Android for proper separator
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const separator = isIOS ? '&' : '?';
+
+  // Close modals
+  document.getElementById('smsPhoneModal').classList.remove('show');
+  document.getElementById('messageModal').classList.remove('show');
+
+  // Open SMS app with pre-filled number and body
+  window.location.href = 'sms:' + normalizedPhone + separator + 'body=' + encodeURIComponent(text);
+
+  showToast('📱 اپ پیام‌رسان باز شد');
+}
+
+function closeSMSModal() {
+  document.getElementById('smsPhoneModal').classList.remove('show');
+}
 // ==================== Finance ====================
 function renderFinance() {
   document.getElementById('financeMonthLabel').textContent = `— ${persianMonths[currentJM-1]} ${currentJY}`;
