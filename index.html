@@ -90,6 +90,7 @@
   .btn-warn { background: linear-gradient(135deg, #ffb74d, #ef6c00); }
   .btn-ghost { background: white; color: #ad1457; border: 2px solid #f8bbd0; box-shadow: none; }
   .btn-msg { background: linear-gradient(135deg, #26c6da, #00838f); }
+  .btn-call { background: linear-gradient(135deg, #66bb6a, #2e7d32); }
 
   .item-list { max-height: 500px; overflow-y: auto; padding-right: 5px; }
   .item-list::-webkit-scrollbar { width: 6px; }
@@ -917,7 +918,6 @@ function setupAmountInput(id) {
 // ==================== Phone Helpers ====================
 function getCustomerPhone(name) {
   if (!name) return '';
-  // Find the most recent appointment with a phone number for this customer
   const appts = data.appointments
     .filter(a => a.name.trim() === name.trim() && a.phone)
     .sort((a, b) => {
@@ -1238,6 +1238,7 @@ function renderAppointmentHTML(a) {
           <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${a.id}')">⏰ ترمیم</button>
           <button class="btn btn-sm btn-delete" onclick="markRepair('${a.id}','missed')">❌ نیامد</button>
         ` : ''}
+        ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')" title="تماس">📞</button>` : ''}
         <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')" title="ارسال پیام">✉️</button>
         <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
         <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}')">🗑️</button>
@@ -1767,6 +1768,7 @@ function renderRepairAlert() {
         </div>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        ${x.a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(x.a.phone)}')" title="تماس">📞</button>` : ''}
         <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
         <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
         <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
@@ -1814,6 +1816,7 @@ function renderRepairs() {
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          ${x.a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(x.a.phone)}')" title="تماس">📞</button>` : ''}
           <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
           ${!x.a.repairStatus ? `
             <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
@@ -1890,6 +1893,7 @@ function renderWeeklyRepairs() {
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          ${x.a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(x.a.phone)}')" title="تماس">📞</button>` : ''}
           <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
           <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
           <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
@@ -2004,7 +2008,6 @@ function sendSMS() {
   const text = document.getElementById('msgText').value;
   if (!text) return;
 
-  // Pre-fill phone if customer has one
   const phone = messageCustomerName ? getCustomerPhone(messageCustomerName) : '';
   const phoneInput = document.getElementById('smsPhoneInput');
   const smsModal = document.getElementById('smsPhoneModal');
@@ -2024,17 +2027,14 @@ function confirmSendSMS() {
   const text = document.getElementById('msgText').value;
   if (!text) return;
 
-  // Detect iOS vs Android
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const separator = isIOS ? '&' : '?';
 
   let smsUrl;
   if (rawPhone) {
-    // Phone provided → SMS directly to that number
     const normalized = normalizePhone(rawPhone);
     smsUrl = 'sms:' + normalized + separator + 'body=' + encodeURIComponent(text);
   } else {
-    // No phone → open SMS app, user picks contact
     smsUrl = 'sms:' + separator + 'body=' + encodeURIComponent(text);
   }
 
@@ -2047,6 +2047,16 @@ function confirmSendSMS() {
 
 function closeSMSModal() {
   document.getElementById('smsPhoneModal').classList.remove('show');
+}
+
+// ==================== Call Feature ====================
+function callCustomer(phone) {
+  if (!phone) {
+    showToast('⚠️ شماره‌ای برای این مشتری ثبت نشده');
+    return;
+  }
+  const normalized = normalizePhone(phone);
+  window.location.href = 'tel:' + normalized;
 }
 
 // ==================== Finance ====================
@@ -2183,6 +2193,7 @@ function renderCustomers() {
           ${nextRepair ? `&nbsp;|&nbsp; 🔧 ترمیم بعدی: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
         </div>
         <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+          ${phone ? `<button class="btn btn-sm btn-call" onclick="event.stopPropagation(); callCustomer('${escapeHtml(phone)}')">📞 تماس</button>` : ''}
           <button class="btn btn-sm btn-msg" onclick="event.stopPropagation(); openMessageForCustomer('${escapeHtml(name)}')">✉️ پیام</button>
           <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); openCustomerProfile('${escapeHtml(name)}')">👁️ مشاهده سابقه</button>
         </div>
@@ -2236,7 +2247,10 @@ function openCustomerProfile(name) {
         ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
         ${phone ? `<br>📱 شماره: <b style="color:#00838f;">${escapeHtml(phone)}</b>` : '<br>📱 شماره: ثبت نشده'}
       </div>
-      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:12px;">
+      ${phone ? `<button class="btn btn-call btn-full" onclick="callCustomer('${escapeHtml(phone)}')" style="margin-top:12px;">
+        📞 تماس با ${escapeHtml(name)}
+      </button>` : ''}
+      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:8px;">
         ✉️ ارسال پیام به ${escapeHtml(name)}
       </button>
     </div>
@@ -2284,6 +2298,7 @@ function openCustomerProfile(name) {
             ${repairInfo}
           </div>
           <div class="item-actions">
+            ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')" title="تماس">📞</button>` : ''}
             <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')" title="پیام">✉️</button>
             <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
             <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}'); setTimeout(()=>openCustomerProfile('${escapeHtml(name)}'), 200);">🗑️</button>
