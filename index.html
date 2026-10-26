@@ -1914,16 +1914,16 @@ function openMessageForCustomer(name) {
   const rd = getRepairDate(target);
 
   const msg = `سلام ${firstName} جون 🌸\n\n` +
-              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 👁️\n` +
               `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
               `———\n` +
               `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}\n` +
-              `💅 خدمات: ${target.service}`;
+              `👁️ خدمات: ${target.service}`;
 
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span><br>
+    <b>👁️ ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span><br>
     📅 آخرین مراجعه: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' — ⏰ ' + target.time : ''}<br>
-    💅 خدمات: <b>${escapeHtml(target.service)}</b><br>
+    👁️ خدمات: <b>${escapeHtml(target.service)}</b><br>
     🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
 
