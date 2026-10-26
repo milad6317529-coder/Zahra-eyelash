@@ -89,6 +89,7 @@
   .btn-success { background: linear-gradient(135deg, #66bb6a, #2e7d32); }
   .btn-warn { background: linear-gradient(135deg, #ffb74d, #ef6c00); }
   .btn-ghost { background: white; color: #ad1457; border: 2px solid #f8bbd0; box-shadow: none; }
+  .btn-msg { background: linear-gradient(135deg, #26c6da, #00838f); }
 
   .item-list { max-height: 500px; overflow-y: auto; padding-right: 5px; }
   .item-list::-webkit-scrollbar { width: 6px; }
@@ -147,7 +148,6 @@
   .search-box input { width: 100%; padding: 12px 16px; border: 2px solid #f8bbd0; border-radius: 14px; font-size: 14px; font-family: inherit; background: white; }
   .search-box input:focus { outline: none; border-color: #ad1457; }
 
-  /* Finance Filters */
   .finance-filters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; background: linear-gradient(135deg, #fce4ec, #f3e5f5); padding: 12px; border-radius: 14px; }
   @media (max-width: 850px) { .finance-filters { grid-template-columns: 1fr; } }
   .finance-filters .form-group { margin: 0; }
@@ -250,6 +250,43 @@
     border-color: #ad1457 !important;
   }
   .radio-card:hover { background: #fce4ec; }
+
+  /* Message Modal */
+  .msg-textarea {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #f8bbd0;
+    border-radius: 12px;
+    font-size: 13px;
+    font-family: 'Tahoma', sans-serif;
+    line-height: 2;
+    background: #fff9fb;
+    color: #333;
+    resize: vertical;
+    min-height: 160px;
+    direction: rtl;
+  }
+  .msg-textarea:focus {
+    outline: none;
+    border-color: #ad1457;
+    box-shadow: 0 0 0 3px rgba(173,20,87,0.1);
+  }
+  .msg-info-box {
+    background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: #6a1b9a;
+  }
+  .msg-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .msg-buttons .btn { flex: 1; min-width: 120px; }
 </style>
 </head>
 <body>
@@ -678,6 +715,26 @@
   </div>
 </div>
 
+<!-- Message Modal -->
+<div class="modal-overlay" id="messageModal">
+  <div class="modal" style="max-width:560px;">
+    <h3>✉️ پیام آماده</h3>
+
+    <div class="msg-info-box" id="msgInfoBox"></div>
+
+    <div class="form-group">
+      <label>متن پیام (می‌تونی ویرایش کنی)</label>
+      <textarea class="msg-textarea" id="msgText"></textarea>
+    </div>
+
+    <div class="msg-buttons">
+      <button class="btn btn-ghost" onclick="closeMessageModal()">انصراف</button>
+      <button class="btn btn-msg" onclick="copyMessage()">📋 کپی متن</button>
+      <button class="btn btn-success" onclick="sendWhatsApp()">💬 ارسال به واتساپ</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="backupFileInput" accept=".json" style="display:none;" onchange="handleBackupFile(event)">
 
 <div class="toast" id="toast"></div>
@@ -786,6 +843,7 @@ if (!data.holidays) data.holidays = [...DEFAULT_HOLIDAYS];
 
 let editingItem = null;
 let repairModalId = null;
+let messageCustomerName = null;
 
 // ==================== Helpers ====================
 function save() { localStorage.setItem('masheSystemData', JSON.stringify(data)); }
@@ -1127,6 +1185,7 @@ function renderAppointmentHTML(a) {
           <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${a.id}')">⏰ ترمیم</button>
           <button class="btn btn-sm btn-delete" onclick="markRepair('${a.id}','missed')">❌ نیامد</button>
         ` : ''}
+        <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')" title="ارسال پیام">✉️</button>
         <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
         <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}')">🗑️</button>
       </div>
@@ -1352,7 +1411,6 @@ function openEdit(type, id) {
       <div class="form-group"><label>توضیحات</label><textarea id="editNote">${escapeHtml(item.note||'')}</textarea></div>
     `;
 
-    // Setup amount formatting after modal render
     setTimeout(() => setupAmountInput('editAmount'), 50);
   } else if (type === 'note') {
     title.textContent = '✏️ ویرایش یادداشت';
@@ -1467,7 +1525,6 @@ function rescheduleRepair(id) {
   document.getElementById('repairNewTime').value = a.time || '14:30';
   document.getElementById('repairNewAmount').value = a.amount ? a.amount.toLocaleString('en-US') : '';
 
-  // Auto-check previous services
   const prevServices = a.services || (a.service ? a.service.split(' + ') : []);
   document.querySelectorAll('#repairServiceBox input[type="checkbox"]').forEach(cb => {
     cb.checked = prevServices.includes(cb.value);
@@ -1477,7 +1534,6 @@ function rescheduleRepair(id) {
 
   document.getElementById('repairNewDate').oninput = updateRepairDateHint;
 
-  // Setup amount formatting
   setTimeout(() => setupAmountInput('repairNewAmount'), 50);
 
   document.getElementById('repairModal').classList.add('show');
@@ -1653,6 +1709,7 @@ function renderRepairAlert() {
         </div>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
         <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
         <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
       </div>
@@ -1699,6 +1756,7 @@ function renderRepairs() {
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
           ${!x.a.repairStatus ? `
             <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
             <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
@@ -1774,12 +1832,113 @@ function renderWeeklyRepairs() {
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
           <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
           <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
         </div>
       </div>
     `;
   }).join('');
+}
+
+// ==================== Message Feature ====================
+function openMessageForAppointment(apptId) {
+  const a = data.appointments.find(x => x.id === apptId);
+  if (!a) return;
+
+  messageCustomerName = a.name;
+  const firstName = a.name.trim().split(' ')[0];
+  const rd = getRepairDate(a);
+
+  const msg = `سلام ${firstName} جون 🌸\n\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
+              `———\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}\n` +
+              `💅 خدمات: ${a.service}`;
+
+  document.getElementById('msgInfoBox').innerHTML = `
+    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
+    📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' — ⏰ ' + a.time : ''}<br>
+    💅 خدمات: <b>${escapeHtml(a.service)}</b><br>
+    🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
+  `;
+
+  document.getElementById('msgText').value = msg;
+
+  document.getElementById('messageModal').classList.add('show');
+}
+
+function openMessageForCustomer(name) {
+  const appts = data.appointments.filter(a => a.name.trim() === name.trim()).sort((a, b) => {
+    if (a.jy !== b.jy) return b.jy - a.jy;
+    if (a.jm !== b.jm) return b.jm - a.jm;
+    return b.jd - a.jd;
+  });
+
+  if (!appts.length) {
+    showToast('⚠️ نوبتی برای این مشتری پیدا نشد');
+    return;
+  }
+
+  // Get latest extension appointment
+  const lastExt = appts.find(a => isExtensionService(a));
+  const target = lastExt || appts[0];
+
+  messageCustomerName = name;
+  const firstName = name.trim().split(' ')[0];
+  const rd = getRepairDate(target);
+
+  const msg = `سلام ${firstName} جون 🌸\n\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
+              `———\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}\n` +
+              `💅 خدمات: ${target.service}`;
+
+  document.getElementById('msgInfoBox').innerHTML = `
+    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span><br>
+    📅 آخرین مراجعه: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' — ⏰ ' + target.time : ''}<br>
+    💅 خدمات: <b>${escapeHtml(target.service)}</b><br>
+    🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
+  `;
+
+  document.getElementById('msgText').value = msg;
+
+  document.getElementById('messageModal').classList.add('show');
+}
+
+function closeMessageModal() {
+  document.getElementById('messageModal').classList.remove('show');
+  messageCustomerName = null;
+}
+
+function copyMessage() {
+  const text = document.getElementById('msgText').value;
+  if (!text) return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('📋 متن کپی شد');
+  }).catch(() => {
+    // Fallback for iOS/older browsers
+    const ta = document.getElementById('msgText');
+    ta.select();
+    ta.setSelectionRange(0, 99999);
+    try {
+      document.execCommand('copy');
+      showToast('📋 متن کپی شد');
+    } catch(e) {
+      showToast('⚠️ کپی نشد، دستی انتخاب کن');
+    }
+  });
+}
+
+function sendWhatsApp() {
+  const text = document.getElementById('msgText').value;
+  if (!text) return;
+
+  const encoded = encodeURIComponent(text);
+  window.open('https://wa.me/?text=' + encoded, '_blank');
 }
 
 // ==================== Finance ====================
@@ -1793,7 +1952,6 @@ function renderFinance() {
   let appts = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM);
   const exps = data.expenses.filter(e => e.jy === currentJY && e.jm === currentJM);
 
-  // Apply filters
   if (filterName) {
     appts = appts.filter(a => a.name.toLowerCase().includes(filterName));
   }
@@ -1898,14 +2056,17 @@ function renderCustomers() {
     }
 
     return `
-      <div class="customer-card" onclick="openCustomerProfile('${escapeHtml(name)}')" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(173,20,87,0.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-        <div class="cname">💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span></div>
-        <div class="cinfo">
+      <div class="customer-card" style="cursor:pointer;">
+        <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span></div>
+        <div class="cinfo" onclick="openCustomerProfile('${escapeHtml(name)}')">
           📊 تعداد مراجعات: <b>${totalVisits}</b> بار &nbsp;|&nbsp; 💰 کل پرداختی: <b>${money(totalPaid)}</b><br>
           📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
           ${nextRepair ? `&nbsp;|&nbsp; 🔧 ترمیم بعدی: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
         </div>
-        <div style="margin-top:10px;text-align:center;font-size:11px;color:#ad1457;font-weight:bold;">👆 برای دیدن سابقه کامل کلیک کن</div>
+        <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-msg" onclick="event.stopPropagation(); openMessageForCustomer('${escapeHtml(name)}')">✉️ پیام</button>
+          <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); openCustomerProfile('${escapeHtml(name)}')">👁️ مشاهده سابقه</button>
+        </div>
       </div>
     `;
   }).join('');
@@ -1953,6 +2114,9 @@ function openCustomerProfile(name) {
         📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
         ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
       </div>
+      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:12px;">
+        ✉️ ارسال پیام به ${escapeHtml(name)}
+      </button>
     </div>
 
     <div style="font-weight:bold;color:#ad1457;font-size:15px;margin-bottom:12px;">📜 سابقه کامل مراجعات:</div>
@@ -1998,6 +2162,7 @@ function openCustomerProfile(name) {
             ${repairInfo}
           </div>
           <div class="item-actions">
+            <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')" title="پیام">✉️</button>
             <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
             <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}'); setTimeout(()=>openCustomerProfile('${escapeHtml(name)}'), 200);">🗑️</button>
           </div>
