@@ -114,6 +114,7 @@
   .badge-pending { background: #ffe0b2; color: #ef6c00; }
   .badge-code { background: #e1bee7; color: #6a1b9a; font-family: monospace; }
   .badge-holiday { background: #f8bbd0; color: #ad1457; }
+  .badge-phone { background: #b2ebf2; color: #00838f; font-family: monospace; font-size: 11px; }
 
   .empty-state { text-align: center; padding: 30px 10px; color: #bbb; font-size: 13px; }
   .empty-state .icon { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.4; }
@@ -251,7 +252,6 @@
   }
   .radio-card:hover { background: #fce4ec; }
 
-  /* Message Modal */
   .msg-textarea {
     width: 100%;
     padding: 14px;
@@ -286,7 +286,7 @@
     margin-top: 12px;
     flex-wrap: wrap;
   }
-  .msg-buttons .btn { flex: 1; min-width: 120px; }
+  .msg-buttons .btn { flex: 1; min-width: 100px; }
 </style>
 </head>
 <body>
@@ -350,6 +350,10 @@
             <label>نام مشتری</label>
             <input type="text" id="appointmentName" placeholder="مثلاً: سارا احمدی" list="customerList">
             <datalist id="customerList"></datalist>
+          </div>
+          <div class="form-group">
+            <label>شماره موبایل (اختیاری)</label>
+            <input type="tel" id="appointmentPhone" placeholder="0912 345 6789" inputmode="tel">
           </div>
           <div class="grid-2" style="gap:10px;">
             <div class="form-group"><label>ساعت</label><input type="time" id="appointmentTime"></div>
@@ -507,7 +511,7 @@
   <div class="page" id="customersPage">
     <div class="card">
       <div class="card-title">👥 سابقه مشتریان</div>
-      <div class="search-box"><input type="text" id="customerSearch" placeholder="🔍 جستجوی نام مشتری..." oninput="renderCustomers()"></div>
+      <div class="search-box"><input type="text" id="customerSearch" placeholder="🔍 جستجوی نام یا شماره مشتری..." oninput="renderCustomers()"></div>
       <div id="customersList"></div>
     </div>
   </div>
@@ -744,11 +748,12 @@
     <h3>📱 ارسال پیامک</h3>
 
     <div class="msg-info-box" style="margin-bottom:14px;">
-      شماره موبایل مشتری رو وارد کن. بعد از تأیید، اپ پیام‌رسان گوشی باز می‌شه با متن آماده.
+      <b>شماره مشتری:</b> <span id="smsPhoneHint">نامشخص</span><br>
+      می‌تونی همون رو بزنی ارسال، یا پاک کنی و شماره دیگه‌ای وارد کنی، یا خالی بذاری و بری توی اس‌ام‌اس‌ها خودت مخاطب رو انتخاب کنی.
     </div>
 
     <div class="form-group">
-      <label>شماره موبایل</label>
+      <label>شماره موبایل (اختیاری)</label>
       <input type="tel" id="smsPhoneInput" placeholder="0912 345 6789" inputmode="tel" style="text-align:center;font-family:monospace;font-size:16px;letter-spacing:1px;" onkeydown="if(event.key==='Enter') confirmSendSMS()">
     </div>
 
@@ -907,6 +912,29 @@ function setupAmountInput(id) {
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('input', () => formatInputNum(el));
+}
+
+// ==================== Phone Helpers ====================
+function getCustomerPhone(name) {
+  if (!name) return '';
+  // Find the most recent appointment with a phone number for this customer
+  const appts = data.appointments
+    .filter(a => a.name.trim() === name.trim() && a.phone)
+    .sort((a, b) => {
+      if (a.jy !== b.jy) return b.jy - a.jy;
+      if (a.jm !== b.jm) return b.jm - a.jm;
+      return b.jd - a.jd;
+    });
+  return appts[0]?.phone || '';
+}
+
+function normalizePhone(phone) {
+  if (!phone) return '';
+  let p = phone.trim().replace(/[^\d+]/g, '');
+  if (p.startsWith('0')) p = '+98' + p.substring(1);
+  else if (p.startsWith('9') && p.length === 10) p = '+98' + p;
+  else if (!p.startsWith('+')) p = '+98' + p;
+  return p;
 }
 
 // ==================== Holiday Detection ====================
@@ -1196,6 +1224,7 @@ function renderAppointmentHTML(a) {
         <div class="title">
           💅 ${escapeHtml(a.name)}
           <span class="badge badge-code">${escapeHtml(a.code || '')}</span>
+          ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}
           ${paymentBadge}
         </div>
         <div class="detail">${escapeHtml(a.service)}</div>
@@ -1297,6 +1326,7 @@ function renderAllNotes() {
 // ==================== Add ====================
 function addAppointment() {
   const name = document.getElementById('appointmentName').value.trim();
+  const phone = document.getElementById('appointmentPhone').value.trim();
   const time = document.getElementById('appointmentTime').value;
   const payment = document.getElementById('appointmentPayment').value;
   const note = document.getElementById('appointmentNote').value.trim();
@@ -1318,7 +1348,7 @@ function addAppointment() {
     id: Date.now().toString() + Math.random().toString(36).slice(2,6),
     key: jalaliKey(selJY, selJM, selJD),
     jy: selJY, jm: selJM, jd: selJD,
-    name, time, service, payment, note, amount, code,
+    name, phone, time, service, payment, note, amount, code,
     services: services,
     repairStatus: null, repairLateDays: null,
     createdAt: Date.now()
@@ -1329,6 +1359,7 @@ function addAppointment() {
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
 
   document.getElementById('appointmentName').value = '';
+  document.getElementById('appointmentPhone').value = '';
   document.getElementById('appointmentTime').value = '';
   document.getElementById('appointmentAmount').value = '';
   document.getElementById('appointmentNote').value = '';
@@ -1417,6 +1448,7 @@ function openEdit(type, id) {
 
     body.innerHTML = `
       <div class="form-group"><label>نام مشتری</label><input type="text" id="editName" value="${escapeHtml(item.name)}"></div>
+      <div class="form-group"><label>شماره موبایل (اختیاری)</label><input type="tel" id="editPhone" value="${escapeHtml(item.phone||'')}" placeholder="0912 345 6789" inputmode="tel"></div>
       <div class="grid-2" style="gap:10px;">
         <div class="form-group"><label>ساعت</label><input type="time" id="editTime" value="${item.time||''}"></div>
         <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
@@ -1471,6 +1503,7 @@ function saveEdit() {
     if (editServices.length === 0) { showToast('⚠️ حداقل یه خدمات انتخاب کنید'); return; }
 
     item.name = document.getElementById('editName').value.trim();
+    item.phone = document.getElementById('editPhone').value.trim();
     item.time = document.getElementById('editTime').value;
     item.amount = parseNum(document.getElementById('editAmount').value);
     item.services = editServices;
@@ -1663,6 +1696,7 @@ function submitRepairModal() {
       key: jalaliKey(jy, jm, jd),
       jy, jm, jd,
       name: a.name,
+      phone: a.phone || '',
       time: time,
       service: services.join(' + '),
       services: services,
@@ -1769,7 +1803,7 @@ function renderRepairs() {
     return `
       <div class="alert-box ${boxClass}">
         <div class="alert-content">
-          <div class="name">💅 ${escapeHtml(x.a.name)} <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span></div>
+          <div class="name">💅 ${escapeHtml(x.a.name)} <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span> ${x.a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(x.a.phone)}</span>` : ''}</div>
           <div class="info">
             📅 تاریخ اکستنشن: ${formatJalali(x.a.jy, x.a.jm, x.a.jd)}<br>
             🔧 موعد ترمیم: <b>${formatJalali(x.rd[0], x.rd[1], x.rd[2])}</b><br>
@@ -1882,7 +1916,8 @@ function openMessageForAppointment(apptId) {
               `💅 خدمات: ${a.service}`;
 
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
+    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
+    ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}<br>
     📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' — ⏰ ' + a.time : ''}<br>
     💅 خدمات: <b>${escapeHtml(a.service)}</b><br>
     🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
@@ -1905,25 +1940,26 @@ function openMessageForCustomer(name) {
     return;
   }
 
-  // Get latest extension appointment
   const lastExt = appts.find(a => isExtensionService(a));
   const target = lastExt || appts[0];
 
   messageCustomerName = name;
   const firstName = name.trim().split(' ')[0];
   const rd = getRepairDate(target);
+  const phone = getCustomerPhone(name);
 
   const msg = `سلام ${firstName} جون 🌸\n\n` +
-              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 👁️\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
               `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
               `———\n` +
               `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}\n` +
-              `👁️ خدمات: ${target.service}`;
+              `💅 خدمات: ${target.service}`;
 
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>👁️ ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span><br>
+    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
+    ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}<br>
     📅 آخرین مراجعه: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' — ⏰ ' + target.time : ''}<br>
-    👁️ خدمات: <b>${escapeHtml(target.service)}</b><br>
+    💅 خدمات: <b>${escapeHtml(target.service)}</b><br>
     🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
 
@@ -1944,7 +1980,6 @@ function copyMessage() {
   navigator.clipboard.writeText(text).then(() => {
     showToast('📋 متن کپی شد');
   }).catch(() => {
-    // Fallback for iOS/older browsers
     const ta = document.getElementById('msgText');
     ta.select();
     ta.setSelectionRange(0, 99999);
@@ -1964,61 +1999,56 @@ function sendWhatsApp() {
   const encoded = encodeURIComponent(text);
   window.open('https://wa.me/?text=' + encoded, '_blank');
 }
+
 function sendSMS() {
   const text = document.getElementById('msgText').value;
   if (!text) return;
 
-  // Create a temporary modal to ask for phone number
+  // Pre-fill phone if customer has one
+  const phone = messageCustomerName ? getCustomerPhone(messageCustomerName) : '';
   const phoneInput = document.getElementById('smsPhoneInput');
   const smsModal = document.getElementById('smsPhoneModal');
-  if (smsModal && phoneInput) {
-    phoneInput.value = '';
-    smsModal.classList.add('show');
-    setTimeout(() => phoneInput.focus(), 100);
-  } else {
-    // Fallback: direct sms: link without number
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const separator = isIOS ? '&' : '?';
-    window.location.href = 'sms:' + separator + 'body=' + encodeURIComponent(text);
-  }
+  const hint = document.getElementById('smsPhoneHint');
+
+  phoneInput.value = phone;
+  if (hint) hint.textContent = phone || 'نامشخص (از مخاطبین گوشی انتخاب کن)';
+
+  smsModal.classList.add('show');
+  setTimeout(() => {
+    if (!phone) phoneInput.focus();
+  }, 100);
 }
 
 function confirmSendSMS() {
-  const phone = document.getElementById('smsPhoneInput').value.trim().replace(/[^\d+]/g, '');
+  const rawPhone = document.getElementById('smsPhoneInput').value.trim();
   const text = document.getElementById('msgText').value;
+  if (!text) return;
 
-  if (!phone) {
-    showToast('⚠️ شماره رو وارد کن');
-    return;
-  }
-
-  // Normalize phone for Iran (if starts with 0 or nothing, add +98)
-  let normalizedPhone = phone;
-  if (phone.startsWith('0')) {
-    normalizedPhone = '+98' + phone.substring(1);
-  } else if (phone.startsWith('9') && phone.length === 10) {
-    normalizedPhone = '+98' + phone;
-  } else if (!phone.startsWith('+')) {
-    normalizedPhone = '+98' + phone;
-  }
-
-  // Detect iOS vs Android for proper separator
+  // Detect iOS vs Android
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const separator = isIOS ? '&' : '?';
 
-  // Close modals
+  let smsUrl;
+  if (rawPhone) {
+    // Phone provided → SMS directly to that number
+    const normalized = normalizePhone(rawPhone);
+    smsUrl = 'sms:' + normalized + separator + 'body=' + encodeURIComponent(text);
+  } else {
+    // No phone → open SMS app, user picks contact
+    smsUrl = 'sms:' + separator + 'body=' + encodeURIComponent(text);
+  }
+
   document.getElementById('smsPhoneModal').classList.remove('show');
   document.getElementById('messageModal').classList.remove('show');
 
-  // Open SMS app with pre-filled number and body
-  window.location.href = 'sms:' + normalizedPhone + separator + 'body=' + encodeURIComponent(text);
-
+  window.location.href = smsUrl;
   showToast('📱 اپ پیام‌رسان باز شد');
 }
 
 function closeSMSModal() {
   document.getElementById('smsPhoneModal').classList.remove('show');
 }
+
 // ==================== Finance ====================
 function renderFinance() {
   document.getElementById('financeMonthLabel').textContent = `— ${persianMonths[currentJM-1]} ${currentJY}`;
@@ -2107,7 +2137,13 @@ function renderCustomers() {
   });
 
   let names = Object.keys(byName);
-  if (search) names = names.filter(n => n.toLowerCase().includes(search));
+  if (search) {
+    names = names.filter(n => {
+      if (n.toLowerCase().includes(search)) return true;
+      const phone = getCustomerPhone(n);
+      return phone && phone.includes(search);
+    });
+  }
 
   if (!names.length) {
     c.innerHTML = `<div class="empty-state"><span class="icon">👥</span>مشتری‌ای یافت نشد</div>`;
@@ -2126,6 +2162,7 @@ function renderCustomers() {
     const totalVisits = appts.length;
     const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
     const last = appts[0];
+    const phone = getCustomerPhone(name);
 
     let nextRepair = null;
     const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
@@ -2135,7 +2172,11 @@ function renderCustomers() {
 
     return `
       <div class="customer-card" style="cursor:pointer;">
-        <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span></div>
+        <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">
+          💅 ${escapeHtml(name)} 
+          <span class="badge badge-code">${escapeHtml(code)}</span>
+          ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
+        </div>
         <div class="cinfo" onclick="openCustomerProfile('${escapeHtml(name)}')">
           📊 تعداد مراجعات: <b>${totalVisits}</b> بار &nbsp;|&nbsp; 💰 کل پرداختی: <b>${money(totalPaid)}</b><br>
           📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
@@ -2169,6 +2210,7 @@ function openCustomerProfile(name) {
   const totalPending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
   const first = appts[appts.length - 1];
   const last = appts[0];
+  const phone = getCustomerPhone(name);
 
   const nextRepairInfo = (() => {
     const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
@@ -2183,6 +2225,7 @@ function openCustomerProfile(name) {
     <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:16px;padding:16px;margin-bottom:18px;">
       <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:10px;">
         💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
+        ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
       </div>
       <div style="font-size:13px;line-height:2;color:#666;">
         📊 تعداد مراجعات: <b>${totalVisits}</b> بار<br>
@@ -2191,6 +2234,7 @@ function openCustomerProfile(name) {
         📅 اولین مراجعه: ${formatJalali(first.jy, first.jm, first.jd)}<br>
         📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
         ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
+        ${phone ? `<br>📱 شماره: <b style="color:#00838f;">${escapeHtml(phone)}</b>` : '<br>📱 شماره: ثبت نشده'}
       </div>
       <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:12px;">
         ✉️ ارسال پیام به ${escapeHtml(name)}
