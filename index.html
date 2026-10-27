@@ -455,9 +455,31 @@
   </div>
 
   <!-- FINANCE PAGE -->
-  <div class="page" id="financePage">
     <div class="card">
-      <div class="card-title">💰 گزارش مالی <span id="financeMonthLabel"></span></div>
+      <div class="card-title">
+        💰 گزارش مالی <span id="financeRangeLabel">— ماه جاری</span>
+      </div>
+
+      <!-- Date Range Selector -->
+      <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);padding:14px;border-radius:14px;margin-bottom:15px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+          <span style="font-size:13px;font-weight:bold;color:#6a1b9a;">📅 بازه زمانی:</span>
+          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('current_month')" id="rangeBtnCurrent">این ماه</button>
+          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('last_month')" id="rangeBtnLast">ماه قبل</button>
+          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('last_3_months')" id="rangeBtn3">۳ ماه اخیر</button>
+          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('today')" id="rangeBtnToday">امروز</button>
+          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('all')" id="rangeBtnAll">همه</button>
+          <button class="btn btn-sm" onclick="openFinanceDateModal()" style="margin-right:auto;">🎯 بازه دلخواه</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+          <div style="background:white;padding:8px 12px;border-radius:10px;border:2px solid #f8bbd0;">
+            <b style="color:#6a1b9a;">از:</b> <span id="finFromDisplay" style="color:#ad1457;font-weight:bold;">—</span>
+          </div>
+          <div style="background:white;padding:8px 12px;border-radius:10px;border:2px solid #f8bbd0;">
+            <b style="color:#6a1b9a;">تا:</b> <span id="finToDisplay" style="color:#ad1457;font-weight:bold;">—</span>
+          </div>
+        </div>
+      </div>
 
       <div class="finance-filters">
         <div class="form-group">
@@ -764,7 +786,32 @@
     </div>
   </div>
 </div>
+<!-- Finance Date Range Modal -->
+<div class="modal-overlay" id="financeDateModal" style="z-index:1100;">
+  <div class="modal" style="max-width:440px;">
+    <h3>🎯 بازه زمانی دلخواه</h3>
 
+    <div class="msg-info-box" style="margin-bottom:14px;">
+      تاریخ شمسی رو به فرمت <b>سال/ماه/روز</b> وارد کن.<br>
+      مثال: <b>1404/08/01</b> (اول آبان ۱۴۰۴)
+    </div>
+
+    <div class="form-group">
+      <label>📅 از تاریخ</label>
+      <input type="text" id="finFromDate" placeholder="1404/08/01" style="text-align:center;font-family:monospace;font-size:14px;" inputmode="numeric">
+    </div>
+
+    <div class="form-group">
+      <label>📅 تا تاریخ</label>
+      <input type="text" id="finToDate" placeholder="1404/08/30" style="text-align:center;font-family:monospace;font-size:14px;" inputmode="numeric">
+    </div>
+
+    <div class="msg-buttons">
+      <button class="btn btn-ghost" onclick="closeFinanceDateModal()">انصراف</button>
+      <button class="btn" onclick="applyFinanceDateRange()">اعمال بازه</button>
+    </div>
+  </div>
+</div>
 <input type="file" id="backupFileInput" accept=".json" style="display:none;" onchange="handleBackupFile(event)">
 
 <div class="toast" id="toast"></div>
@@ -2060,15 +2107,240 @@ function callCustomer(phone) {
 }
 
 // ==================== Finance ====================
+let financeRange = {
+  type: 'current_month', // 'current_month', 'last_month', 'last_3_months', 'today', 'all', 'custom'
+  from: null, // {jy, jm, jd}
+  to: null
+};
+
+function setFinanceRange(type) {
+  financeRange.type = type;
+  financeRange.from = null;
+  financeRange.to = null;
+
+  // Update button states
+  document.querySelectorAll('#rangeBtnCurrent, #rangeBtnLast, #rangeBtn3, #rangeBtnToday, #rangeBtnAll').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = 'white';
+    b.style.color = '#ad1457';
+    b.style.borderColor = '#f8bbd0';
+  });
+
+  const btnMap = {
+    'current_month': 'rangeBtnCurrent',
+    'last_month': 'rangeBtnLast',
+    'last_3_months': 'rangeBtn3',
+    'today': 'rangeBtnToday',
+    'all': 'rangeBtnAll'
+  };
+
+  const btnId = btnMap[type];
+  if (btnId) {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      btn.style.background = 'linear-gradient(135deg, #ad1457, #6a1b9a)';
+      btn.style.color = 'white';
+      btn.style.borderColor = 'transparent';
+    }
+  }
+
+  renderFinance();
+}
+
+function openFinanceDateModal() {
+  const modal = document.getElementById('financeDateModal');
+  const fromInput = document.getElementById('finFromDate');
+  const toInput = document.getElementById('finToDate');
+
+  // Pre-fill with current range if custom, else current month
+  if (financeRange.type === 'custom' && financeRange.from && financeRange.to) {
+    fromInput.value = `${financeRange.from.jy}/${String(financeRange.from.jm).padStart(2,'0')}/${String(financeRange.from.jd).padStart(2,'0')}`;
+    toInput.value = `${financeRange.to.jy}/${String(financeRange.to.jm).padStart(2,'0')}/${String(financeRange.to.jd).padStart(2,'0')}`;
+  } else {
+    // Default to current month
+    const daysInMonth = jalaliMonthDays(todayJ[0], todayJ[1]);
+    fromInput.value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/01`;
+    toInput.value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/${String(daysInMonth).padStart(2,'0')}`;
+  }
+
+  modal.classList.add('show');
+  setTimeout(() => fromInput.focus(), 100);
+}
+
+function closeFinanceDateModal() {
+  document.getElementById('financeDateModal').classList.remove('show');
+}
+
+function applyFinanceDateRange() {
+  const fromStr = document.getElementById('finFromDate').value.trim();
+  const toStr = document.getElementById('finToDate').value.trim();
+
+  const fromParts = fromStr.split('/');
+  const toParts = toStr.split('/');
+
+  if (fromParts.length !== 3 || toParts.length !== 3) {
+    showToast('⚠️ فرمت تاریخ درست نیست (مثال: 1404/08/01)');
+    return;
+  }
+
+  const fjy = parseInt(fromParts[0]);
+  const fjm = parseInt(fromParts[1]);
+  const fjd = parseInt(fromParts[2]);
+  const tjy = parseInt(toParts[0]);
+  const tjm = parseInt(toParts[1]);
+  const tjd = parseInt(toParts[2]);
+
+  if (!fjy || !fjm || !fjd || fjy < 1300 || fjy > 1500 || fjm < 1 || fjm > 12 || fjd < 1 || fjd > 31) {
+    showToast('⚠️ تاریخ شروع معتبر نیست');
+    return;
+  }
+
+  if (!tjy || !tjm || !tjd || tjy < 1300 || tjy > 1500 || tjm < 1 || tjm > 12 || tjd < 1 || tjd > 31) {
+    showToast('⚠️ تاریخ پایان معتبر نیست');
+    return;
+  }
+
+  // Check from <= to
+  const fromKey = fjy * 10000 + fjm * 100 + fjd;
+  const toKey = tjy * 10000 + tjm * 100 + tjd;
+
+  if (fromKey > toKey) {
+    showToast('⚠️ تاریخ شروع باید قبل از پایان باشه');
+    return;
+  }
+
+  financeRange.type = 'custom';
+  financeRange.from = { jy: fjy, jm: fjm, jd: fjd };
+  financeRange.to = { jy: tjy, jm: tjm, jd: tjd };
+
+  // Clear button active states
+  document.querySelectorAll('#rangeBtnCurrent, #rangeBtnLast, #rangeBtn3, #rangeBtnToday, #rangeBtnAll').forEach(b => {
+    b.style.background = 'white';
+    b.style.color = '#ad1457';
+    b.style.borderColor = '#f8bbd0';
+  });
+
+  closeFinanceDateModal();
+  renderFinance();
+  showToast('✅ بازه اعمال شد');
+}
+
+function getFinanceRangeBounds() {
+  // Returns { from: {jy,jm,jd}, to: {jy,jm,jd}, label: '...' }
+  const t = todayJ;
+
+  if (financeRange.type === 'custom' && financeRange.from && financeRange.to) {
+    return {
+      from: financeRange.from,
+      to: financeRange.to,
+      label: `${formatJalali(financeRange.from.jy, financeRange.from.jm, financeRange.from.jd)} تا ${formatJalali(financeRange.to.jy, financeRange.to.jm, financeRange.to.jd)}`
+    };
+  }
+
+  if (financeRange.type === 'today') {
+    return {
+      from: { jy: t[0], jm: t[1], jd: t[2] },
+      to: { jy: t[0], jm: t[1], jd: t[2] },
+      label: `امروز — ${formatJalali(t[0], t[1], t[2])}`
+    };
+  }
+
+  if (financeRange.type === 'last_month') {
+    let lm = t[1] - 1;
+    let ly = t[0];
+    if (lm < 1) { lm = 12; ly--; }
+    const daysInLM = jalaliMonthDays(ly, lm);
+    return {
+      from: { jy: ly, jm: lm, jd: 1 },
+      to: { jy: ly, jm: lm, jd: daysInLM },
+      label: `ماه قبل — ${persianMonths[lm-1]} ${ly}`
+    };
+  }
+
+  if (financeRange.type === 'last_3_months') {
+    let lm = t[1] - 2;
+    let ly = t[0];
+    while (lm < 1) { lm += 12; ly--; }
+    const daysInCur = jalaliMonthDays(t[0], t[1]);
+    return {
+      from: { jy: ly, jm: lm, jd: 1 },
+      to: { jy: t[0], jm: t[1], jd: daysInCur },
+      label: `۳ ماه اخیر (${persianMonths[lm-1]} ${ly} تا ${persianMonths[t[1]-1]} ${t[0]})`
+    };
+  }
+
+  if (financeRange.type === 'all') {
+    return {
+      from: { jy: 1300, jm: 1, jd: 1 },
+      to: { jy: 1500, jm: 12, jd: 30 },
+      label: 'همه نوبت‌ها'
+    };
+  }
+
+  // current_month (default)
+  const daysInMonth = jalaliMonthDays(t[0], t[1]);
+  return {
+    from: { jy: t[0], jm: t[1], jd: 1 },
+    to: { jy: t[0], jm: t[1], jd: daysInMonth },
+    label: `این ماه — ${persianMonths[t[1]-1]} ${t[0]}`
+  };
+}
+
+function isDateInRange(jy, jm, jd, from, to) {
+  const key = jy * 10000 + jm * 100 + jd;
+  const fromKey = from.jy * 10000 + from.jm * 100 + from.jd;
+  const toKey = to.jy * 10000 + to.jm * 100 + to.jd;
+  return key >= fromKey && key <= toKey;
+}
+
 function renderFinance() {
-  document.getElementById('financeMonthLabel').textContent = `— ${persianMonths[currentJM-1]} ${currentJY}`;
+  const bounds = getFinanceRangeBounds();
+
+  // Update label
+  const rangeLabel = document.getElementById('financeRangeLabel');
+  if (rangeLabel) rangeLabel.textContent = `— ${bounds.label}`;
+
+  // Update display
+  const fromDisplay = document.getElementById('finFromDisplay');
+  const toDisplay = document.getElementById('finToDisplay');
+  if (fromDisplay) fromDisplay.textContent = formatJalali(bounds.from.jy, bounds.from.jm, bounds.from.jd);
+  if (toDisplay) toDisplay.textContent = formatJalali(bounds.to.jy, bounds.to.jm, bounds.to.jd);
+
+  // Update button states (for custom, no button active)
+  if (financeRange.type === 'custom') {
+    document.querySelectorAll('#rangeBtnCurrent, #rangeBtnLast, #rangeBtn3, #rangeBtnToday, #rangeBtnAll').forEach(b => {
+      b.style.background = 'white';
+      b.style.color = '#ad1457';
+      b.style.borderColor = '#f8bbd0';
+    });
+  } else {
+    const btnMap = {
+      'current_month': 'rangeBtnCurrent',
+      'last_month': 'rangeBtnLast',
+      'last_3_months': 'rangeBtn3',
+      'today': 'rangeBtnToday',
+      'all': 'rangeBtnAll'
+    };
+    document.querySelectorAll('#rangeBtnCurrent, #rangeBtnLast, #rangeBtn3, #rangeBtnToday, #rangeBtnAll').forEach(b => {
+      b.style.background = 'white';
+      b.style.color = '#ad1457';
+      b.style.borderColor = '#f8bbd0';
+    });
+    const btn = document.getElementById(btnMap[financeRange.type]);
+    if (btn) {
+      btn.style.background = 'linear-gradient(135deg, #ad1457, #6a1b9a)';
+      btn.style.color = 'white';
+      btn.style.borderColor = 'transparent';
+    }
+  }
 
   const filterName = (document.getElementById('finFilterName').value || '').trim().toLowerCase();
   const filterService = document.getElementById('finFilterService').value;
   const filterPayment = document.getElementById('finFilterPayment').value;
 
-  let appts = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM);
-  const exps = data.expenses.filter(e => e.jy === currentJY && e.jm === currentJM);
+  // Filter by date range
+  let appts = data.appointments.filter(a => isDateInRange(a.jy, a.jm, a.jd, bounds.from, bounds.to));
+  let exps = data.expenses.filter(e => isDateInRange(e.jy, e.jm, e.jd, bounds.from, bounds.to));
 
   if (filterName) {
     appts = appts.filter(a => a.name.toLowerCase().includes(filterName));
@@ -2096,7 +2368,11 @@ function renderFinance() {
   if (!appts.length) {
     ac.innerHTML = `<div class="empty-state"><span class="icon">💵</span>نوبتی با این فیلتر پیدا نشد</div>`;
   } else {
-    ac.innerHTML = appts.sort((a,b) => a.jd - b.jd).map(a => {
+    ac.innerHTML = appts.sort((a,b) => {
+      if (a.jy !== b.jy) return b.jy - a.jy;
+      if (a.jm !== b.jm) return b.jm - a.jm;
+      return a.jd - b.jd;
+    }).map(a => {
       const badge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
                     '<span class="badge badge-pending">⏳ در انتظار</span>';
       return `
@@ -2116,7 +2392,11 @@ function renderFinance() {
   if (!exps.length) {
     ec.innerHTML = `<div class="empty-state"><span class="icon">💸</span>خرجی ثبت نشده</div>`;
   } else {
-    ec.innerHTML = exps.sort((a,b) => a.jd - b.jd).map(e => `
+    ec.innerHTML = exps.sort((a,b) => {
+      if (a.jy !== b.jy) return b.jy - a.jy;
+      if (a.jm !== b.jm) return b.jm - a.jm;
+      return a.jd - b.jd;
+    }).map(e => `
       <div class="item pending">
         <div class="item-content">
           <div class="title">${escapeHtml(e.title)}</div>
