@@ -73,6 +73,8 @@
   .legend-today { background: linear-gradient(135deg, #ad1457, #6a1b9a); }
   .legend-selected { background: linear-gradient(135deg, #f8bbd0, #e1bee7); border: 1px solid #ad1457; }
   .legend-normal { background: #fafafa; border: 1px solid #eee; }
+  .legend-dot-appt { background: #6a1b9a; width: 8px; height: 8px; border-radius: 50%; }
+  .legend-dot-repair { background: #ff6f00; width: 8px; height: 8px; border-radius: 50%; }
 
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; margin-bottom: 5px; color: #6a1b9a; font-size: 13px; font-weight: bold; }
@@ -90,7 +92,6 @@
   .btn-warn { background: linear-gradient(135deg, #ffb74d, #ef6c00); }
   .btn-ghost { background: white; color: #ad1457; border: 2px solid #f8bbd0; box-shadow: none; }
   .btn-msg { background: linear-gradient(135deg, #26c6da, #00838f); }
-  .btn-call { background: linear-gradient(135deg, #66bb6a, #2e7d32); }
 
   .item-list { max-height: 500px; overflow-y: auto; padding-right: 5px; }
   .item-list::-webkit-scrollbar { width: 6px; }
@@ -113,7 +114,6 @@
   .badge-pending { background: #ffe0b2; color: #ef6c00; }
   .badge-code { background: #e1bee7; color: #6a1b9a; font-family: monospace; }
   .badge-holiday { background: #f8bbd0; color: #ad1457; }
-  .badge-phone { background: #b2ebf2; color: #00838f; font-family: monospace; font-size: 11px; }
 
   .empty-state { text-align: center; padding: 30px 10px; color: #bbb; font-size: 13px; }
   .empty-state .icon { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.4; }
@@ -283,7 +283,7 @@
     margin-top: 12px;
     flex-wrap: wrap;
   }
-  .msg-buttons .btn { flex: 1; min-width: 100px; }
+  .msg-buttons .btn { flex: 1; min-width: 120px; }
 
   .name-link {
     cursor: pointer;
@@ -296,6 +296,15 @@
     background: rgba(173,20,87,0.08);
     border-radius: 4px;
     padding: 0 3px;
+  }
+
+  .history-item {
+    background: #fff9fb;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-right: 3px solid #ad1457;
+    font-size: 12px;
   }
 </style>
 </head>
@@ -321,33 +330,29 @@
 
   <!-- DASHBOARD -->
   <div class="page active" id="dashboardPage">
-    <div class="card">
-      <div class="card-title">📅 تقویم <span id="selectedDateLabel"></span></div>
-      <div class="calendar-header">
-        <button onclick="changeMonth(-1)">‹</button>
-        <div class="calendar-title" id="calendarTitle"></div>
-        <button onclick="changeMonth(1)">›</button>
-      </div>
-      <div class="weekdays">
-        <div>ش</div><div>ی</div><div>د</div><div>س</div><div>چ</div><div>پ</div><div class="friday-col">ج</div>
-      </div>
-      <div class="days" id="calendarDays"></div>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل / جمعه</div>
-        <div class="legend-item"><div class="legend-color legend-today"></div>امروز</div>
-        <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب شده</div>
-        <div class="legend-item"><div class="legend-color legend-normal"></div>روز عادی</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📋 برنامه‌های روز <span id="selectedDayLabel"></span></div>
-      <div class="item-list" id="selectedDayItems"></div>
-    </div>
-
     <div class="grid-2">
       <div class="card">
-        <div class="card-title">✍️ ثبت اطلاعات</div>
+        <div class="card-title">📅 تقویم</div>
+        <div class="calendar-header">
+          <button onclick="changeMonth(-1)">‹</button>
+          <div class="calendar-title" id="calendarTitle"></div>
+          <button onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="weekdays">
+          <div>ش</div><div>ی</div><div>د</div><div>س</div><div>چ</div><div>پ</div><div class="friday-col">ج</div>
+        </div>
+        <div class="days" id="calendarDays"></div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل</div>
+          <div class="legend-item"><div class="legend-color legend-today"></div>امروز</div>
+          <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب</div>
+          <div class="legend-item"><div class="legend-dot-appt"></div>نوبت</div>
+          <div class="legend-item"><div class="legend-dot-repair"></div>ترمیم</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✍️ ثبت اطلاعات <span id="selectedDateLabel"></span></div>
         <div class="tabs">
           <button class="tab active" onclick="switchTab('appointment')">📌 نوبت</button>
           <button class="tab" onclick="switchTab('note')">📝 یادداشت</button>
@@ -360,10 +365,6 @@
             <label>نام مشتری</label>
             <input type="text" id="appointmentName" placeholder="مثلاً: سارا احمدی" list="customerList">
             <datalist id="customerList"></datalist>
-          </div>
-          <div class="form-group">
-            <label>شماره موبایل (اختیاری)</label>
-            <input type="tel" id="appointmentPhone" placeholder="0912 345 6789" inputmode="tel">
           </div>
           <div class="grid-2" style="gap:10px;">
             <div class="form-group"><label>ساعت</label><input type="time" id="appointmentTime"></div>
@@ -390,7 +391,7 @@
               <option value="paid">پرداخت شده</option>
             </select>
           </div>
-          <div class="form-group"><label>توضیحات</label><textarea id="appointmentNote" placeholder="توضیحات..."></textarea></div>
+          <div class="form-group"><label>توضیحات (اختیاری)</label><textarea id="appointmentNote" placeholder="توضیحات..."></textarea></div>
           <button class="btn btn-full" onclick="addAppointment()">ثبت نوبت</button>
         </div>
 
@@ -406,11 +407,16 @@
           <button class="btn btn-full" onclick="addExpense()">ثبت خرج</button>
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <div class="card-title">🗓️ نمای هفته پیش‌رو</div>
-        <div class="grid-2" id="weekGrid" style="gap:10px;"></div>
-      </div>
+    <div class="card">
+      <div class="card-title">📋 برنامه‌های روز <span id="selectedDayLabel"></span></div>
+      <div class="item-list" id="selectedDayItems"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗓️ نمای هفته پیش‌رو</div>
+      <div class="grid-4" id="weekGrid"></div>
     </div>
   </div>
 
@@ -428,15 +434,16 @@
       </div>
       <div class="days" id="calendarDaysMain"></div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل / جمعه</div>
+        <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل</div>
         <div class="legend-item"><div class="legend-color legend-today"></div>امروز</div>
-        <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب شده</div>
-        <div class="legend-item"><div class="legend-color legend-normal"></div>روز عادی</div>
+        <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب</div>
+        <div class="legend-item"><div class="legend-dot-appt"></div>نوبت</div>
+        <div class="legend-item"><div class="legend-dot-repair"></div>ترمیم</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">📋 برنامه‌های روز <span id="selectedDayLabelMain"></span></div>
+      <div class="card-title">📋 برنامه‌های روز انتخاب شده <span id="selectedDayLabelMain"></span></div>
       <div class="item-list" id="selectedDayItemsMain"></div>
     </div>
   </div>
@@ -528,7 +535,7 @@
   <div class="page" id="customersPage">
     <div class="card">
       <div class="card-title">👥 مشتریان</div>
-      <div class="search-box"><input type="text" id="customerSearch" placeholder="🔍 جستجوی نام یا شماره..." oninput="renderCustomers()"></div>
+      <div class="search-box"><input type="text" id="customerSearch" placeholder="🔍 جستجوی نام..." oninput="renderCustomers()"></div>
       <div id="customersList"></div>
     </div>
   </div>
@@ -547,7 +554,7 @@
   <!-- REPAIRS PAGE -->
   <div class="page" id="repairsPage">
     <div class="card">
-      <div class="card-title">🔔 یادآوری‌های ترمیم <span style="font-size:12px;">(نزدیک‌ترین‌ها بالا)</span></div>
+      <div class="card-title">🔔 یادآوری‌های ترمیم <span style="font-size:12px;">(نزدیک‌ترین بالا)</span></div>
       <div id="repairsList"></div>
     </div>
   </div>
@@ -555,7 +562,7 @@
   <!-- HOLIDAYS PAGE -->
   <div class="page" id="holidaysPage">
     <div class="card">
-      <div class="card-title">🎉 تعطیلات</div>
+      <div class="card-title">🎉 مدیریت تعطیلات</div>
       <div class="grid-3" style="gap:10px;">
         <div class="form-group">
           <label>ماه</label>
@@ -571,7 +578,7 @@
         <div class="form-group"><label>روز</label><input type="number" id="holidayDay" min="1" max="31" placeholder="1"></div>
         <div class="form-group"><label>عنوان</label><input type="text" id="holidayTitle" placeholder="عید..."></div>
       </div>
-      <button class="btn btn-full" onclick="addHoliday()">➕ افزودن</button>
+      <button class="btn btn-full" onclick="addHoliday()">➕ افزودن تعطیلی</button>
       <div style="margin-top:20px;font-weight:bold;color:#ad1457;">📋 لیست:</div>
       <div id="holidaysList" style="margin-top:10px;"></div>
     </div>
@@ -591,7 +598,7 @@
         <button class="btn btn-full btn-success" onclick="importBackup()" style="padding:20px;">📂 بازگردانی</button>
       </div>
       <div style="margin-top:20px;padding-top:20px;border-top:2px dashed #f8bbd0;">
-        <div style="font-weight:bold;color:#ad1457;margin-bottom:10px;">📊 اطلاعات فعلی:</div>
+        <div style="font-weight:bold;color:#ad1457;margin-bottom:10px;">📊 آمار:</div>
         <div class="grid-4" id="backupStats"></div>
       </div>
     </div>
@@ -705,28 +712,7 @@
     <div class="msg-buttons">
       <button class="btn btn-ghost" onclick="closeMessageModal()">انصراف</button>
       <button class="btn btn-msg" onclick="copyMessage()">📋 کپی</button>
-    </div>
-    <div class="msg-buttons">
-      <button class="btn" style="background:linear-gradient(135deg,#25d366,#128c7e);" onclick="sendWhatsApp()">💬 واتساپ</button>
-      <button class="btn" style="background:linear-gradient(135deg,#42a5f5,#1565c0);" onclick="sendSMS()">📱 پیامک</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="smsPhoneModal" style="z-index:1100;">
-  <div class="modal" style="max-width:420px;">
-    <h3>📱 ارسال پیامک</h3>
-    <div class="msg-info-box" style="margin-bottom:14px;">
-      <b>شماره:</b> <span id="smsPhoneHint">نامشخص</span><br>
-      می‌تونی همون رو ارسال کنی یا پاک کنی و بری توی اس‌ام‌اس‌ها.
-    </div>
-    <div class="form-group">
-      <label>شماره موبایل (اختیاری)</label>
-      <input type="tel" id="smsPhoneInput" placeholder="0912 345 6789" inputmode="tel" style="text-align:center;font-family:monospace;font-size:16px;" onkeydown="if(event.key==='Enter') confirmSendSMS()">
-    </div>
-    <div class="msg-buttons">
-      <button class="btn btn-ghost" onclick="closeSMSModal()">انصراف</button>
-      <button class="btn" style="background:linear-gradient(135deg,#42a5f5,#1565c0);" onclick="confirmSendSMS()">📱 ارسال</button>
+      <button class="btn btn-success" onclick="sendWhatsApp()">💬 واتساپ</button>
     </div>
   </div>
 </div>
@@ -883,13 +869,15 @@ function showToast(msg) {
 
 function parseNum(str) {
   if (!str) return 0;
-  return parseInt(String(str).replace(/[^\d]/g, '')) || 0;
+  const cleaned = String(str).replace(/[^\d]/g, '');
+  return parseInt(cleaned) || 0;
 }
 
 function formatInputNum(inputEl) {
   const raw = inputEl.value.replace(/[^\d]/g, '');
   if (raw === '') { inputEl.value = ''; return; }
-  inputEl.value = (parseInt(raw) || 0).toLocaleString('en-US');
+  const num = parseInt(raw) || 0;
+  inputEl.value = num.toLocaleString('en-US');
 }
 
 function setupAmountInput(id) {
@@ -898,23 +886,7 @@ function setupAmountInput(id) {
   el.addEventListener('input', () => formatInputNum(el));
 }
 
-function getCustomerPhone(name) {
-  if (!name) return '';
-  const appts = data.appointments
-    .filter(a => a.name.trim() === name.trim() && a.phone)
-    .sort((a, b) => (b.jy - a.jy) || (b.jm - a.jm) || (b.jd - a.jd));
-  return appts[0]?.phone || '';
-}
-
-function normalizePhone(phone) {
-  if (!phone) return '';
-  let p = phone.trim().replace(/[^\d+]/g, '');
-  if (p.startsWith('0')) p = '+98' + p.substring(1);
-  else if (p.startsWith('9') && p.length === 10) p = '+98' + p;
-  else if (!p.startsWith('+')) p = '+98' + p;
-  return p;
-}
-
+// ==================== Holiday ====================
 function getHolidayInfo(jy, jm, jd) {
   const dow = getDayOfWeekJalali(jy, jm, jd);
   const isFriday = dow === 5;
@@ -924,6 +896,7 @@ function getHolidayInfo(jy, jm, jd) {
   return { isHoliday: false, isFriday: false, title: '' };
 }
 
+// ==================== Repair ====================
 function isExtensionService(a) {
   if (!a) return false;
   const extensionServices = ['اسپایکی','والیوم','کلاسیک','قهوه ای','خط چشمی','مژه و ابرو'];
@@ -940,6 +913,16 @@ function getRepairDate(a) {
   return addDaysToJalali(a.jy, a.jm, a.jd, 21);
 }
 
+// All repairs for a specific date (regardless of month)
+function getRepairsForDate(jy, jm, jd) {
+  return data.appointments.filter(a => {
+    if (!isExtensionService(a)) return false;
+    if (a.repairStatus) return false;
+    const rd = getRepairDate(a);
+    return rd[0] === jy && rd[1] === jm && rd[2] === jd;
+  });
+}
+
 function getCustomerCode(name) {
   const existing = data.appointments.find(a => a.name.trim() === name.trim() && a.code);
   if (existing) return existing.code;
@@ -948,7 +931,7 @@ function getCustomerCode(name) {
   return code;
 }
 
-// ==================== Page Navigation ====================
+// ==================== Page Nav ====================
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
@@ -994,15 +977,19 @@ function renderCalendar() {
     if (hInfo.isHoliday) el.classList.add('holiday');
     if (isToday) el.classList.add('today');
     if (isSel) el.classList.add('selected');
+    if (hInfo.title) el.title = hInfo.title;
 
     const appts = data.appointments.filter(a => a.key === key);
     const notes = data.notes.filter(n => n.key === key);
+    // IMPORTANT: repairs for this date (21 days after any extension on this day OR from other days)
+    const repairs = getRepairsForDate(currentJY, currentJM, d);
 
-    if (appts.length || notes.length) {
+    if (appts.length || notes.length || repairs.length) {
       const dots = document.createElement('div');
       dots.className = 'dots';
       if (appts.length) { const dd = document.createElement('div'); dd.className = 'dot appointment'; dots.appendChild(dd); }
       if (notes.length) { const dd = document.createElement('div'); dd.className = 'dot note'; dots.appendChild(dd); }
+      if (repairs.length) { const dd = document.createElement('div'); dd.className = 'dot repair'; dots.appendChild(dd); }
       el.appendChild(dots);
     }
 
@@ -1034,8 +1021,12 @@ function updateHolidayWarning() {
   const hInfo = getHolidayInfo(selJY, selJM, selJD);
   if (hInfo.isHoliday) {
     w.classList.add('show');
-    w.textContent = hInfo.title === 'جمعه' ? '🎉 این روز جمعه است!' : `🎉 ${hInfo.title} — تعطیل رسمی است!`;
-  } else w.classList.remove('show');
+    w.textContent = hInfo.title === 'جمعه'
+      ? '🎉 این روز جمعه است! شاید بهتره برای این روز نوبت نذاری.'
+      : `🎉 ${hInfo.title} — این روز تعطیل رسمی است!`;
+  } else {
+    w.classList.remove('show');
+  }
 }
 
 // ==================== Calendar Main ====================
@@ -1068,15 +1059,18 @@ function renderCalendarMain() {
     if (hInfo.isHoliday) el.classList.add('holiday');
     if (isToday) el.classList.add('today');
     if (isSel) el.classList.add('selected');
+    if (hInfo.title) el.title = hInfo.title;
 
     const appts = data.appointments.filter(a => a.key === key);
     const notes = data.notes.filter(n => n.key === key);
+    const repairs = getRepairsForDate(mainCurrentJY, mainCurrentJM, d);
 
-    if (appts.length || notes.length) {
+    if (appts.length || notes.length || repairs.length) {
       const dots = document.createElement('div');
       dots.className = 'dots';
       if (appts.length) { const dd = document.createElement('div'); dd.className = 'dot appointment'; dots.appendChild(dd); }
       if (notes.length) { const dd = document.createElement('div'); dd.className = 'dot note'; dots.appendChild(dd); }
+      if (repairs.length) { const dd = document.createElement('div'); dd.className = 'dot repair'; dots.appendChild(dd); }
       el.appendChild(dots);
     }
 
@@ -1103,13 +1097,23 @@ function renderSelectedDayItemsMain() {
   const appts = data.appointments.filter(a => a.key === key).sort((a,b) => (a.time||'').localeCompare(b.time||''));
   const notes = data.notes.filter(n => n.key === key);
   const exps = data.expenses.filter(e => e.key === key);
+  const repairs = getRepairsForDate(selJY, selJM, selJD);
 
-  if (!appts.length && !notes.length && !exps.length) {
+  if (!appts.length && !notes.length && !exps.length && !repairs.length) {
     c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ برنامه‌ای نیست</div>`;
     return;
   }
 
   let html = '';
+  repairs.forEach(a => {
+    html += `<div class="alert-box" style="border-color:#ffb74d;">
+      <div class="alert-content">
+        <div class="name"><span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">🔧 ${escapeHtml(a.name)}</span> <span class="badge badge-code">${escapeHtml(a.code||'')}</span></div>
+        <div class="info">ترمیم ۲۱ روزه — از اکستنشن ${formatJalali(a.jy, a.jm, a.jd)}</div>
+      </div>
+      <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
+    </div>`;
+  });
   appts.forEach(a => { html += renderAppointmentHTML(a); });
   notes.forEach(n => { html += renderNoteHTML(n); });
   exps.forEach(e => { html += renderExpenseHTML(e); });
@@ -1128,13 +1132,23 @@ function renderSelectedDayItems() {
   const appts = data.appointments.filter(a => a.key === key).sort((a,b) => (a.time||'').localeCompare(b.time||''));
   const notes = data.notes.filter(n => n.key === key);
   const exps = data.expenses.filter(e => e.key === key);
+  const repairs = getRepairsForDate(selJY, selJM, selJD);
 
-  if (!appts.length && !notes.length && !exps.length) {
+  if (!appts.length && !notes.length && !exps.length && !repairs.length) {
     c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ برنامه‌ای برای این روز نیست</div>`;
     return;
   }
 
   let html = '';
+  repairs.forEach(a => {
+    html += `<div class="alert-box" style="border-color:#ffb74d;">
+      <div class="alert-content">
+        <div class="name"><span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">🔧 ${escapeHtml(a.name)}</span> <span class="badge badge-code">${escapeHtml(a.code||'')}</span></div>
+        <div class="info">ترمیم ۲۱ روزه — از اکستنشن ${formatJalali(a.jy, a.jm, a.jd)}</div>
+      </div>
+      <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
+    </div>`;
+  });
   appts.forEach(a => { html += renderAppointmentHTML(a); });
   notes.forEach(n => { html += renderNoteHTML(n); });
   exps.forEach(e => { html += renderExpenseHTML(e); });
@@ -1144,7 +1158,6 @@ function renderSelectedDayItems() {
 // ==================== Render Items ====================
 function renderAppointmentHTML(a) {
   const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' : '<span class="badge badge-pending">⏳ در انتظار</span>';
-
   let repairInfo = '';
   if (isExtensionService(a)) {
     const rd = getRepairDate(a);
@@ -1163,7 +1176,6 @@ function renderAppointmentHTML(a) {
         <div class="title">
           <span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')" title="سابقه">💅 ${escapeHtml(a.name)}</span>
           <span class="badge badge-code">${escapeHtml(a.code || '')}</span>
-          ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}
           ${paymentBadge}
         </div>
         <div class="detail">${escapeHtml(a.service)}</div>
@@ -1173,7 +1185,6 @@ function renderAppointmentHTML(a) {
         ${repairInfo}
       </div>
       <div class="item-actions">
-        ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')">📞</button>` : ''}
         <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
         <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
         <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}')">🗑️</button>
@@ -1220,7 +1231,6 @@ function openCustomerHistory(customerName) {
   if (!appts.length) { showToast('⚠️ سابقه‌ای پیدا نشد'); return; }
 
   const code = appts[0].code || '—';
-  const phone = getCustomerPhone(name);
   const totalVisits = appts.length;
   const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
 
@@ -1229,25 +1239,23 @@ function openCustomerHistory(customerName) {
     const svcs = a.services || (a.service ? a.service.split(' + ') : []);
     svcs.forEach(s => { serviceCount[s] = (serviceCount[s] || 0) + 1; });
   });
-
   const servicesSummary = Object.entries(serviceCount).sort((a, b) => b[1] - a[1]).map(([s, c]) => `${s} (${c} بار)`).join(' • ');
 
   document.getElementById('historyModalContent').innerHTML = `
     <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:14px;padding:14px;margin-bottom:14px;">
       <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:8px;">
         💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
-        ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
       </div>
       <div style="font-size:12px;color:#666;line-height:1.9;">
         📊 ${totalVisits} مراجعه &nbsp;|&nbsp; 💰 ${money(totalPaid)} پرداختی
       </div>
-      ${servicesSummary ? `<div style="margin-top:8px;padding:8px;background:white;border-radius:8px;font-size:11px;color:#6a1b9a;line-height:1.8;"><b>💅 خدمات گذشته:</b><br>${servicesSummary}</div>` : ''}
+      ${servicesSummary ? `<div style="margin-top:8px;padding:8px;background:white;border-radius:8px;font-size:11px;color:#6a1b9a;line-height:1.8;"><b>💅 خدمات:</b><br>${servicesSummary}</div>` : ''}
     </div>
 
-    <div style="font-weight:bold;color:#ad1457;font-size:13px;margin-bottom:8px;">📜 لیست مراجعات:</div>
+    <div style="font-weight:bold;color:#ad1457;font-size:13px;margin-bottom:8px;">📜 مراجعات (۲ مورد آخر):</div>
 
     <div style="max-height:400px;overflow-y:auto;padding-right:5px;">
-      ${appts.map((a, idx) => {
+      ${appts.slice(0, 5).map((a, idx) => {
         const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓</span>' : '<span class="badge badge-pending">⏳</span>';
         const isLatest = idx === 0;
         let repairInfo = '';
@@ -1260,7 +1268,7 @@ function openCustomerHistory(customerName) {
         }
 
         return `
-          <div style="background:${isLatest ? 'linear-gradient(135deg,#e8f5e9,#f1f8e9)' : '#fff9fb'};border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid ${isLatest ? '#2e7d32' : '#ad1457'};">
+          <div class="history-item" style="background:${isLatest ? 'linear-gradient(135deg,#e8f5e9,#f1f8e9)' : '#fff9fb'};border-right-color:${isLatest ? '#2e7d32' : '#ad1457'};">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
               <span style="font-size:12px;font-weight:bold;color:#6a1b9a;">${isLatest ? '🆕 ' : ''}📅 ${formatJalali(a.jy, a.jm, a.jd)}</span>
               ${paymentBadge}
@@ -1283,7 +1291,7 @@ function closeHistoryModal() {
   document.getElementById('historyModal').classList.remove('show');
 }
 
-// ==================== Notes ====================
+// ==================== All Notes ====================
 function renderAllNotes() {
   const c = document.getElementById('allNotesList');
   if (!c) return;
@@ -1314,7 +1322,6 @@ function renderAllNotes() {
 // ==================== Add ====================
 function addAppointment() {
   const name = document.getElementById('appointmentName').value.trim();
-  const phone = document.getElementById('appointmentPhone').value.trim();
   const time = document.getElementById('appointmentTime').value;
   const payment = document.getElementById('appointmentPayment').value;
   const note = document.getElementById('appointmentNote').value.trim();
@@ -1333,7 +1340,7 @@ function addAppointment() {
     id: Date.now().toString() + Math.random().toString(36).slice(2,6),
     key: jalaliKey(selJY, selJM, selJD),
     jy: selJY, jm: selJM, jd: selJD,
-    name, phone, time, service: services.join(' + '), payment, note, amount, code,
+    name, time, service: services.join(' + '), payment, note, amount, code,
     services, repairStatus: null, repairLateDays: null,
     createdAt: Date.now()
   });
@@ -1343,7 +1350,6 @@ function addAppointment() {
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
 
   document.getElementById('appointmentName').value = '';
-  document.getElementById('appointmentPhone').value = '';
   document.getElementById('appointmentTime').value = '';
   document.getElementById('appointmentAmount').value = '';
   document.getElementById('appointmentNote').value = '';
@@ -1398,7 +1404,6 @@ function openEdit(type, id) {
   const arr = type === 'appointment' ? 'appointments' : type === 'note' ? 'notes' : 'expenses';
   const item = data[arr].find(i => i.id === id);
   if (!item) return;
-
   editingItem = { type: arr, id };
   const body = document.getElementById('editModalBody');
   const title = document.getElementById('editModalTitle');
@@ -1416,10 +1421,9 @@ function openEdit(type, id) {
 
     body.innerHTML = `
       <div class="form-group"><label>نام مشتری</label><input type="text" id="editName" value="${escapeHtml(item.name)}"></div>
-      <div class="form-group"><label>شماره موبایل</label><input type="tel" id="editPhone" value="${escapeHtml(item.phone||'')}" placeholder="0912 345 6789" inputmode="tel"></div>
       <div class="grid-2" style="gap:10px;">
         <div class="form-group"><label>ساعت</label><input type="time" id="editTime" value="${item.time||''}"></div>
-        <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
+        <div class="form-group"><label>مبلغ</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
       </div>
       <div class="form-group"><label>خدمات</label>${serviceBoxHTML}</div>
       <div class="form-group">
@@ -1458,7 +1462,6 @@ function saveEdit() {
     const editServices = Array.from(document.querySelectorAll('#editServiceBox input[type="checkbox"]:checked')).map(cb => cb.value);
     if (editServices.length === 0) { showToast('⚠️ حداقل یه خدمات'); return; }
     item.name = document.getElementById('editName').value.trim();
-    item.phone = document.getElementById('editPhone').value.trim();
     item.time = document.getElementById('editTime').value;
     item.amount = parseNum(document.getElementById('editAmount').value);
     item.services = editServices;
@@ -1485,16 +1488,7 @@ function saveEdit() {
   showToast('✅ ذخیره شد');
 }
 
-// ==================== Repairs (Sorted by nearest) ====================
-function getRepairsForDate(jy, jm, jd) {
-  return data.appointments.filter(a => {
-    if (!isExtensionService(a)) return false;
-    if (a.repairStatus) return false;
-    const rd = getRepairDate(a);
-    return rd[0] === jy && rd[1] === jm && rd[2] === jd;
-  });
-}
-
+// ==================== Repairs ====================
 function markRepair(id, status) {
   const a = data.appointments.find(x => x.id === id);
   if (!a) return;
@@ -1510,7 +1504,6 @@ function markRepair(id, status) {
 function rescheduleRepair(id) {
   const a = data.appointments.find(x => x.id === id);
   if (!a) return;
-
   repairModalId = id;
   const currentRepair = getRepairDate(a);
   const currentStr = `${currentRepair[0]}/${String(currentRepair[1]).padStart(2,'0')}/${String(currentRepair[2]).padStart(2,'0')}`;
@@ -1518,7 +1511,7 @@ function rescheduleRepair(id) {
   document.getElementById('repairInfoBox').innerHTML = `
     <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
     📅 اکستنشن: ${formatJalali(a.jy, a.jm, a.jd)}<br>
-    🔧 موعد فعلی: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b><br>
+    🔧 موعد: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b><br>
     💅 خدمات قبلی: <b>${escapeHtml(a.service)}</b>
   `;
 
@@ -1597,7 +1590,7 @@ function submitRepairModal() {
     const parts = document.getElementById('repairNewDate').value.trim().split('/');
     if (parts.length !== 3) { showToast('⚠️ فرمت تاریخ'); return; }
     const jy = parseInt(parts[0]), jm = parseInt(parts[1]), jd = parseInt(parts[2]);
-    if (!jy || !jm || !jd || jy < 1300 || jy > 1500 || jm < 1 || jm > 12 || jd < 1 || jd > 31) { showToast('⚠️ تاریخ معتبر'); return; }
+    if (!jy || !jm || !jd || jy < 1300 || jy > 1500 || jm < 1 || jm > 12 || jd < 1 || jd > 31) { showToast('⚠️ تاریخ'); return; }
 
     const services = Array.from(document.querySelectorAll('#repairServiceBox input[type="checkbox"]:checked')).map(cb => cb.value);
     if (services.length === 0) { showToast('⚠️ خدمات'); return; }
@@ -1611,7 +1604,6 @@ function submitRepairModal() {
       key: jalaliKey(jy, jm, jd),
       jy, jm, jd,
       name: a.name,
-      phone: a.phone || '',
       time: time,
       service: services.join(' + '),
       services: services,
@@ -1642,11 +1634,9 @@ function submitRepairModal() {
   }
 }
 
-// ==================== Repairs List (Sorted by nearest to today) ====================
 function renderRepairs() {
   const c = document.getElementById('repairsList');
-  
-  // Get all active repairs with their diff from today
+  // Sort by diff (nearest first): 0 (today) → 1 → 2 → ... → past (negative) → completed
   const items = data.appointments
     .filter(a => isExtensionService(a))
     .map(a => {
@@ -1654,23 +1644,18 @@ function renderRepairs() {
       const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
       return { a, rd, diff };
     })
-    // Sort: active (no repairStatus) first, by nearest to today (diff closest to 0 first)
-    // then completed/missed items at bottom
     .sort((x, y) => {
+      // Active items first
       const xActive = !x.a.repairStatus;
       const yActive = !y.a.repairStatus;
       if (xActive && !yActive) return -1;
       if (!xActive && yActive) return 1;
-      // Both same status group — sort by diff (nearest first)
-      // For active: closest to today means smallest |diff|, but future first then past
-      if (xActive) {
-        // Future/upcoming first (diff >= 0), then past (diff < 0)
+      // Sort by nearest to today (future first, then past)
+      if (xActive && yActive) {
         if (x.diff >= 0 && y.diff < 0) return -1;
         if (x.diff < 0 && y.diff >= 0) return 1;
-        // Both future: smaller diff first (closer)
         if (x.diff >= 0 && y.diff >= 0) return x.diff - y.diff;
-        // Both past: closer to today first (larger diff first since they're negative)
-        return y.diff - x.diff;
+        return y.diff - x.diff; // Both past: closer first (larger negative = closer)
       }
       return y.diff - x.diff;
     });
@@ -1685,11 +1670,9 @@ function renderRepairs() {
     if (x.a.repairStatus === 'came') { statusBadge = '<span class="badge badge-paid">✓ انجام شد</span>'; boxClass = 'done'; }
     else if (x.a.repairStatus === 'late') { statusBadge = `<span class="badge badge-pending">⏰ ${x.a.repairLateDays} روز دیرتر</span>`; boxClass = 'done'; }
     else if (x.a.repairStatus === 'missed') { statusBadge = '<span class="badge" style="background:#ffcdd2;color:#c62828;">✗ نیامد</span>'; boxClass = 'overdue'; }
-    else if (x.diff < 0) { statusBadge = '<span class="badge" style="background:#ffcdd2;color:#c62828;">⚠️ از موعد گذشته</span>'; boxClass = 'overdue'; }
-    else if (x.diff === 0) { statusBadge = '<span class="badge badge-pending">🔔 امروز</span>'; }
-    else if (x.diff <= 3) { statusBadge = `<span class="badge badge-pending">⏳ ${x.diff} روز دیگر</span>`; }
-    else if (x.diff <= 7) { statusBadge = `<span class="badge badge-pending">⏳ ${x.diff} روز دیگر</span>`; }
-    else { statusBadge = `<span class="badge badge-code">📅 ${x.diff} روز مانده</span>`; }
+    else if (x.diff < 0) { statusBadge = '<span class="badge" style="background:#ffcdd2;color:#c62828;">⚠️ گذشته</span>'; boxClass = 'overdue'; }
+    else if (x.diff <= 7) { statusBadge = `<span class="badge badge-pending">🔔 ${x.diff === 0 ? 'امروز' : x.diff + ' روز دیگر'}</span>`; }
+    else { statusBadge = `<span class="badge badge-code">${x.diff} روز مانده</span>`; }
 
     return `
       <div class="alert-box ${boxClass}">
@@ -1697,17 +1680,15 @@ function renderRepairs() {
           <div class="name">
             <span class="name-link" onclick="openCustomerHistory('${escapeHtml(x.a.name)}')">💅 ${escapeHtml(x.a.name)}</span>
             <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span>
-            ${x.a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(x.a.phone)}</span>` : ''}
           </div>
           <div class="info">
             📅 اکستنشن: ${formatJalali(x.a.jy, x.a.jm, x.a.jd)}<br>
-            🔧 موعد: <b>${formatJalali(x.rd[0], x.rd[1], x.rd[2])}</b>
-            ${!x.a.repairStatus ? (x.diff < 0 ? `<br>⚠️ ${Math.abs(x.diff)} روز از موعد گذشته` : (x.diff === 0 ? '<br>🔔 امروز موعد ترمیم است' : `<br>⏳ ${x.diff} روز دیگر`)) : ''}
+            🔧 موعد ترمیم: <b>${formatJalali(x.rd[0], x.rd[1], x.rd[2])}</b><br>
+            ${!x.a.repairStatus ? (x.diff < 0 ? `⚠️ ${Math.abs(x.diff)} روز از موعد گذشته` : (x.diff === 0 ? '🔔 امروز موعد ترمیم است' : `⏳ ${x.diff} روز دیگر`)) : ''}
           </div>
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          ${x.a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(x.a.phone)}')">📞</button>` : ''}
           <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')">✉️</button>
           ${!x.a.repairStatus ? `
             <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
@@ -1726,20 +1707,20 @@ function openMessageForAppointment(apptId) {
   messageCustomerName = a.name;
   const firstName = a.name.trim().split(' ')[0];
   const rd = getRepairDate(a);
+
   const msg = `سلام ${firstName} جون 🌸\n\n` +
-              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
-              `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
-              `———\n` +
-              `📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}\n` +
-              `💅 خدمات: ${a.service}`;
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) ✔️\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر، روز و تایم آزادتو بهم بگو تا برات اوکی کنم 💗\n` +
+              `____\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}`;
 
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
-    ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}<br>
+    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
     📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' — ⏰ ' + a.time : ''}<br>
     💅 خدمات: <b>${escapeHtml(a.service)}</b><br>
     🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
+
   document.getElementById('msgText').value = msg;
   document.getElementById('messageModal').classList.add('show');
 }
@@ -1752,21 +1733,20 @@ function openMessageForCustomer(name) {
   messageCustomerName = name;
   const firstName = name.trim().split(' ')[0];
   const rd = getRepairDate(target);
-  const phone = getCustomerPhone(name);
+
   const msg = `سلام ${firstName} جون 🌸\n\n` +
-              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
-              `اگه دوست داری تایم فیکس کنی، زودتر روز و تایم آزاداتو بهم بگو تا برات اوکی کنم 💜\n\n` +
-              `———\n` +
-              `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}\n` +
-              `💅 خدمات: ${target.service}`;
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) ✔️\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر، روز و تایم آزادتو بهم بگو تا برات اوکی کنم 💗\n` +
+              `____\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}`;
 
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
-    ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}<br>
+    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span><br>
     📅 آخرین: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' — ⏰ ' + target.time : ''}<br>
     💅 خدمات: <b>${escapeHtml(target.service)}</b><br>
     🔧 ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
+
   document.getElementById('msgText').value = msg;
   document.getElementById('messageModal').classList.add('show');
 }
@@ -1790,39 +1770,7 @@ function sendWhatsApp() {
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 }
 
-function sendSMS() {
-  const text = document.getElementById('msgText').value;
-  if (!text) return;
-  const phone = messageCustomerName ? getCustomerPhone(messageCustomerName) : '';
-  document.getElementById('smsPhoneInput').value = phone;
-  document.getElementById('smsPhoneHint').textContent = phone || 'نامشخص (از مخاطبین انتخاب کن)';
-  document.getElementById('smsPhoneModal').classList.add('show');
-  setTimeout(() => { if (!phone) document.getElementById('smsPhoneInput').focus(); }, 100);
-}
-
-function confirmSendSMS() {
-  const rawPhone = document.getElementById('smsPhoneInput').value.trim();
-  const text = document.getElementById('msgText').value;
-  if (!text) return;
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const sep = isIOS ? '&' : '?';
-  let url;
-  if (rawPhone) url = 'sms:' + normalizePhone(rawPhone) + sep + 'body=' + encodeURIComponent(text);
-  else url = 'sms:' + sep + 'body=' + encodeURIComponent(text);
-  document.getElementById('smsPhoneModal').classList.remove('show');
-  document.getElementById('messageModal').classList.remove('show');
-  window.location.href = url;
-  showToast('📱 باز شد');
-}
-
-function closeSMSModal() { document.getElementById('smsPhoneModal').classList.remove('show'); }
-
-function callCustomer(phone) {
-  if (!phone) { showToast('⚠️ شماره‌ای نیست'); return; }
-  window.location.href = 'tel:' + normalizePhone(phone);
-}
-
-// ==================== Finance with Range ====================
+// ==================== Finance Range ====================
 let financeRange = { type: 'current_month', from: null, to: null };
 
 function setFinanceRange(type) {
@@ -1857,7 +1805,7 @@ function applyFinanceDateRange() {
   const tjy = parseInt(tp[0]), tjm = parseInt(tp[1]), tjd = parseInt(tp[2]);
   if (!fjy || !fjm || !fjd || fjy < 1300 || fjy > 1500 || fjm < 1 || fjm > 12 || fjd < 1 || fjd > 31) { showToast('⚠️ تاریخ شروع'); return; }
   if (!tjy || !tjm || !tjd || tjy < 1300 || tjy > 1500 || tjm < 1 || tjm > 12 || tjd < 1 || tjd > 31) { showToast('⚠️ تاریخ پایان'); return; }
-  if (fjy*10000 + fjm*100 + fjd > tjy*10000 + tjm*100 + tjd) { showToast('⚠️ شروع باید قبل از پایان'); return; }
+  if (fjy*10000 + fjm*100 + fjd > tjy*10000 + tjm*100 + tjd) { showToast('⚠️ شروع قبل از پایان'); return; }
   financeRange.type = 'custom';
   financeRange.from = { jy: fjy, jm: fjm, jd: fjd };
   financeRange.to = { jy: tjy, jm: tjm, jd: tjd };
@@ -1984,13 +1932,7 @@ function renderCustomers() {
   });
 
   let names = Object.keys(byName);
-  if (search) {
-    names = names.filter(n => {
-      if (n.toLowerCase().includes(search)) return true;
-      const phone = getCustomerPhone(n);
-      return phone && phone.includes(search);
-    });
-  }
+  if (search) names = names.filter(n => n.toLowerCase().includes(search));
 
   if (!names.length) { c.innerHTML = `<div class="empty-state"><span class="icon">👥</span>مشتری‌ای یافت نشد</div>`; return; }
 
@@ -2001,25 +1943,19 @@ function renderCustomers() {
     const totalVisits = appts.length;
     const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
     const last = appts[0];
-    const phone = getCustomerPhone(name);
     let nextRepair = null;
     const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
     if (lastExt) nextRepair = getRepairDate(lastExt);
 
     return `
       <div class="customer-card" style="cursor:pointer;">
-        <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">
-          💅 ${escapeHtml(name)}
-          <span class="badge badge-code">${escapeHtml(code)}</span>
-          ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
-        </div>
+        <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span></div>
         <div class="cinfo" onclick="openCustomerProfile('${escapeHtml(name)}')">
           📊 ${totalVisits} مراجعه &nbsp;|&nbsp; 💰 ${money(totalPaid)}<br>
           📅 آخرین: ${formatJalali(last.jy, last.jm, last.jd)}
           ${nextRepair ? `&nbsp;|&nbsp; 🔧 ترمیم: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
         </div>
         <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
-          ${phone ? `<button class="btn btn-sm btn-call" onclick="event.stopPropagation(); callCustomer('${escapeHtml(phone)}')">📞 تماس</button>` : ''}
           <button class="btn btn-sm btn-msg" onclick="event.stopPropagation(); openMessageForCustomer('${escapeHtml(name)}')">✉️ پیام</button>
           <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); openCustomerProfile('${escapeHtml(name)}')">👁️ سابقه</button>
         </div>
@@ -2032,18 +1968,16 @@ function openCustomerProfile(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('customerProfilePage').classList.add('active');
-
   document.getElementById('customerProfileName').textContent = `💅 ${name}`;
 
   const appts = data.appointments.filter(a => a.name.trim() === name.trim()).sort((a, b) => (b.jy - a.jy) || (b.jm - a.jm) || (b.jd - a.jd));
-
   const code = appts[0]?.code || '—';
   const totalVisits = appts.length;
   const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
   const totalPending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
   const first = appts[appts.length - 1];
   const last = appts[0];
-  const phone = getCustomerPhone(name);
+
   const nextRepairInfo = (() => {
     const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
     if (lastExt) { const rd = getRepairDate(lastExt); return formatJalali(rd[0], rd[1], rd[2]); }
@@ -2054,7 +1988,6 @@ function openCustomerProfile(name) {
     <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:16px;padding:16px;margin-bottom:18px;">
       <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:10px;">
         💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
-        ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
       </div>
       <div style="font-size:13px;line-height:2;color:#666;">
         📊 ${totalVisits} مراجعه<br>
@@ -2064,8 +1997,7 @@ function openCustomerProfile(name) {
         📅 آخرین: ${formatJalali(last.jy, last.jm, last.jd)}
         ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
       </div>
-      ${phone ? `<button class="btn btn-call btn-full" onclick="callCustomer('${escapeHtml(phone)}')" style="margin-top:12px;">📞 تماس</button>` : ''}
-      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:8px;">✉️ ارسال پیام</button>
+      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:12px;">✉️ ارسال پیام</button>
     </div>
 
     <div style="font-weight:bold;color:#ad1457;font-size:15px;margin-bottom:12px;">📜 سابقه کامل:</div>
@@ -2097,7 +2029,6 @@ function openCustomerProfile(name) {
             ${repairInfo}
           </div>
           <div class="item-actions">
-            ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')">📞</button>` : ''}
             <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
             <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
             <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}'); setTimeout(()=>openCustomerProfile('${escapeHtml(name)}'), 200);">🗑️</button>
@@ -2147,10 +2078,18 @@ function renderWeekView() {
     const key = jalaliKey(day.jy, day.jm, day.jd);
     const appts = data.appointments.filter(a => a.key === key);
     const notes = data.notes.filter(n => n.key === key);
+    const repairs = getRepairsForDate(day.jy, day.jm, day.jd);
     appts.forEach(a => {
       const e = document.createElement('div');
       e.className = 'week-event appointment';
       e.textContent = `💅 ${a.name}`;
+      ev.appendChild(e);
+    });
+    repairs.forEach(a => {
+      const e = document.createElement('div');
+      e.className = 'week-event';
+      e.style.background = '#ff6f00';
+      e.textContent = `🔧 ${a.name}`;
       ev.appendChild(e);
     });
     notes.forEach(n => {
@@ -2159,7 +2098,7 @@ function renderWeekView() {
       e.textContent = `📝 ${n.title}`;
       ev.appendChild(e);
     });
-    if (!appts.length && !notes.length) {
+    if (!appts.length && !notes.length && !repairs.length) {
       const e = document.createElement('div');
       e.style.cssText = 'font-size:10px;color:#bbb;';
       e.textContent = '—';
