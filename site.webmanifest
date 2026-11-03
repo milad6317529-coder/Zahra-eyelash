@@ -1,22 +1,21 @@
 {
-  "name": "خدمات اکستنشن مژه زهرا مطهری",
-  "short_name": "مژه زهرا",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#fce4ec",
-  "theme_color": "#ad1457",
-  "lang": "fa",
-  "dir": "rtl",
+  "name": "MyWebSite",
+  "short_name": "MySite",
   "icons": [
     {
-      "src": "web-app-manifest-192x192.png",
+      "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
-      "src": "web-app-manifest-512x512.png",
+      "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "theme_color": "#dba2a2",
+  "background_color": "#e69797",
+  "display": "standalone"
 }
