@@ -1926,7 +1926,25 @@ function renderRepairs() {
   const c = document.getElementById('repairsList');
   const items = data.appointments.filter(a => isExtensionService(a))
     .map(a => { const rd = getRepairDate(a); const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]); return { a, rd, diff }; })
-    .sort((a, b) => a.diff - b.diff);
+        .sort((a, b) => {
+      // اولویت ۱: ترمیم‌های انجام نشده و آینده
+      // اولویت ۲: ترمیم‌های انجام نشده و گذشته (منفی)
+      // اولویت ۳: ترمیم‌های انجام شده/نیامده
+      const aDone = (a.a.repairStatus === 'came' || a.a.repairStatus === 'late' || a.a.repairStatus === 'missed') ? 1 : 0;
+      const bDone = (b.a.repairStatus === 'came' || b.a.repairStatus === 'late' || b.a.repairStatus === 'missed') ? 1 : 0;
+      
+      // انجام نشده‌ها اول بیان
+      if (aDone !== bDone) return aDone - bDone;
+      
+      // بین انجام نشده‌ها: نزدیک‌ترین (کمترین اختلاف مطلق) بالاتر
+      // یعنی اگه امروز و فردا و دیروز هست → امروز اول
+      if (aDone === 0) {
+        return Math.abs(a.diff) - Math.abs(b.diff);
+      }
+      
+      // انجام شده‌ها: جدیدترین اول
+      return b.a.jy - a.a.jy || b.a.jm - a.a.jm || b.a.jd - a.a.jd;
+    });
   if (!items.length) { c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ یادآوری ترمیمی نیست</div>`; return; }
   c.innerHTML = items.map(x => {
     let statusBadge = '', boxClass = '';
