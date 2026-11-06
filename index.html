@@ -1327,7 +1327,7 @@ function renderDayItemsHTML(jy, jm, jd, key) {
             ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}
           </div>
           <div class="detail">📅 موعد ترمیم — اکستنشن اصلی: ${formatJalali(a.jy, a.jm, a.jd)}</div>
-          <div class="detail">💅 ${escapeHtml(a.service)}</div>
+          <div class="detail">👀 ${escapeHtml(a.service)}</div>
         </div>
         <div class="item-actions">
           ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')">📞</button>` : ''}
@@ -1379,7 +1379,7 @@ function renderAppointmentHTML(a) {
     <div class="item appointment ${a.payment === 'paid' ? 'paid' : 'pending'}">
       <div class="item-content">
         <div class="title">
-          <span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">💅 ${escapeHtml(a.name)}</span>
+          <span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">👀 ${escapeHtml(a.name)}</span>
           <span class="badge badge-code">${escapeHtml(a.code || '')}</span>
           ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}
           ${paymentBadge}
@@ -1826,10 +1826,10 @@ function rescheduleRepair(id) {
   const currentRepair = getRepairDate(a);
   const currentStr = `${currentRepair[0]}/${String(currentRepair[1]).padStart(2,'0')}/${String(currentRepair[2]).padStart(2,'0')}`;
   document.getElementById('repairInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
+    <b>👀 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
     📅 اکستنشن: ${formatJalali(a.jy, a.jm, a.jd)}<br>
     🔧 موعد فعلی: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b><br>
-    💅 خدمات قبلی: <b>${escapeHtml(a.service)}</b>
+    👀 خدمات قبلی: <b>${escapeHtml(a.service)}</b>
   `;
   setRepairDays(0);
   document.getElementById('repairDaysCustom').value = '';
@@ -1958,7 +1958,7 @@ function renderRepairs() {
       <div class="alert-box ${boxClass}">
         <div class="alert-content">
           <div class="name">
-            <span class="name-link" onclick="openCustomerHistory('${escapeHtml(x.a.name)}')">💅 ${escapeHtml(x.a.name)}</span>
+            <span class="name-link" onclick="openCustomerHistory('${escapeHtml(x.a.name)}')">👀 ${escapeHtml(x.a.name)}</span>
             <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span>
             ${x.a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(x.a.phone)}</span>` : ''}
           </div>
@@ -1988,12 +1988,12 @@ function openMessageForAppointment(apptId) {
   messageCustomerName = a.name;
   const firstName = a.name.trim().split(' ')[0];
   const rd = getRepairDate(a);
-  const msg = `سلام ${firstName} جون 🌸\n\nتایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\nاگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n———\n📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}\n💅 خدمات: ${a.service}`;
+  const msg = `سلام ${firstName} جون 🌸\n\nتایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 👀\nاگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n———\n📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}\n💅 خدمات: ${a.service}`;
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
+    <b>👀 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
     ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}<br>
     📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}<br>
-    💅 خدمات: <b>${escapeHtml(a.service)}</b>
+    👀 خدمات: <b>${escapeHtml(a.service)}</b>
   `;
   document.getElementById('msgText').value = msg;
   document.getElementById('messageModal').classList.add('show');
@@ -2012,9 +2012,9 @@ function openMessageForCustomer(name) {
   const firstName = name.trim().split(' ')[0];
   const rd = getRepairDate(target);
   const phone = getCustomerPhone(name);
-  const msg = `سلام ${firstName} جون 🌸\n\nتایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\nاگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n———\n📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}\n💅 خدمات: ${target.service}`;
+  const msg = `سلام ${firstName} جون 🌸\n\nتایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 👀\nاگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n———\n📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}\n💅 خدمات: ${target.service}`;
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
+    <b>👀 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
     ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
   `;
   document.getElementById('msgText').value = msg;
@@ -2088,7 +2088,7 @@ function openCustomerHistory(customerName) {
   document.getElementById('historyModalContent').innerHTML = `
     <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:14px;padding:14px;margin-bottom:14px;">
       <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:8px;">
-        💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
+        👀 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
         ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
       </div>
       <div style="font-size:12px;color:#666;line-height:1.9;">
@@ -2164,7 +2164,7 @@ function renderCustomers() {
     return `
       <div class="customer-card" style="cursor:pointer;">
         <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">
-          💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
+          👀 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
           ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
         </div>
         <div class="cinfo" onclick="openCustomerProfile('${escapeHtml(name)}')">
@@ -2186,7 +2186,7 @@ function openCustomerProfile(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('customerProfilePage').classList.add('active');
-  document.getElementById('customerProfileName').textContent = `💅 ${name}`;
+  document.getElementById('customerProfileName').textContent = `👀 ${name}`;
   const appts = data.appointments.filter(a => a.name.trim() === name.trim()).sort((a, b) => {
     if (a.jy !== b.jy) return b.jy - a.jy;
     if (a.jm !== b.jm) return b.jm - a.jm;
@@ -2206,7 +2206,7 @@ function openCustomerProfile(name) {
   document.getElementById('customerProfileContent').innerHTML = `
     <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:16px;padding:16px;margin-bottom:18px;">
       <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:10px;">
-        💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
+        👀 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
         ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
       </div>
       <div style="font-size:13px;line-height:2;color:#666;">
