@@ -1986,14 +1986,18 @@ function openMessageForAppointment(apptId) {
   const a = data.appointments.find(x => x.id === apptId);
   if (!a) return;
   messageCustomerName = a.name;
-  const firstName = a.name.trim().split(' ')[0];
   const rd = getRepairDate(a);
-  const msg = `سلام ${firstName} جون 🌸\n\nتایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 👀\nاگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n———\n📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}\n💅 خدمات: ${a.service}`;
+  const msg = `سلام عزیزم🌸\n\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) ✔️\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر، روز و تایم آزادتو بهم بگو تا برات اوکی کنم 💗\n` +
+              `____\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}`;
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>👀 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
+    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
     ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}<br>
-    📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}<br>
-    👀 خدمات: <b>${escapeHtml(a.service)}</b>
+    📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' — ⏰ ' + a.time : ''}<br>
+    💅 خدمات: <b>${escapeHtml(a.service)}</b><br>
+    🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
   document.getElementById('msgText').value = msg;
   document.getElementById('messageModal').classList.add('show');
@@ -2009,18 +2013,23 @@ function openMessageForCustomer(name) {
   const lastExt = appts.find(a => isExtensionService(a));
   const target = lastExt || appts[0];
   messageCustomerName = name;
-  const firstName = name.trim().split(' ')[0];
   const rd = getRepairDate(target);
   const phone = getCustomerPhone(name);
-  const msg = `سلام ${firstName} جون 🌸\n\nتایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 👀\nاگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n———\n📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}\n💅 خدمات: ${target.service}`;
+  const msg = `سلام عزیزم🌸\n\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) ✔️\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر، روز و تایم آزادتو بهم بگو تا برات اوکی کنم 💗\n` +
+              `____\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}`;
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>👀 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
-    ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
+    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
+    ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}<br>
+    📅 آخرین مراجعه: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' — ⏰ ' + target.time : ''}<br>
+    💅 خدمات: <b>${escapeHtml(target.service)}</b><br>
+    🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
   document.getElementById('msgText').value = msg;
   document.getElementById('messageModal').classList.add('show');
 }
-
 function closeMessageModal() { document.getElementById('messageModal').classList.remove('show'); messageCustomerName = null; }
 function copyMessage() {
   const text = document.getElementById('msgText').value;
