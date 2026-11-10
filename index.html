@@ -59,12 +59,11 @@
   .day.holiday.selected { background: linear-gradient(135deg, #f06292, #ec407a); border: 2px solid #6a1b9a; color: white; }
 
   .day .dots { display: flex; gap: 2px; position: absolute; bottom: 3px; }
-  .day .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .day .dot { width: 4px; height: 4px; border-radius: 50%; }
   .day .dot.appointment { background: #6a1b9a; }
-  .day .dot.note { background: #ffeb3b; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
+  .day .dot.note { background: #ad1457; }
   .day .dot.repair { background: #ff6f00; }
   .day.holiday .dot { background: #fff; }
-  .day.holiday .dot.note { background: #ffeb3b; }
   .day.holiday .dot.repair { background: #ffd54f; }
 
   .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #f8bbd0; font-size: 11px; color: #666; justify-content: center; }
@@ -74,10 +73,6 @@
   .legend-today { background: linear-gradient(135deg, #ad1457, #6a1b9a); }
   .legend-selected { background: linear-gradient(135deg, #f8bbd0, #e1bee7); border: 1px solid #ad1457; }
   .legend-normal { background: #fafafa; border: 1px solid #eee; }
-  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .legend-dot.appointment { background: #6a1b9a; }
-  .legend-dot.note { background: #ffeb3b; border: 1px solid #ccc; }
-  .legend-dot.repair { background: #ff6f00; }
 
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; margin-bottom: 5px; color: #6a1b9a; font-size: 13px; font-weight: bold; }
@@ -95,8 +90,6 @@
   .btn-warn { background: linear-gradient(135deg, #ffb74d, #ef6c00); }
   .btn-ghost { background: white; color: #ad1457; border: 2px solid #f8bbd0; box-shadow: none; }
   .btn-msg { background: linear-gradient(135deg, #26c6da, #00838f); }
-  .btn-call { background: linear-gradient(135deg, #66bb6a, #2e7d32); }
-  .btn-note { background: linear-gradient(135deg, #fdd835, #f57f17); color: #333; }
 
   .item-list { max-height: 500px; overflow-y: auto; padding-right: 5px; }
   .item-list::-webkit-scrollbar { width: 6px; }
@@ -107,7 +100,6 @@
   .item.appointment { border-right-color: #6a1b9a; background: linear-gradient(135deg, #fff9fb, #f3e5f5); }
   .item.paid { border-right-color: #2e7d32; background: linear-gradient(135deg, #f1f8e9, #f9fbe7); }
   .item.pending { border-right-color: #ef6c00; background: linear-gradient(135deg, #fff8e1, #fff3e0); }
-  .item.note { border-right-color: #f57f17; background: linear-gradient(135deg, #fffde7, #fff9c4); }
   .item.repair-due { border-right-color: #ff6f00; background: linear-gradient(135deg, #fff3e0, #ffe0b2); box-shadow: 0 0 0 2px #ffb74d; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -122,8 +114,6 @@
   .badge-pending { background: #ffe0b2; color: #ef6c00; }
   .badge-code { background: #e1bee7; color: #6a1b9a; font-family: monospace; }
   .badge-holiday { background: #f8bbd0; color: #ad1457; }
-  .badge-phone { background: #b2ebf2; color: #00838f; font-family: monospace; font-size: 11px; }
-  .badge-note { background: #fff59d; color: #f57f17; }
 
   .empty-state { text-align: center; padding: 30px 10px; color: #bbb; font-size: 13px; }
   .empty-state .icon { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.4; }
@@ -195,10 +185,7 @@
   .week-day .events { flex: 1; display: flex; flex-direction: column; gap: 4px; }
   .week-event { font-size: 10px; padding: 4px 6px; border-radius: 6px; background: #ad1457; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
   .week-event.appointment { background: #6a1b9a; }
-  .week-event.note { background: #fdd835; color: #333; }
-  .week-event.repair { background: #ff6f00; }
   .week-day.today .week-event { background: rgba(255,255,255,0.25); }
-  .week-day.today .week-event.note { background: #ffeb3b; color: #333; }
 
   .developer-signature {
     text-align: center;
@@ -264,6 +251,7 @@
   }
   .radio-card:hover { background: #fce4ec; }
 
+  /* Message Modal */
   .msg-textarea {
     width: 100%;
     padding: 14px;
@@ -298,103 +286,7 @@
     margin-top: 12px;
     flex-wrap: wrap;
   }
-  .msg-buttons .btn { flex: 1; min-width: 100px; }
-
-  .name-link {
-    cursor: pointer;
-    text-decoration: underline dotted;
-    text-underline-offset: 3px;
-  }
-  .name-link:hover {
-    color: #ad1457;
-    background: rgba(173,20,87,0.08);
-    border-radius: 4px;
-    padding: 0 3px;
-  }
-
-  .customer-info-panel {
-    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-    border: 2px solid #66bb6a;
-    border-radius: 12px;
-    padding: 10px 14px;
-    margin-bottom: 12px;
-    font-size: 12px;
-    color: #2e7d32;
-    line-height: 1.8;
-    display: none;
-  }
-  .customer-info-panel.show { display: block; }
-  .customer-info-panel .big {
-    font-size: 14px;
-    font-weight: bold;
-    color: #1b5e20;
-  }
-  .customer-info-panel .actions {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-    flex-wrap: wrap;
-  }
-
-  /* Floating Add Note Button */
-  .fab-note {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #fdd835, #f57f17);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 32px;
-    font-weight: bold;
-    box-shadow: 0 8px 25px rgba(245,127,23,0.5);
-    z-index: 900;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    padding-bottom: 3px;
-  }
-  .fab-note:hover {
-    transform: scale(1.1) rotate(90deg);
-    box-shadow: 0 12px 35px rgba(245,127,23,0.7);
-  }
-  .fab-note:active { transform: scale(0.95); }
-
-  /* Notes filter toolbar */
-  .notes-toolbar {
-    background: linear-gradient(135deg, #fffde7, #fff9c4);
-    padding: 14px;
-    border-radius: 14px;
-    margin-bottom: 15px;
-    border: 2px solid #fff59d;
-  }
-  .notes-toolbar .row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .notes-toolbar .row:last-child { margin-bottom: 0; }
-  .notes-toolbar .label {
-    font-size: 12px;
-    font-weight: bold;
-    color: #6a1b9a;
-  }
-  .notes-toolbar .date-display {
-    background: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 2px solid #ffe082;
-    font-size: 12px;
-    color: #ad1457;
-    font-weight: bold;
-  }
+  .msg-buttons .btn { flex: 1; min-width: 120px; }
 </style>
 </head>
 <body>
@@ -419,6 +311,11 @@
 
   <!-- DASHBOARD -->
   <div class="page active" id="dashboardPage">
+    <div class="card" id="repairAlertCard" style="display:none; background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-color: #ffb74d;">
+      <div class="card-title" style="color:#ef6c00;">🔔 هشدار ترمیم‌های هفته آینده</div>
+      <div id="repairAlertList"></div>
+    </div>
+
     <div class="grid-2">
       <div class="card">
         <div class="card-title">📅 تقویم</div>
@@ -432,12 +329,10 @@
         </div>
         <div class="days" id="calendarDays"></div>
         <div class="legend">
-          <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل</div>
+          <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل / جمعه</div>
           <div class="legend-item"><div class="legend-color legend-today"></div>امروز</div>
-          <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب</div>
-          <div class="legend-item"><div class="legend-dot appointment"></div>نوبت</div>
-          <div class="legend-item"><div class="legend-dot repair"></div>ترمیم</div>
-          <div class="legend-item"><div class="legend-dot note"></div>یادداشت</div>
+          <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب شده</div>
+          <div class="legend-item"><div class="legend-color legend-normal"></div>روز عادی</div>
         </div>
       </div>
 
@@ -445,40 +340,33 @@
         <div class="card-title">✍️ ثبت اطلاعات <span id="selectedDateLabel"></span></div>
         <div class="tabs">
           <button class="tab active" onclick="switchTab('appointment')">📌 نوبت</button>
+          <button class="tab" onclick="switchTab('note')">📝 یادداشت</button>
           <button class="tab" onclick="switchTab('expense')">💸 خرج</button>
         </div>
 
         <div class="tab-content active" id="appointmentTab">
-          <div class="holiday-warning" id="holidayWarning">🎉 این روز تعطیل است!</div>
+          <div class="holiday-warning" id="holidayWarning">🎉 این روز تعطیل است! مطمئن شو مشتری برای تعطیلات نوبت می‌خواد.</div>
           <div class="form-group">
             <label>نام مشتری</label>
-            <input type="text" id="appointmentName" placeholder="مثلاً: نام مشتری" list="customerList" autocomplete="off" oninput="updateCustomerInfoPanel()">
+            <input type="text" id="appointmentName" placeholder="مثلاً: سارا احمدی" list="customerList">
             <datalist id="customerList"></datalist>
-          </div>
-
-          <div class="customer-info-panel" id="customerInfoPanel"></div>
-
-          <div class="form-group">
-            <label>شماره موبایل (اختیاری)</label>
-            <input type="tel" id="appointmentPhone" placeholder="0912 345 6789" inputmode="tel">
           </div>
           <div class="grid-2" style="gap:10px;">
             <div class="form-group"><label>ساعت</label><input type="time" id="appointmentTime"></div>
-            <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="appointmentAmount" placeholder="500,000" inputmode="numeric"></div>
+            <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="appointmentAmount" placeholder="مثلاً: 500,000" inputmode="numeric"></div>
           </div>
           <div class="form-group">
             <label>نوع خدمات (می‌تونی چند تا انتخاب کنی)</label>
             <div id="appointmentServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">
-              <label class="service-check"><input type="checkbox" value="ترمیم"> ترمیم</label>
               <label class="service-check"><input type="checkbox" value="اسپایکی"> اسپایکی</label>
-              <label class="service-check"><input type="checkbox" value="کلاسیک"> کلاسیک</label>
               <label class="service-check"><input type="checkbox" value="والیوم"> والیوم</label>
+              <label class="service-check"><input type="checkbox" value="کلاسیک"> کلاسیک</label>
+              <label class="service-check"><input type="checkbox" value="قهوه ای"> قهوه ای</label>
               <label class="service-check"><input type="checkbox" value="خط چشمی"> خط چشمی</label>
-              <label class="service-check"><input type="checkbox" value="ریمو"> ریمو</label>
-              <label class="service-check"><input type="checkbox" value="لیفت ابرو"> لیفت ابرو</label>
               <label class="service-check"><input type="checkbox" value="لیفت مژه"> لیفت مژه</label>
-              <label class="service-check"><input type="checkbox" value="رنگی"> رنگی</label>
-              <label class="service-check"><input type="checkbox" value="کاشت"> کاشت</label>
+              <label class="service-check"><input type="checkbox" value="لیفت ابرو"> لیفت ابرو</label>
+              <label class="service-check"><input type="checkbox" value="مژه و ابرو"> مژه و ابرو</label>
+              <label class="service-check"><input type="checkbox" value="ریمو"> ریمو</label>
             </div>
           </div>
           <div class="form-group">
@@ -492,9 +380,15 @@
           <button class="btn btn-full" onclick="addAppointment()">ثبت نوبت</button>
         </div>
 
+        <div class="tab-content" id="noteTab">
+          <div class="form-group"><label>عنوان یادداشت</label><input type="text" id="noteTitle" placeholder="مثلاً: خرید چسب مژه"></div>
+          <div class="form-group"><label>متن یادداشت</label><textarea id="noteText" placeholder="متن..."></textarea></div>
+          <button class="btn btn-full" onclick="addNote()">ثبت یادداشت</button>
+        </div>
+
         <div class="tab-content" id="expenseTab">
           <div class="form-group"><label>عنوان خرج</label><input type="text" id="expenseTitle" placeholder="مثلاً: خرید چسب مژه"></div>
-          <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="expenseAmount" placeholder="200,000" inputmode="numeric"></div>
+          <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="expenseAmount" placeholder="مثلاً: 200,000" inputmode="numeric"></div>
           <button class="btn btn-full" onclick="addExpense()">ثبت خرج</button>
         </div>
       </div>
@@ -508,6 +402,14 @@
     <div class="card">
       <div class="card-title">🗓️ نمای هفته پیش‌رو</div>
       <div class="grid-4" id="weekGrid"></div>
+    </div>
+
+    <div class="card" id="weeklyRepairCard">
+      <div class="card-title">
+        🔧 ترمیم‌های این هفته (پنجشنبه تا پنجشنبه)
+        <span id="weeklyRepairRange"></span>
+      </div>
+      <div id="weeklyRepairList"></div>
     </div>
   </div>
 
@@ -525,12 +427,10 @@
       </div>
       <div class="days" id="calendarDaysMain"></div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل</div>
+        <div class="legend-item"><div class="legend-color legend-holiday"></div>تعطیل / جمعه</div>
         <div class="legend-item"><div class="legend-color legend-today"></div>امروز</div>
-        <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب</div>
-        <div class="legend-item"><div class="legend-dot appointment"></div>نوبت</div>
-        <div class="legend-item"><div class="legend-dot repair"></div>ترمیم</div>
-        <div class="legend-item"><div class="legend-dot note"></div>یادداشت</div>
+        <div class="legend-item"><div class="legend-color legend-selected"></div>انتخاب شده</div>
+        <div class="legend-item"><div class="legend-color legend-normal"></div>روز عادی</div>
       </div>
     </div>
 
@@ -544,24 +444,6 @@
   <div class="page" id="notesPage">
     <div class="card">
       <div class="card-title">📝 همه یادداشت‌ها <span id="notesCount"></span></div>
-
-      <div class="notes-toolbar">
-        <div class="row">
-          <span class="label">📅 بازه زمانی:</span>
-          <button class="btn btn-sm btn-ghost" onclick="setNotesRange('all')" id="notesRangeAll">همه</button>
-          <button class="btn btn-sm btn-ghost" onclick="setNotesRange('current_month')" id="notesRangeCurrent">این ماه</button>
-          <button class="btn btn-sm btn-ghost" onclick="setNotesRange('last_month')" id="notesRangeLast">ماه قبل</button>
-          <button class="btn btn-sm btn-ghost" onclick="setNotesRange('last_3_months')" id="notesRange3">۳ ماه اخیر</button>
-          <button class="btn btn-sm" onclick="openNotesDateModal()" style="margin-right:auto;">🎯 بازه دلخواه</button>
-        </div>
-        <div class="row" id="notesDateDisplayRow" style="display:none;">
-          <span class="label">📌 بازه:</span>
-          <div class="date-display" id="notesFromDisplay">—</div>
-          <span style="color:#ad1457;">تا</span>
-          <div class="date-display" id="notesToDisplay">—</div>
-        </div>
-      </div>
-
       <div class="search-box"><input type="text" id="notesSearch" placeholder="🔍 جستجو در یادداشت‌ها..." oninput="renderAllNotes()"></div>
       <div id="allNotesList"></div>
     </div>
@@ -570,27 +452,7 @@
   <!-- FINANCE PAGE -->
   <div class="page" id="financePage">
     <div class="card">
-      <div class="card-title">💰 گزارش مالی <span id="financeRangeLabel">— ماه جاری</span></div>
-
-      <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);padding:14px;border-radius:14px;margin-bottom:15px;">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
-          <span style="font-size:13px;font-weight:bold;color:#6a1b9a;">📅 بازه زمانی:</span>
-          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('current_month')" id="rangeBtnCurrent">این ماه</button>
-          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('last_month')" id="rangeBtnLast">ماه قبل</button>
-          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('last_3_months')" id="rangeBtn3">۳ ماه اخیر</button>
-          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('today')" id="rangeBtnToday">امروز</button>
-          <button class="btn btn-sm btn-ghost" onclick="setFinanceRange('all')" id="rangeBtnAll">همه</button>
-          <button class="btn btn-sm" onclick="openFinanceDateModal()" style="margin-right:auto;">🎯 بازه دلخواه</button>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
-          <div style="background:white;padding:8px 12px;border-radius:10px;border:2px solid #f8bbd0;">
-            <b style="color:#6a1b9a;">از:</b> <span id="finFromDisplay" style="color:#ad1457;font-weight:bold;">—</span>
-          </div>
-          <div style="background:white;padding:8px 12px;border-radius:10px;border:2px solid #f8bbd0;">
-            <b style="color:#6a1b9a;">تا:</b> <span id="finToDisplay" style="color:#ad1457;font-weight:bold;">—</span>
-          </div>
-        </div>
-      </div>
+      <div class="card-title">💰 گزارش مالی <span id="financeMonthLabel"></span></div>
 
       <div class="finance-filters">
         <div class="form-group">
@@ -601,16 +463,15 @@
           <label>💅 نوع خدمات</label>
           <select id="finFilterService" onchange="renderFinance()">
             <option value="">همه خدمات</option>
-            <option value="ترمیم">ترمیم</option>
             <option value="اسپایکی">اسپایکی</option>
-            <option value="کلاسیک">کلاسیک</option>
             <option value="والیوم">والیوم</option>
+            <option value="کلاسیک">کلاسیک</option>
+            <option value="قهوه ای">قهوه ای</option>
             <option value="خط چشمی">خط چشمی</option>
-            <option value="ریمو">ریمو</option>
-            <option value="لیفت ابرو">لیفت ابرو</option>
             <option value="لیفت مژه">لیفت مژه</option>
-            <option value="رنگی">رنگی</option>
-            <option value="کاشت">کاشت</option>
+            <option value="لیفت ابرو">لیفت ابرو</option>
+            <option value="مژه و ابرو">مژه و ابرو</option>
+            <option value="ریمو">ریمو</option>
           </select>
         </div>
         <div class="form-group">
@@ -632,11 +493,11 @@
     </div>
     <div class="grid-2">
       <div class="card">
-        <div class="card-title">💵 نوبت‌های این بازه</div>
+        <div class="card-title">💵 نوبت‌های این ماه</div>
         <div class="item-list" id="financeAppointments"></div>
       </div>
       <div class="card">
-        <div class="card-title">💸 خرج‌های این بازه</div>
+        <div class="card-title">💸 خرج‌های این ماه</div>
         <div class="item-list" id="financeExpenses"></div>
       </div>
     </div>
@@ -646,7 +507,7 @@
   <div class="page" id="customersPage">
     <div class="card">
       <div class="card-title">👥 سابقه مشتریان</div>
-      <div class="search-box"><input type="text" id="customerSearch" placeholder="🔍 جستجوی نام یا شماره مشتری..." oninput="renderCustomers()"></div>
+      <div class="search-box"><input type="text" id="customerSearch" placeholder="🔍 جستجوی نام مشتری..." oninput="renderCustomers()"></div>
       <div id="customersList"></div>
     </div>
   </div>
@@ -674,23 +535,40 @@
   <div class="page" id="holidaysPage">
     <div class="card">
       <div class="card-title">🎉 مدیریت تعطیلات رسمی</div>
-      <p style="font-size:12px;color:#777;margin-bottom:15px;line-height:1.8;">تعطیلات رسمی ایران پیش‌فرض وارد شده. می‌تونی اضافه یا حذف کنی.</p>
+      <p style="font-size:12px;color:#777;margin-bottom:15px;line-height:1.8;">
+        تعطیلات رسمی ایران به صورت پیش‌فرض وارد شده. می‌تونی تعطیلات رو <b>اضافه</b> یا <b>حذف</b> کنی.
+        تاریخ‌ها به صورت <b>ماه/روز</b> ذخیره می‌شن و هر سال خودکار اعمال می‌شن.
+      </p>
+
       <div class="grid-3" style="gap:10px;">
         <div class="form-group">
           <label>ماه</label>
           <select id="holidayMonth">
-            <option value="1">فروردین</option><option value="2">اردیبهشت</option>
-            <option value="3">خرداد</option><option value="4">تیر</option>
-            <option value="5">مرداد</option><option value="6">شهریور</option>
-            <option value="7">مهر</option><option value="8">آبان</option>
-            <option value="9">آذر</option><option value="10">دی</option>
-            <option value="11">بهمن</option><option value="12">اسفند</option>
+            <option value="1">فروردین</option>
+            <option value="2">اردیبهشت</option>
+            <option value="3">خرداد</option>
+            <option value="4">تیر</option>
+            <option value="5">مرداد</option>
+            <option value="6">شهریور</option>
+            <option value="7">مهر</option>
+            <option value="8">آبان</option>
+            <option value="9">آذر</option>
+            <option value="10">دی</option>
+            <option value="11">بهمن</option>
+            <option value="12">اسفند</option>
           </select>
         </div>
-        <div class="form-group"><label>روز</label><input type="number" id="holidayDay" min="1" max="31" placeholder="1"></div>
-        <div class="form-group"><label>عنوان</label><input type="text" id="holidayTitle" placeholder="عید نوروز"></div>
+        <div class="form-group">
+          <label>روز</label>
+          <input type="number" id="holidayDay" min="1" max="31" placeholder="مثلاً: 1">
+        </div>
+        <div class="form-group">
+          <label>عنوان تعطیلی</label>
+          <input type="text" id="holidayTitle" placeholder="مثلاً: عید نوروز">
+        </div>
       </div>
       <button class="btn btn-full" onclick="addHoliday()">➕ افزودن تعطیلی</button>
+
       <div style="margin-top:20px;font-weight:bold;color:#ad1457;">📋 لیست تعطیلات:</div>
       <div id="holidaysList" style="margin-top:10px;"></div>
     </div>
@@ -700,32 +578,46 @@
   <div class="page" id="backupPage">
     <div class="card">
       <div class="card-title">💾 پشتیبان‌گیری و بازگردانی</div>
+
       <div class="backup-info">
         <b>💡 راهنما:</b><br>
-        • <b>بکاپ بگیر:</b> یه فایل از کل اطلاعات دانلود می‌شه.<br>
-        • <b>بازگردانی:</b> اگه اطلاعات پاک شد، از فایل بکاپ استفاده کن.
+        • <b>بکاپ بگیر:</b> یه فایل از کل اطلاعات (نوبت‌ها، یادداشت‌ها، خرج‌ها، تعطیلات) دانلود می‌شه که می‌تونی هر جایی نگه داری.<br>
+        • <b>بازگردانی کن:</b> اگه بعداً اطلاعات پاک شد یا خواستی به سیستم دیگه‌ای منتقل کنی، از فایل بکاپ استفاده کن.<br>
+        • <b>پیشنهاد:</b> هر هفته یا آخر هر ماه یه بکاپ بگیر و توی گوگل درایو یا تلگرام ذخیره کن.
       </div>
+
       <div class="grid-2" style="gap:15px;">
-        <button class="btn btn-full" onclick="exportBackup()" style="padding:20px;font-size:15px;">💾 دانلود بکاپ کامل</button>
-        <button class="btn btn-full btn-success" onclick="importBackup()" style="padding:20px;font-size:15px;">📂 بازگردانی از فایل بکاپ</button>
+        <button class="btn btn-full" onclick="exportBackup()" style="padding:20px;font-size:15px;">
+          💾 دانلود بکاپ کامل
+        </button>
+        <button class="btn btn-full btn-success" onclick="importBackup()" style="padding:20px;font-size:15px;">
+          📂 بازگردانی از فایل بکاپ
+        </button>
       </div>
+
       <div style="margin-top:20px;padding-top:20px;border-top:2px dashed #f8bbd0;">
-        <div style="font-weight:bold;color:#ad1457;margin-bottom:10px;">📊 اطلاعات فعلی:</div>
+        <div style="font-weight:bold;color:#ad1457;margin-bottom:10px;">📊 اطلاعات فعلی سیستم:</div>
         <div class="grid-4" id="backupStats"></div>
       </div>
     </div>
+
     <div class="card" style="border-color:#ffcdd2;">
       <div class="card-title" style="color:#c62828;">⚠️ منطقه خطر</div>
-      <p style="font-size:12px;color:#777;line-height:1.8;margin-bottom:15px;">با زدن دکمه زیر، تمام اطلاعات پاک می‌شه.</p>
-      <button class="btn btn-full btn-delete" onclick="resetAll()" style="padding:16px;font-size:14px;">🔄 بازنشانی کل سیستم</button>
+      <p style="font-size:12px;color:#777;line-height:1.8;margin-bottom:15px;">
+        با زدن دکمه زیر، <b style="color:#c62828;">تمام اطلاعات</b> سیستم (نوبت‌ها، یادداشت‌ها، خرج‌ها و حتی تعطیلات سفارشی) پاک می‌شه.
+        <br>تعطیلات رسمی پیش‌فرض دوباره برمی‌گردن.<br>
+        <b>این کار قابل برگشت نیست!</b> پس قبلش حتماً بکاپ بگیر.
+      </p>
+      <button class="btn btn-full btn-delete" onclick="resetAll()" style="padding:16px;font-size:14px;">
+        🔄 بازنشانی کل سیستم
+      </button>
     </div>
   </div>
 
-  <div class="developer-signature">توسعه‌دهنده: <span>میلاد طیبی</span> 💜</div>
+  <div class="developer-signature">
+    توسعه‌دهنده: <span>میلاد طیبی</span> 💜
+  </div>
 </div>
-
-<!-- Floating Add Note Button -->
-<button class="fab-note" onclick="openAddNoteModal()" title="افزودن یادداشت">+</button>
 
 <!-- Edit Modal -->
 <div class="modal-overlay" id="editModal">
@@ -734,71 +626,7 @@
     <div id="editModalBody"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeEditModal()">انصراف</button>
-      <button class="btn" onclick="saveEdit()">ذخیره</button>
-    </div>
-  </div>
-</div>
-
-<!-- Add Note Modal -->
-<div class="modal-overlay" id="addNoteModal">
-  <div class="modal" style="max-width:500px;">
-    <h3>📝 افزودن یادداشت</h3>
-
-    <div class="form-group">
-      <label>📅 تاریخ</label>
-      <div style="display:flex;gap:6px;">
-        <input type="text" id="newNoteDate" placeholder="1404/09/15" style="text-align:center;font-family:monospace;flex:2;">
-        <button class="btn btn-sm btn-ghost" onclick="setNewNoteToToday()" style="flex:1;">امروز</button>
-      </div>
-      <div style="font-size:11px;color:#999;margin-top:4px;text-align:center;" id="newNoteDateHint"></div>
-    </div>
-
-    <div class="form-group">
-      <label>عنوان یادداشت</label>
-      <input type="text" id="newNoteTitle" placeholder="مثلاً: خرید چسب مژه">
-    </div>
-
-    <div class="form-group">
-      <label>متن یادداشت (اختیاری)</label>
-      <textarea id="newNoteText" placeholder="متن یادداشت..." style="min-height:100px;"></textarea>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeAddNoteModal()">انصراف</button>
-      <button class="btn btn-note" onclick="saveNewNote()">💾 ذخیره یادداشت</button>
-    </div>
-  </div>
-</div>
-
-<!-- Notes Range Modal -->
-<div class="modal-overlay" id="notesDateModal" style="z-index:1100;">
-  <div class="modal" style="max-width:440px;">
-    <h3>🎯 بازه زمانی یادداشت‌ها</h3>
-    <div class="msg-info-box" style="margin-bottom:14px;">
-      تاریخ شمسی به فرمت <b>سال/ماه/روز</b> وارد کن.<br>
-      مثال: <b>1404/08/01</b>
-    </div>
-    <div class="form-group"><label>📅 از تاریخ</label><input type="text" id="notesFromDate" placeholder="1404/08/01" style="text-align:center;font-family:monospace;" inputmode="numeric"></div>
-    <div class="form-group"><label>📅 تا تاریخ</label><input type="text" id="notesToDate" placeholder="1404/08/30" style="text-align:center;font-family:monospace;" inputmode="numeric"></div>
-    <div class="msg-buttons">
-      <button class="btn btn-ghost" onclick="closeNotesDateModal()">انصراف</button>
-      <button class="btn" onclick="applyNotesDateRange()">اعمال بازه</button>
-    </div>
-  </div>
-</div>
-
-<!-- Finance Date Modal -->
-<div class="modal-overlay" id="financeDateModal" style="z-index:1100;">
-  <div class="modal" style="max-width:440px;">
-    <h3>🎯 بازه زمانی مالی</h3>
-    <div class="msg-info-box" style="margin-bottom:14px;">
-      تاریخ شمسی به فرمت <b>سال/ماه/روز</b> وارد کن.
-    </div>
-    <div class="form-group"><label>📅 از تاریخ</label><input type="text" id="finFromDate" placeholder="1404/08/01" style="text-align:center;font-family:monospace;" inputmode="numeric"></div>
-    <div class="form-group"><label>📅 تا تاریخ</label><input type="text" id="finToDate" placeholder="1404/08/30" style="text-align:center;font-family:monospace;" inputmode="numeric"></div>
-    <div class="msg-buttons">
-      <button class="btn btn-ghost" onclick="closeFinanceDateModal()">انصراف</button>
-      <button class="btn" onclick="applyFinanceDateRange()">اعمال بازه</button>
+      <button class="btn" onclick="saveEdit()">ذخیره تغییرات</button>
     </div>
   </div>
 </div>
@@ -807,7 +635,9 @@
 <div class="modal-overlay" id="repairModal">
   <div class="modal" style="max-width:560px;">
     <h3>⏰ ترمیم جدید</h3>
-    <div id="repairInfoBox" style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:14px;padding:14px;margin-bottom:18px;font-size:13px;line-height:1.9;color:#6a1b9a;"></div>
+
+    <div id="repairInfoBox" style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:14px;padding:14px;margin-bottom:18px;font-size:13px;line-height:1.9;color:#6a1b9a;">
+    </div>
 
     <div class="form-group">
       <label>⏰ چند روز دیرتر آمد؟</label>
@@ -836,28 +666,39 @@
     <div id="newApptSection">
       <div class="form-group">
         <label>📅 تاریخ نوبت جدید</label>
-        <input type="text" id="repairNewDate" placeholder="1404/09/15" style="text-align:center;font-family:monospace;font-size:14px;">
+        <input type="text" id="repairNewDate" placeholder="مثال: 1404/09/15" style="text-align:center;font-family:monospace;font-size:14px;">
         <div style="font-size:11px;color:#999;margin-top:4px;text-align:center;" id="repairNewDateHint"></div>
       </div>
+
       <div class="grid-2" style="gap:10px;">
-        <div class="form-group"><label>⏰ ساعت</label><input type="time" id="repairNewTime" value="14:30"></div>
-        <div class="form-group"><label>💵 مبلغ (تومان)</label><input type="text" id="repairNewAmount" placeholder="0" inputmode="numeric"></div>
-      </div>
-      <div class="form-group">
-        <label>🎯 خدمات</label>
-        <div id="repairServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">
-          <label class="service-check"><input type="checkbox" value="ترمیم"> ترمیم</label>
-          <label class="service-check"><input type="checkbox" value="اسپایکی"> اسپایکی</label>
-          <label class="service-check"><input type="checkbox" value="کلاسیک"> کلاسیک</label>
-          <label class="service-check"><input type="checkbox" value="والیوم"> والیوم</label>
-          <label class="service-check"><input type="checkbox" value="خط چشمی"> خط چشمی</label>
-          <label class="service-check"><input type="checkbox" value="ریمو"> ریمو</label>
-          <label class="service-check"><input type="checkbox" value="لیفت ابرو"> لیفت ابرو</label>
-          <label class="service-check"><input type="checkbox" value="لیفت مژه"> لیفت مژه</label>
-          <label class="service-check"><input type="checkbox" value="رنگی"> رنگی</label>
-          <label class="service-check"><input type="checkbox" value="کاشت"> کاشت</label>
+        <div class="form-group">
+          <label>⏰ ساعت</label>
+          <input type="time" id="repairNewTime" value="14:30">
+        </div>
+        <div class="form-group">
+          <label>💵 مبلغ (تومان)</label>
+          <input type="text" id="repairNewAmount" placeholder="0" inputmode="numeric">
         </div>
       </div>
+
+      <div class="form-group">
+        <label>🎯 خدمات (پیش‌فرض از نوبت قبلیه، می‌تونی عوض کنی)</label>
+        <div id="repairServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">
+          <label class="service-check"><input type="checkbox" value="اسپایکی"> اسپایکی</label>
+          <label class="service-check"><input type="checkbox" value="والیوم"> والیوم</label>
+          <label class="service-check"><input type="checkbox" value="کلاسیک"> کلاسیک</label>
+          <label class="service-check"><input type="checkbox" value="قهوه ای"> قهوه ای</label>
+          <label class="service-check"><input type="checkbox" value="خط چشمی"> خط چشمی</label>
+          <label class="service-check"><input type="checkbox" value="لیفت مژه"> لیفت مژه</label>
+          <label class="service-check"><input type="checkbox" value="لیفت ابرو"> لیفت ابرو</label>
+          <label class="service-check"><input type="checkbox" value="مژه و ابرو"> مژه و ابرو</label>
+          <label class="service-check"><input type="checkbox" value="ریمو"> ریمو</label>
+        </div>
+        <div style="font-size:11px;color:#ad1457;margin-top:8px;padding:8px;background:#fce4ec;border-radius:8px;line-height:1.7;">
+          💡 اگه فقط <b>ریمو</b> یا <b>لیفت</b> انتخاب کنی، ترمیم ۲۱ روزه بهش تعلق نمی‌گیره
+        </div>
+      </div>
+
       <div class="form-group">
         <label>💰 وضعیت پرداخت</label>
         <select id="repairNewPayment">
@@ -878,47 +719,18 @@
 <div class="modal-overlay" id="messageModal">
   <div class="modal" style="max-width:560px;">
     <h3>✉️ پیام آماده</h3>
+
     <div class="msg-info-box" id="msgInfoBox"></div>
+
     <div class="form-group">
-      <label>متن پیام</label>
+      <label>متن پیام (می‌تونی ویرایش کنی)</label>
       <textarea class="msg-textarea" id="msgText"></textarea>
     </div>
+
     <div class="msg-buttons">
       <button class="btn btn-ghost" onclick="closeMessageModal()">انصراف</button>
-      <button class="btn btn-msg" onclick="copyMessage()">📋 کپی</button>
-    </div>
-    <div class="msg-buttons">
-      <button class="btn" style="background:linear-gradient(135deg,#25d366,#128c7e);" onclick="sendWhatsApp()">💬 واتساپ</button>
-      <button class="btn" style="background:linear-gradient(135deg,#42a5f5,#1565c0);" onclick="sendSMS()">📱 پیامک</button>
-    </div>
-  </div>
-</div>
-
-<!-- SMS Phone Modal -->
-<div class="modal-overlay" id="smsPhoneModal" style="z-index:1100;">
-  <div class="modal" style="max-width:420px;">
-    <h3>📱 ارسال پیامک</h3>
-    <div class="msg-info-box" style="margin-bottom:14px;">
-      <b>شماره مشتری:</b> <span id="smsPhoneHint">نامشخص</span>
-    </div>
-    <div class="form-group">
-      <label>شماره موبایل (اختیاری)</label>
-      <input type="tel" id="smsPhoneInput" placeholder="0912 345 6789" inputmode="tel" style="text-align:center;font-family:monospace;font-size:16px;" onkeydown="if(event.key==='Enter') confirmSendSMS()">
-    </div>
-    <div class="msg-buttons">
-      <button class="btn btn-ghost" onclick="closeSMSModal()">انصراف</button>
-      <button class="btn" style="background:linear-gradient(135deg,#42a5f5,#1565c0);" onclick="confirmSendSMS()">📱 ارسال</button>
-    </div>
-  </div>
-</div>
-
-<!-- Customer History Modal -->
-<div class="modal-overlay" id="historyModal" style="z-index:1200;">
-  <div class="modal" style="max-width:560px;">
-    <h3>📋 سابقه مشتری</h3>
-    <div id="historyModalContent"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeHistoryModal()">بستن</button>
+      <button class="btn btn-msg" onclick="copyMessage()">📋 کپی متن</button>
+      <button class="btn btn-success" onclick="sendWhatsApp()">💬 ارسال به واتساپ</button>
     </div>
   </div>
 </div>
@@ -1003,25 +815,6 @@ function diffDaysJalali(jy1, jm1, jd1, jy2, jm2, jd2) {
   return Math.round((d2 - d1) / (1000*60*60*24));
 }
 
-function daysToReadable(totalDays) {
-  if (totalDays < 0) return 'آینده';
-  if (totalDays === 0) return 'امروز';
-  if (totalDays === 1) return 'دیروز';
-  if (totalDays < 30) return `${totalDays} روز پیش`;
-  const months = Math.floor(totalDays / 30);
-  const days = totalDays % 30;
-  if (months < 12) {
-    if (days === 0) return `${months} ماه پیش`;
-    return `${months} ماه و ${days} روز پیش`;
-  }
-  const years = Math.floor(months / 12);
-  const remainingMonths = months % 12;
-  let parts = [`${years} سال`];
-  if (remainingMonths > 0) parts.push(`${remainingMonths} ماه`);
-  if (days > 0) parts.push(`${days} روز`);
-  return parts.join(' و ') + ' پیش';
-}
-
 // ==================== State ====================
 const todayJ = getTodayJalali();
 let currentJY = todayJ[0], currentJM = todayJ[1];
@@ -1029,23 +822,42 @@ let mainCurrentJY = todayJ[0], mainCurrentJM = todayJ[1];
 let selJY = todayJ[0], selJM = todayJ[1], selJD = todayJ[2];
 
 const DEFAULT_HOLIDAYS = [
-  { jm: 1, jd: 1, title: 'عید نوروز' }, { jm: 1, jd: 2, title: 'عید نوروز' },
-  { jm: 1, jd: 3, title: 'عید نوروز' }, { jm: 1, jd: 4, title: 'عید نوروز' },
-  { jm: 1, jd: 12, title: 'روز جمهوری اسلامی' }, { jm: 1, jd: 13, title: 'سیزده بدر' },
-  { jm: 3, jd: 14, title: 'رحلت امام خمینی' }, { jm: 3, jd: 15, title: 'قیام ۱۵ خرداد' },
-  { jm: 11, jd: 22, title: 'پیروزی انقلاب اسلامی' }, { jm: 12, jd: 29, title: 'ملی شدن صنعت نفت' },
+  { jm: 1,  jd: 1,  title: 'عید نوروز' },
+  { jm: 1,  jd: 2,  title: 'عید نوروز' },
+  { jm: 1,  jd: 3,  title: 'عید نوروز' },
+  { jm: 1,  jd: 4,  title: 'عید نوروز' },
+  { jm: 1,  jd: 12, title: 'روز جمهوری اسلامی' },
+  { jm: 1,  jd: 13, title: 'سیزده بدر' },
+  { jm: 3,  jd: 14, title: 'رحلت امام خمینی' },
+  { jm: 3,  jd: 15, title: 'قیام ۱۵ خرداد' },
+  { jm: 11, jd: 22, title: 'پیروزی انقلاب اسلامی' },
+  { jm: 12, jd: 29, title: 'ملی شدن صنعت نفت' },
 ];
 
-let data = JSON.parse(localStorage.getItem('masheSystemData') || 'null');
-if (!data) data = { appointments: [], notes: [], expenses: [], holidays: [...DEFAULT_HOLIDAYS] };
-if (!data.expenses) data.expenses = [];
-if (!data.holidays) data.holidays = [...DEFAULT_HOLIDAYS];
-if (!data.notes) data.notes = [];
+function createEmptyData() {
+  return { appointments: [], notes: [], expenses: [], holidays: [...DEFAULT_HOLIDAYS] };
+}
+
+function normalizeData(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return createEmptyData();
+  return {
+    appointments: Array.isArray(value.appointments) ? value.appointments : [],
+    notes: Array.isArray(value.notes) ? value.notes : [],
+    expenses: Array.isArray(value.expenses) ? value.expenses : [],
+    holidays: Array.isArray(value.holidays) ? value.holidays : [...DEFAULT_HOLIDAYS]
+  };
+}
+
+let data;
+try {
+  data = normalizeData(JSON.parse(localStorage.getItem('masheSystemData') || 'null'));
+} catch (err) {
+  data = createEmptyData();
+}
 
 let editingItem = null;
 let repairModalId = null;
 let messageCustomerName = null;
-let notesRange = { type: 'all', from: null, to: null };
 
 // ==================== Helpers ====================
 function save() { localStorage.setItem('masheSystemData', JSON.stringify(data)); }
@@ -1056,6 +868,9 @@ function escapeHtml(str) {
   d.textContent = str || '';
   return d.innerHTML;
 }
+function escapeInlineArg(value) {
+  return JSON.stringify(String(value)).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1063,53 +878,31 @@ function showToast(msg) {
   clearTimeout(t._timeout);
   t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+// ==================== Number Formatting ====================
 function parseNum(str) {
   if (!str) return 0;
-  return parseInt(String(str).replace(/[^\d]/g, '')) || 0;
+  const cleaned = String(str).replace(/[^\d]/g, '');
+  return parseInt(cleaned) || 0;
 }
+
 function formatInputNum(inputEl) {
   const raw = inputEl.value.replace(/[^\d]/g, '');
-  if (raw === '') { inputEl.value = ''; return; }
-  inputEl.value = parseInt(raw).toLocaleString('en-US');
+  if (raw === '') {
+    inputEl.value = '';
+    return;
+  }
+  const num = parseInt(raw) || 0;
+  inputEl.value = num.toLocaleString('en-US');
 }
+
 function setupAmountInput(id) {
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('input', () => formatInputNum(el));
 }
-function getCustomerPhone(name) {
-  if (!name) return '';
-  const appts = data.appointments
-    .filter(a => a.name.trim() === name.trim() && a.phone)
-    .sort((a, b) => {
-      if (a.jy !== b.jy) return b.jy - a.jy;
-      if (a.jm !== b.jm) return b.jm - a.jm;
-      return b.jd - a.jd;
-    });
-  return appts[0]?.phone || '';
-}
-function getLastVisitInfo(name) {
-  const appts = data.appointments.filter(a => a.name.trim() === name.trim()).sort((a, b) => {
-    if (a.jy !== b.jy) return b.jy - a.jy;
-    if (a.jm !== b.jm) return b.jm - a.jm;
-    return b.jd - a.jd;
-  });
-  if (!appts.length) return null;
-  const nowKey = todayJ[0] * 10000 + todayJ[1] * 100 + todayJ[2];
-  const pastAppts = appts.filter(a => (a.jy*10000 + a.jm*100 + a.jd) <= nowKey);
-  if (!pastAppts.length) return null;
-  const last = pastAppts[0];
-  const diffDays = diffDaysJalali(last.jy, last.jm, last.jd, todayJ[0], todayJ[1], todayJ[2]);
-  return { appointment: last, daysAgo: diffDays, readable: daysToReadable(diffDays), count: appts.length };
-}
-function normalizePhone(phone) {
-  if (!phone) return '';
-  let p = phone.trim().replace(/[^\d+]/g, '');
-  if (p.startsWith('0')) p = '+98' + p.substring(1);
-  else if (p.startsWith('9') && p.length === 10) p = '+98' + p;
-  else if (!p.startsWith('+')) p = '+98' + p;
-  return p;
-}
+
+// ==================== Holiday Detection ====================
 function getHolidayInfo(jy, jm, jd) {
   const dow = getDayOfWeekJalali(jy, jm, jd);
   const isFriday = dow === 5;
@@ -1119,46 +912,38 @@ function getHolidayInfo(jy, jm, jd) {
   return { isHoliday: false, isFriday: false, title: '' };
 }
 
-const REPAIR_ELIGIBLE_SERVICES = ['ترمیم', 'اسپایکی', 'کلاسیک', 'والیوم', 'خط چشمی', 'رنگی', 'کاشت'];
+function isHoliday(jy, jm, jd) { return getHolidayInfo(jy, jm, jd).isHoliday; }
+
+// ==================== Repair Detection ====================
 function isExtensionService(a) {
   if (!a) return false;
-  const services = a.services && Array.isArray(a.services) ? a.services : (a.service ? a.service.split(' + ') : []);
-  return services.some(s => REPAIR_ELIGIBLE_SERVICES.includes(s));
+  const extensionServices = ['اسپایکی','والیوم','کلاسیک','قهوه ای','خط چشمی','مژه و ابرو'];
+  if (a.services && Array.isArray(a.services)) {
+    return a.services.some(s => extensionServices.includes(s));
+  }
+  if (a.service) {
+    if (a.service.includes('اکستنشن')) return true;
+    return extensionServices.some(s => a.service.includes(s));
+  }
+  return false;
 }
+
 function getRepairDate(a) {
-  if (a.repairDateOverride) return [a.repairDateOverride.jy, a.repairDateOverride.jm, a.repairDateOverride.jd];
+  if (a.repairDateOverride) {
+    return [a.repairDateOverride.jy, a.repairDateOverride.jm, a.repairDateOverride.jd];
+  }
   return addDaysToJalali(a.jy, a.jm, a.jd, 21);
 }
+
+// ==================== Customer Code ====================
 function getCustomerCode(name) {
   const existing = data.appointments.find(a => a.name.trim() === name.trim() && a.code);
   if (existing) return existing.code;
   let code = 'M' + (1000 + data.appointments.filter(a => a.name.trim() === name.trim()).length + 1);
-  while (data.appointments.some(a => a.code === code)) code = 'M' + (parseInt(code.slice(1)) + 1);
+  while (data.appointments.some(a => a.code === code)) {
+    code = 'M' + (parseInt(code.slice(1)) + 1);
+  }
   return code;
-}
-
-// ==================== Customer Info Panel ====================
-function updateCustomerInfoPanel() {
-  const name = document.getElementById('appointmentName').value.trim();
-  const panel = document.getElementById('customerInfoPanel');
-  const phoneInput = document.getElementById('appointmentPhone');
-  if (!name) { panel.classList.remove('show'); panel.innerHTML = ''; return; }
-  const info = getLastVisitInfo(name);
-  if (!info) { panel.classList.remove('show'); panel.innerHTML = ''; return; }
-  const phone = getCustomerPhone(name);
-  if (!phoneInput.value && phone) phoneInput.value = phone;
-  const a = info.appointment;
-  panel.innerHTML = `
-    <div style="margin-bottom:6px;">📊 <b>${info.count}</b> بار مراجعه داشته</div>
-    <div class="big">📅 آخرین مراجعه: ${info.readable}</div>
-    <div style="font-size:11px;color:#666;margin-top:3px;">(${formatJalali(a.jy, a.jm, a.jd)} — ${escapeHtml(a.service)})</div>
-    <div class="actions">
-      <button class="btn btn-sm btn-call" onclick="event.preventDefault(); callCustomer('${escapeHtml(phone || '')}')" ${!phone ? 'style="opacity:0.5;pointer-events:none;"' : ''}>📞 تماس</button>
-      <button class="btn btn-sm btn-msg" onclick="event.preventDefault(); openMessageForCustomer('${escapeHtml(name)}')">✉️ پیام</button>
-      <button class="btn btn-sm btn-ghost" onclick="event.preventDefault(); openCustomerHistory('${escapeHtml(name)}')">📜 سابقه</button>
-    </div>
-  `;
-  panel.classList.add('show');
 }
 
 // ==================== Page Navigation ====================
@@ -1167,6 +952,7 @@ function showPage(page) {
   document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(page + 'Page').classList.add('active');
   event.target.classList.add('active');
+
   if (page === 'finance') renderFinance();
   if (page === 'customers') renderCustomers();
   if (page === 'repairs') renderRepairs();
@@ -1181,39 +967,54 @@ function renderCalendar() {
   document.getElementById('calendarTitle').textContent = `${persianMonths[currentJM-1]} ${currentJY}`;
   const c = document.getElementById('calendarDays');
   c.innerHTML = '';
+
   const daysInMonth = jalaliMonthDays(currentJY, currentJM);
   const firstDate = toGregorian(currentJY, currentJM, 1);
   const fdw = new Date(firstDate[0], firstDate[1]-1, firstDate[2]).getDay();
   const offset = (fdw + 1) % 7;
-  for (let i = 0; i < offset; i++) { const e = document.createElement('div'); e.className = 'day empty'; c.appendChild(e); }
+
+  for (let i = 0; i < offset; i++) {
+    const e = document.createElement('div');
+    e.className = 'day empty';
+    c.appendChild(e);
+  }
+
   for (let d = 1; d <= daysInMonth; d++) {
     const el = document.createElement('div');
     el.className = 'day';
     el.textContent = d;
+
     const key = jalaliKey(currentJY, currentJM, d);
     const isToday = currentJY === todayJ[0] && currentJM === todayJ[1] && d === todayJ[2];
     const isSel = currentJY === selJY && currentJM === selJM && d === selJD;
     const hInfo = getHolidayInfo(currentJY, currentJM, d);
+
     if (hInfo.isHoliday) el.classList.add('holiday');
     if (isToday) el.classList.add('today');
     if (isSel) el.classList.add('selected');
     if (hInfo.title) el.title = hInfo.title;
+
     const appts = data.appointments.filter(a => a.key === key);
     const notes = data.notes.filter(n => n.key === key);
     const repairs = getRepairsForDate(currentJY, currentJM, d);
+
     if (appts.length || notes.length || repairs.length) {
       const dots = document.createElement('div');
       dots.className = 'dots';
       if (appts.length) { const dd = document.createElement('div'); dd.className = 'dot appointment'; dots.appendChild(dd); }
-      if (repairs.length) { const dd = document.createElement('div'); dd.className = 'dot repair'; dots.appendChild(dd); }
       if (notes.length) { const dd = document.createElement('div'); dd.className = 'dot note'; dots.appendChild(dd); }
+      if (repairs.length) { const dd = document.createElement('div'); dd.className = 'dot repair'; dots.appendChild(dd); }
       el.appendChild(dots);
     }
+
     el.onclick = () => selectDay(currentJY, currentJM, d);
     c.appendChild(el);
   }
+
   renderSelectedDayItems();
   renderWeekView();
+  renderRepairAlert();
+  renderWeeklyRepairs();
 }
 
 function changeMonth(d) {
@@ -1227,7 +1028,9 @@ function selectDay(jy, jm, jd) {
   selJY = jy; selJM = jm; selJD = jd;
   renderCalendar();
   updateHolidayWarning();
-  if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
+  if (document.getElementById('calendarPage').classList.contains('active')) {
+    renderCalendarMain();
+  }
 }
 
 function updateHolidayWarning() {
@@ -1235,7 +1038,9 @@ function updateHolidayWarning() {
   const hInfo = getHolidayInfo(selJY, selJM, selJD);
   if (hInfo.isHoliday) {
     w.classList.add('show');
-    w.textContent = hInfo.title === 'جمعه' ? '🎉 این روز جمعه است!' : `🎉 ${hInfo.title} — تعطیل رسمی!`;
+    w.textContent = hInfo.title === 'جمعه'
+      ? '🎉 این روز جمعه است! شاید بهتره برای این روز نوبت نذاری.'
+      : `🎉 ${hInfo.title} — این روز تعطیل رسمی است!`;
   } else {
     w.classList.remove('show');
   }
@@ -1246,37 +1051,53 @@ function renderCalendarMain() {
   document.getElementById('calendarTitleMain').textContent = `${persianMonths[mainCurrentJM-1]} ${mainCurrentJY}`;
   const c = document.getElementById('calendarDaysMain');
   c.innerHTML = '';
+
   const daysInMonth = jalaliMonthDays(mainCurrentJY, mainCurrentJM);
   const firstDate = toGregorian(mainCurrentJY, mainCurrentJM, 1);
   const fdw = new Date(firstDate[0], firstDate[1]-1, firstDate[2]).getDay();
   const offset = (fdw + 1) % 7;
-  for (let i = 0; i < offset; i++) { const e = document.createElement('div'); e.className = 'day empty'; c.appendChild(e); }
+
+  for (let i = 0; i < offset; i++) {
+    const e = document.createElement('div');
+    e.className = 'day empty';
+    c.appendChild(e);
+  }
+
   for (let d = 1; d <= daysInMonth; d++) {
     const el = document.createElement('div');
     el.className = 'day';
     el.textContent = d;
+
     const key = jalaliKey(mainCurrentJY, mainCurrentJM, d);
     const isToday = mainCurrentJY === todayJ[0] && mainCurrentJM === todayJ[1] && d === todayJ[2];
     const isSel = mainCurrentJY === selJY && mainCurrentJM === selJM && d === selJD;
     const hInfo = getHolidayInfo(mainCurrentJY, mainCurrentJM, d);
+
     if (hInfo.isHoliday) el.classList.add('holiday');
     if (isToday) el.classList.add('today');
     if (isSel) el.classList.add('selected');
     if (hInfo.title) el.title = hInfo.title;
+
     const appts = data.appointments.filter(a => a.key === key);
     const notes = data.notes.filter(n => n.key === key);
     const repairs = getRepairsForDate(mainCurrentJY, mainCurrentJM, d);
+
     if (appts.length || notes.length || repairs.length) {
       const dots = document.createElement('div');
       dots.className = 'dots';
       if (appts.length) { const dd = document.createElement('div'); dd.className = 'dot appointment'; dots.appendChild(dd); }
-      if (repairs.length) { const dd = document.createElement('div'); dd.className = 'dot repair'; dots.appendChild(dd); }
       if (notes.length) { const dd = document.createElement('div'); dd.className = 'dot note'; dots.appendChild(dd); }
+      if (repairs.length) { const dd = document.createElement('div'); dd.className = 'dot repair'; dots.appendChild(dd); }
       el.appendChild(dots);
     }
-    el.onclick = () => { selectDay(mainCurrentJY, mainCurrentJM, d); renderCalendarMain(); };
+
+    el.onclick = () => {
+      selectDay(mainCurrentJY, mainCurrentJM, d);
+      renderCalendarMain();
+    };
     c.appendChild(el);
   }
+
   renderSelectedDayItemsMain();
 }
 
@@ -1291,108 +1112,97 @@ function renderSelectedDayItemsMain() {
   const key = jalaliKey(selJY, selJM, selJD);
   const c = document.getElementById('selectedDayItemsMain');
   const hInfo = getHolidayInfo(selJY, selJM, selJD);
-  document.getElementById('selectedDayLabelMain').innerHTML = `— ${formatJalali(selJY, selJM, selJD)} ${hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${hInfo.title}</span>` : ''}`;
-  c.innerHTML = renderDayItemsHTML(selJY, selJM, selJD, key);
-}
+  document.getElementById('selectedDayLabelMain').innerHTML = `— ${formatJalali(selJY, selJM, selJD)} ${hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${escapeHtml(hInfo.title)}</span>` : ''}`;
 
-// ==================== Day Items Renderer (FIXED with repairs + notes) ====================
-function renderDayItemsHTML(jy, jm, jd, key) {
   const appts = data.appointments.filter(a => a.key === key).sort((a,b) => (a.time||'').localeCompare(b.time||''));
-  const notes = data.notes.filter(n => n.key === key).sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+  const notes = data.notes.filter(n => n.key === key);
   const exps = data.expenses.filter(e => e.key === key);
 
-  // ⭐ ترمیم‌های امروز: اکستنشن‌هایی که موعد ترمیمشون این روزه
-  const repairs = data.appointments.filter(a => {
-    if (!isExtensionService(a)) return false;
-    if (a.repairStatus === 'came' || a.repairStatus === 'late' || a.repairStatus === 'missed') return false;
-    const rd = getRepairDate(a);
-    return rd[0] === jy && rd[1] === jm && rd[2] === jd;
-  });
-
-  if (!appts.length && !notes.length && !exps.length && !repairs.length) {
-    return `<div class="empty-state"><span class="icon">🌸</span>هیچ برنامه‌ای نیست</div>`;
+  if (!appts.length && !notes.length && !exps.length) {
+    c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ برنامه‌ای نیست</div>`;
+    return;
   }
 
   let html = '';
-
-  // ترمیم‌ها اول
-  repairs.forEach(a => {
-    const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' : '<span class="badge badge-pending">⏳ در انتظار</span>';
-    html += `
-      <div class="item repair-due">
-        <div class="item-content">
-          <div class="title">
-            🔧 ترمیم: <span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">${escapeHtml(a.name)}</span>
-            <span class="badge badge-code">${escapeHtml(a.code || '')}</span>
-            ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}
-          </div>
-          <div class="detail">📅 موعد ترمیم — اکستنشن اصلی: ${formatJalali(a.jy, a.jm, a.jd)}</div>
-          <div class="detail">👀 ${escapeHtml(a.service)}</div>
-        </div>
-        <div class="item-actions">
-          ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')">📞</button>` : ''}
-          <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
-          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${a.id}')">⏰</button>
-          <button class="btn btn-sm btn-delete" onclick="markRepair('${a.id}','missed')">❌</button>
-        </div>
-      </div>
-    `;
-  });
-
-  // نوبت‌ها
   appts.forEach(a => { html += renderAppointmentHTML(a); });
-
-  // یادداشت‌ها
   notes.forEach(n => { html += renderNoteHTML(n); });
-
-  // خرج‌ها
   exps.forEach(e => { html += renderExpenseHTML(e); });
-
-  return html;
+  c.innerHTML = html;
 }
 
+// ==================== Selected Day Items ====================
 function renderSelectedDayItems() {
   const key = jalaliKey(selJY, selJM, selJD);
   const c = document.getElementById('selectedDayItems');
   const hInfo = getHolidayInfo(selJY, selJM, selJD);
-  const holidayBadge = hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${hInfo.title}</span>` : '';
+  const holidayBadge = hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${escapeHtml(hInfo.title)}</span>` : '';
   document.getElementById('selectedDateLabel').innerHTML = `${formatJalali(selJY, selJM, selJD)} ${holidayBadge}`;
   document.getElementById('selectedDayLabel').innerHTML = `— ${formatJalali(selJY, selJM, selJD)} ${holidayBadge}`;
-  c.innerHTML = renderDayItemsHTML(selJY, selJM, selJD, key);
+
+  const appts = data.appointments.filter(a => a.key === key).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+  const notes = data.notes.filter(n => n.key === key);
+  const exps = data.expenses.filter(e => e.key === key);
+
+  if (!appts.length && !notes.length && !exps.length) {
+    c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ برنامه‌ای برای این روز ثبت نشده</div>`;
+    return;
+  }
+
+  let html = '';
+  appts.forEach(a => { html += renderAppointmentHTML(a); });
+  notes.forEach(n => { html += renderNoteHTML(n); });
+  exps.forEach(e => { html += renderExpenseHTML(e); });
+  c.innerHTML = html;
 }
 
 // ==================== Render Item HTML ====================
 function renderAppointmentHTML(a) {
-  const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' : '<span class="badge badge-pending">⏳ در انتظار</span>';
+  const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
+                       '<span class="badge badge-pending">⏳ در انتظار</span>';
+
   let repairInfo = '';
   if (isExtensionService(a)) {
     const repairDate = getRepairDate(a);
     const diffFromToday = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], repairDate[0], repairDate[1], repairDate[2]);
-    if (a.repairStatus === 'came') repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#2e7d32;">انجام شد</b></div>`;
-    else if (a.repairStatus === 'late') repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#ef6c00;">${a.repairLateDays} روز دیرتر آمد</b></div>`;
-    else if (a.repairStatus === 'missed') repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#c62828;">نیامد</b></div>`;
-    else if (diffFromToday < 0) repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#c62828;">${Math.abs(diffFromToday)} روز از موعد گذشته</b></div>`;
-    else if (diffFromToday <= 7) repairInfo = `<div class="detail">🔔 ترمیم: <b style="color:#ef6c00;">${diffFromToday === 0 ? 'امروز' : diffFromToday + ' روز دیگر'}</b> (${formatJalali(repairDate[0], repairDate[1], repairDate[2])})</div>`;
-    else repairInfo = `<div class="detail">🔧 ترمیم بعدی: ${formatJalali(repairDate[0], repairDate[1], repairDate[2])}</div>`;
+
+    if (a.repairStatus === 'came') {
+      repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#2e7d32;">انجام شد</b></div>`;
+    } else if (a.repairStatus === 'late') {
+      repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#ef6c00;">${a.repairLateDays} روز دیرتر آمد</b></div>`;
+    } else if (a.repairStatus === 'missed') {
+      repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#c62828;">نیامد</b></div>`;
+    } else if (diffFromToday < 0) {
+      repairInfo = `<div class="detail">🔧 ترمیم: <b style="color:#c62828;">${Math.abs(diffFromToday)} روز از موعد گذشته</b></div>`;
+    } else if (diffFromToday <= 7 && diffFromToday >= 0) {
+      repairInfo = `<div class="detail">🔔 ترمیم: <b style="color:#ef6c00;">${diffFromToday === 0 ? 'امروز' : diffFromToday + ' روز دیگر'}</b> (${formatJalali(repairDate[0], repairDate[1], repairDate[2])})</div>`;
+    } else {
+      repairInfo = `<div class="detail">🔧 ترمیم بعدی: ${formatJalali(repairDate[0], repairDate[1], repairDate[2])}</div>`;
+    }
   }
+
+  const rd = getRepairDate(a);
+  const isRepairDue = isExtensionService(a) && !a.repairStatus && diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]) <= 7;
+
   return `
-    <div class="item appointment ${a.payment === 'paid' ? 'paid' : 'pending'}">
+    <div class="item appointment ${a.payment === 'paid' ? 'paid' : 'pending'} ${isRepairDue ? 'repair-due' : ''}">
       <div class="item-content">
         <div class="title">
-          <span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">👀 ${escapeHtml(a.name)}</span>
+          💅 ${escapeHtml(a.name)}
           <span class="badge badge-code">${escapeHtml(a.code || '')}</span>
-          ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}
           ${paymentBadge}
         </div>
         <div class="detail">${escapeHtml(a.service)}</div>
         ${a.time ? `<div class="detail">⏰ ساعت ${a.time}</div>` : ''}
-        ${a.amount ? `<div class="detail">💵 ${money(a.amount)}</div>` : ''}
+        ${a.amount ? `<div class="detail">💵 مبلغ: <b>${money(a.amount)}</b></div>` : ''}
         ${a.note ? `<div class="detail">📝 ${escapeHtml(a.note)}</div>` : ''}
         ${repairInfo}
       </div>
       <div class="item-actions">
-        ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')">📞</button>` : ''}
-        <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
+        ${isRepairDue ? `
+          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${a.id}')">⏰ ترمیم</button>
+          <button class="btn btn-sm btn-delete" onclick="markRepair('${a.id}','missed')">❌ نیامد</button>
+        ` : ''}
+        <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')" title="ارسال پیام">✉️</button>
         <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
         <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}')">🗑️</button>
       </div>
@@ -1401,13 +1211,11 @@ function renderAppointmentHTML(a) {
 }
 
 function renderNoteHTML(n) {
-  const hInfo = getHolidayInfo(n.jy, n.jm, n.jd);
   return `
-    <div class="item note">
+    <div class="item">
       <div class="item-content">
-        <div class="title">📝 ${escapeHtml(n.title)} <span class="badge badge-note">یادداشت</span></div>
+        <div class="title">📝 ${escapeHtml(n.title)}</div>
         ${n.text ? `<div class="detail">${escapeHtml(n.text)}</div>` : ''}
-        <div class="detail">📅 ${formatJalali(n.jy, n.jm, n.jd)}</div>
       </div>
       <div class="item-actions">
         <button class="btn btn-sm btn-edit" onclick="openEdit('note','${n.id}')">✏️</button>
@@ -1432,248 +1240,134 @@ function renderExpenseHTML(e) {
   `;
 }
 
-// ==================== Notes Page with Range ====================
-function setNotesRange(type) {
-  notesRange.type = type;
-  notesRange.from = null;
-  notesRange.to = null;
-  renderAllNotes();
-}
-
-function openNotesDateModal() {
-  const modal = document.getElementById('notesDateModal');
-  const fromInput = document.getElementById('notesFromDate');
-  const toInput = document.getElementById('notesToDate');
-  if (notesRange.type === 'custom' && notesRange.from && notesRange.to) {
-    fromInput.value = `${notesRange.from.jy}/${String(notesRange.from.jm).padStart(2,'0')}/${String(notesRange.from.jd).padStart(2,'0')}`;
-    toInput.value = `${notesRange.to.jy}/${String(notesRange.to.jm).padStart(2,'0')}/${String(notesRange.to.jd).padStart(2,'0')}`;
-  } else {
-    const dim = jalaliMonthDays(todayJ[0], todayJ[1]);
-    fromInput.value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/01`;
-    toInput.value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/${String(dim).padStart(2,'0')}`;
-  }
-  modal.classList.add('show');
-  setTimeout(() => fromInput.focus(), 100);
-}
-
-function closeNotesDateModal() { document.getElementById('notesDateModal').classList.remove('show'); }
-
-function applyNotesDateRange() {
-  const fp = document.getElementById('notesFromDate').value.trim().split('/');
-  const tp = document.getElementById('notesToDate').value.trim().split('/');
-  if (fp.length !== 3 || tp.length !== 3) { showToast('⚠️ فرمت تاریخ درست نیست'); return; }
-  const fjy = parseInt(fp[0]), fjm = parseInt(fp[1]), fjd = parseInt(fp[2]);
-  const tjy = parseInt(tp[0]), tjm = parseInt(tp[1]), tjd = parseInt(tp[2]);
-  if (!fjy || !fjm || !fjd || fjy < 1300 || fjy > 1500 || fjm < 1 || fjm > 12 || fjd < 1 || fjd > 31) { showToast('⚠️ تاریخ شروع معتبر نیست'); return; }
-  if (!tjy || !tjm || !tjd || tjy < 1300 || tjy > 1500 || tjm < 1 || tjm > 12 || tjd < 1 || tjd > 31) { showToast('⚠️ تاریخ پایان معتبر نیست'); return; }
-  if (fjy*10000 + fjm*100 + fjd > tjy*10000 + tjm*100 + tjd) { showToast('⚠️ تاریخ شروع باید قبل باشه'); return; }
-  notesRange.type = 'custom';
-  notesRange.from = { jy: fjy, jm: fjm, jd: fjd };
-  notesRange.to = { jy: tjy, jm: tjm, jd: tjd };
-  closeNotesDateModal();
-  renderAllNotes();
-  showToast('✅ بازه اعمال شد');
-}
-
-function getNotesRangeBounds() {
-  const t = todayJ;
-  if (notesRange.type === 'custom' && notesRange.from && notesRange.to) return { from: notesRange.from, to: notesRange.to };
-  if (notesRange.type === 'current_month') {
-    const dim = jalaliMonthDays(t[0], t[1]);
-    return { from: { jy: t[0], jm: t[1], jd: 1 }, to: { jy: t[0], jm: t[1], jd: dim } };
-  }
-  if (notesRange.type === 'last_month') {
-    let lm = t[1] - 1, ly = t[0];
-    if (lm < 1) { lm = 12; ly--; }
-    const dim = jalaliMonthDays(ly, lm);
-    return { from: { jy: ly, jm: lm, jd: 1 }, to: { jy: ly, jm: lm, jd: dim } };
-  }
-  if (notesRange.type === 'last_3_months') {
-    let lm = t[1] - 2, ly = t[0];
-    while (lm < 1) { lm += 12; ly--; }
-    const dim = jalaliMonthDays(t[0], t[1]);
-    return { from: { jy: ly, jm: lm, jd: 1 }, to: { jy: t[0], jm: t[1], jd: dim } };
-  }
-  return null;
-}
-
+// ==================== All Notes Page ====================
 function renderAllNotes() {
   const c = document.getElementById('allNotesList');
   if (!c) return;
 
   const search = (document.getElementById('notesSearch').value || '').trim().toLowerCase();
-  const bounds = getNotesRangeBounds();
 
-  const displayRow = document.getElementById('notesDateDisplayRow');
-  if (bounds) {
-    document.getElementById('notesFromDisplay').textContent = formatJalali(bounds.from.jy, bounds.from.jm, bounds.from.jd);
-    document.getElementById('notesToDisplay').textContent = formatJalali(bounds.to.jy, bounds.to.jm, bounds.to.jd);
-    displayRow.style.display = 'flex';
-  } else {
-    displayRow.style.display = 'none';
-  }
-
-  // Button states
-  ['notesRangeAll','notesRangeCurrent','notesRangeLast','notesRange3'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.style.background = 'white'; el.style.color = '#ad1457'; el.style.borderColor = '#f8bbd0'; }
-  });
-  const btnMap = { 'all': 'notesRangeAll', 'current_month': 'notesRangeCurrent', 'last_month': 'notesRangeLast', 'last_3_months': 'notesRange3' };
-  if (btnMap[notesRange.type]) {
-    const btn = document.getElementById(btnMap[notesRange.type]);
-    if (btn) { btn.style.background = 'linear-gradient(135deg, #ad1457, #6a1b9a)'; btn.style.color = 'white'; btn.style.borderColor = 'transparent'; }
-  }
-
-  let notes = [...data.notes];
-
-  if (bounds) {
-    notes = notes.filter(n => {
-      const key = n.jy * 10000 + n.jm * 100 + n.jd;
-      const fromKey = bounds.from.jy * 10000 + bounds.from.jm * 100 + bounds.from.jd;
-      const toKey = bounds.to.jy * 10000 + bounds.to.jm * 100 + bounds.to.jd;
-      return key >= fromKey && key <= toKey;
-    });
-  }
-
-  if (search) {
-    notes = notes.filter(n => (n.title && n.title.toLowerCase().includes(search)) || (n.text && n.text.toLowerCase().includes(search)));
-  }
-
-  // Sort: newest first
-  notes.sort((a, b) => {
+  let notes = [...data.notes].sort((a, b) => {
     if (a.jy !== b.jy) return b.jy - a.jy;
     if (a.jm !== b.jm) return b.jm - a.jm;
-    if (a.jd !== b.jd) return b.jd - a.jd;
-    return (b.createdAt || 0) - (a.createdAt || 0);
+    return b.jd - a.jd;
   });
+
+  if (search) {
+    notes = notes.filter(n =>
+      (n.title && n.title.toLowerCase().includes(search)) ||
+      (n.text && n.text.toLowerCase().includes(search))
+    );
+  }
 
   const countEl = document.getElementById('notesCount');
   if (countEl) countEl.textContent = `— ${notes.length} یادداشت`;
 
   if (!notes.length) {
-    c.innerHTML = `<div class="empty-state"><span class="icon">📝</span>یادداشتی نیست</div>`;
+    c.innerHTML = `<div class="empty-state"><span class="icon">📝</span>${search ? 'یادداشتی با این عنوان پیدا نشد' : 'هیچ یادداشتی ثبت نشده'}</div>`;
     return;
   }
 
   c.innerHTML = notes.map(n => {
     const hInfo = getHolidayInfo(n.jy, n.jm, n.jd);
-    const holidayBadge = hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${hInfo.title}</span>` : '';
+    const holidayBadge = hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${escapeHtml(hInfo.title)}</span>` : '';
     return `
-      <div class="item note">
+      <div class="item">
         <div class="item-content">
           <div class="title">📝 ${escapeHtml(n.title)} ${holidayBadge}</div>
           ${n.text ? `<div class="detail">${escapeHtml(n.text)}</div>` : ''}
           <div class="detail">📅 ${formatJalali(n.jy, n.jm, n.jd)}</div>
         </div>
         <div class="item-actions">
-          <button class="btn btn-sm btn-edit" onclick="openEdit('note','${n.id}')">✏️</button>
-          <button class="btn btn-sm btn-delete" onclick="deleteItem('notes','${n.id}'); setTimeout(renderAllNotes, 150);">🗑️</button>
+          <button class="btn btn-sm btn-edit" onclick="openEdit('note','${n.id}')">✏️ ویرایش</button>
+          <button class="btn btn-sm btn-delete" onclick="deleteItem('notes','${n.id}'); setTimeout(renderAllNotes, 150);">🗑️ حذف</button>
         </div>
       </div>
     `;
   }).join('');
 }
 
-// ==================== Add Note Modal ====================
-function openAddNoteModal() {
-  const modal = document.getElementById('addNoteModal');
-  document.getElementById('newNoteDate').value = `${selJY}/${String(selJM).padStart(2,'0')}/${String(selJD).padStart(2,'0')}`;
-  document.getElementById('newNoteDateHint').textContent = `پیشنهاد: ${formatJalali(selJY, selJM, selJD)}`;
-  document.getElementById('newNoteTitle').value = '';
-  document.getElementById('newNoteText').value = '';
-  modal.classList.add('show');
-  setTimeout(() => document.getElementById('newNoteTitle').focus(), 100);
-}
-
-function closeAddNoteModal() {
-  document.getElementById('addNoteModal').classList.remove('show');
-}
-
-function setNewNoteToToday() {
-  document.getElementById('newNoteDate').value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/${String(todayJ[2]).padStart(2,'0')}`;
-  document.getElementById('newNoteDateHint').textContent = `امروز: ${formatJalali(todayJ[0], todayJ[1], todayJ[2])}`;
-}
-
-function saveNewNote() {
-  const dateStr = document.getElementById('newNoteDate').value.trim();
-  const title = document.getElementById('newNoteTitle').value.trim();
-  const text = document.getElementById('newNoteText').value.trim();
-
-  if (!title) { showToast('⚠️ عنوان را وارد کنید'); return; }
-  const parts = dateStr.split('/');
-  if (parts.length !== 3) { showToast('⚠️ فرمت تاریخ درست نیست (1404/09/15)'); return; }
-  const jy = parseInt(parts[0]), jm = parseInt(parts[1]), jd = parseInt(parts[2]);
-  if (!jy || !jm || !jd || jy < 1300 || jy > 1500 || jm < 1 || jm > 12 || jd < 1 || jd > 31) {
-    showToast('⚠️ تاریخ معتبر نیست'); return;
-  }
-
-  data.notes.push({
-    id: Date.now().toString() + Math.random().toString(36).slice(2,6),
-    key: jalaliKey(jy, jm, jd),
-    jy, jm, jd,
-    title, text,
-    createdAt: Date.now()
-  });
-
-  save();
-  renderCalendar();
-  if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
-  if (document.getElementById('notesPage').classList.contains('active')) renderAllNotes();
-  closeAddNoteModal();
-  showToast('✅ یادداشت ذخیره شد');
-}
-
 // ==================== Add ====================
 function addAppointment() {
   const name = document.getElementById('appointmentName').value.trim();
-  const phone = document.getElementById('appointmentPhone').value.trim();
   const time = document.getElementById('appointmentTime').value;
   const payment = document.getElementById('appointmentPayment').value;
   const note = document.getElementById('appointmentNote').value.trim();
   const amount = parseNum(document.getElementById('appointmentAmount').value);
+
   const serviceCheckboxes = document.querySelectorAll('#appointmentServiceBox input[type="checkbox"]:checked');
   const services = Array.from(serviceCheckboxes).map(cb => cb.value);
+
   if (!name) { showToast('⚠️ نام مشتری را وارد کنید'); return; }
   if (services.length === 0) { showToast('⚠️ حداقل یه خدمات انتخاب کنید'); return; }
+
   const hInfo = getHolidayInfo(selJY, selJM, selJD);
-  if (hInfo.isHoliday && !confirm(`این روز تعطیل است (${hInfo.title}). مطمئنی؟`)) return;
+  if (hInfo.isHoliday && !confirm(`این روز تعطیل است (${hInfo.title}). مطمئنی می‌خوای نوبت ثبت کنی؟`)) return;
+
   const code = getCustomerCode(name);
   const service = services.join(' + ');
+
   data.appointments.push({
     id: Date.now().toString() + Math.random().toString(36).slice(2,6),
     key: jalaliKey(selJY, selJM, selJD),
     jy: selJY, jm: selJM, jd: selJD,
-    name, phone, time, service, payment, note, amount, code,
-    services: services, repairStatus: null, repairLateDays: null,
+    name, time, service, payment, note, amount, code,
+    services: services,
+    repairStatus: null, repairLateDays: null,
     createdAt: Date.now()
   });
+
   save();
   renderCalendar();
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
+
   document.getElementById('appointmentName').value = '';
-  document.getElementById('appointmentPhone').value = '';
   document.getElementById('appointmentTime').value = '';
   document.getElementById('appointmentAmount').value = '';
   document.getElementById('appointmentNote').value = '';
   document.querySelectorAll('#appointmentServiceBox input[type="checkbox"]').forEach(cb => cb.checked = false);
-  document.getElementById('customerInfoPanel').classList.remove('show');
+
   updateCustomerDatalist();
   showToast('✅ نوبت ثبت شد');
+}
+
+function addNote() {
+  const title = document.getElementById('noteTitle').value.trim();
+  const text = document.getElementById('noteText').value.trim();
+  if (!title) { showToast('⚠️ عنوان را وارد کنید'); return; }
+
+  data.notes.push({
+    id: Date.now().toString() + Math.random().toString(36).slice(2,6),
+    key: jalaliKey(selJY, selJM, selJD),
+    jy: selJY, jm: selJM, jd: selJD,
+    title, text
+  });
+
+  save();
+  renderCalendar();
+  if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
+
+  document.getElementById('noteTitle').value = '';
+  document.getElementById('noteText').value = '';
+  showToast('✅ یادداشت ثبت شد');
 }
 
 function addExpense() {
   const title = document.getElementById('expenseTitle').value.trim();
   const amount = parseNum(document.getElementById('expenseAmount').value);
   if (!title || !amount) { showToast('⚠️ عنوان و مبلغ را وارد کنید'); return; }
+
   data.expenses.push({
     id: Date.now().toString() + Math.random().toString(36).slice(2,6),
     key: jalaliKey(selJY, selJM, selJD),
     jy: selJY, jm: selJM, jd: selJD,
     title, amount
   });
+
   save();
   renderCalendar();
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
+
   document.getElementById('expenseTitle').value = '';
   document.getElementById('expenseAmount').value = '';
   showToast('✅ خرج ثبت شد');
@@ -1681,7 +1375,7 @@ function addExpense() {
 
 // ==================== Delete ====================
 function deleteItem(type, id) {
-  if (!confirm('مطمئنی؟')) return;
+  if (!confirm('مطمئنی می‌خوای حذف کنی؟')) return;
   data[type] = data[type].filter(i => i.id !== id);
   save();
   renderCalendar();
@@ -1698,41 +1392,46 @@ function openEdit(type, id) {
   const arr = type === 'appointment' ? 'appointments' : type === 'note' ? 'notes' : 'expenses';
   const item = data[arr].find(i => i.id === id);
   if (!item) return;
+
   editingItem = { type: arr, id };
   const body = document.getElementById('editModalBody');
   const title = document.getElementById('editModalTitle');
 
   if (type === 'appointment') {
     title.textContent = '✏️ ویرایش نوبت';
-    const serviceOptions = ['ترمیم','اسپایکی','کلاسیک','والیوم','خط چشمی','ریمو','لیفت ابرو','لیفت مژه','رنگی','کاشت'];
+    const serviceOptions = ['اسپایکی','والیوم','کلاسیک','قهوه ای','خط چشمی','لیفت مژه','لیفت ابرو','مژه و ابرو','ریمو'];
     const itemServices = item.services || (item.service ? item.service.split(' + ') : []);
     let serviceBoxHTML = '<div id="editServiceBox" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff9fb;border:2px solid #f8bbd0;border-radius:10px;padding:10px;">';
     serviceOptions.forEach(s => {
-      serviceBoxHTML += `<label class="service-check"><input type="checkbox" value="${s}" ${itemServices.includes(s) ? 'checked' : ''}> ${s}</label>`;
+      const isChecked = itemServices.includes(s);
+      serviceBoxHTML += `<label class="service-check"><input type="checkbox" value="${s}" ${isChecked ? 'checked' : ''}> ${s}</label>`;
     });
     serviceBoxHTML += '</div>';
+
     body.innerHTML = `
       <div class="form-group"><label>نام مشتری</label><input type="text" id="editName" value="${escapeHtml(item.name)}"></div>
-      <div class="form-group"><label>شماره موبایل (اختیاری)</label><input type="tel" id="editPhone" value="${escapeHtml(item.phone||'')}" placeholder="0912 345 6789" inputmode="tel"></div>
       <div class="grid-2" style="gap:10px;">
         <div class="form-group"><label>ساعت</label><input type="time" id="editTime" value="${item.time||''}"></div>
         <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
       </div>
-      <div class="form-group"><label>خدمات</label>${serviceBoxHTML}</div>
+      <div class="form-group">
+        <label>خدمات (می‌تونی چند تا انتخاب کنی)</label>
+        ${serviceBoxHTML}
+      </div>
       <div class="form-group">
         <label>وضعیت پرداخت</label>
         <select id="editPayment">
-          <option value="pending" ${item.payment==='pending'?'selected':''}>در انتظار</option>
+          <option value="pending" ${item.payment==='pending'?'selected':''}>در انتظار پرداخت</option>
           <option value="paid" ${item.payment==='paid'?'selected':''}>پرداخت شده</option>
         </select>
       </div>
       <div class="form-group"><label>توضیحات</label><textarea id="editNote">${escapeHtml(item.note||'')}</textarea></div>
     `;
+
     setTimeout(() => setupAmountInput('editAmount'), 50);
   } else if (type === 'note') {
     title.textContent = '✏️ ویرایش یادداشت';
     body.innerHTML = `
-      <div class="form-group"><label>تاریخ</label><input type="text" id="editNoteDate" value="${item.jy}/${String(item.jm).padStart(2,'0')}/${String(item.jd).padStart(2,'0')}" style="text-align:center;font-family:monospace;" placeholder="1404/09/15"></div>
       <div class="form-group"><label>عنوان</label><input type="text" id="editTitle" value="${escapeHtml(item.title)}"></div>
       <div class="form-group"><label>متن</label><textarea id="editText">${escapeHtml(item.text||'')}</textarea></div>
     `;
@@ -1742,8 +1441,10 @@ function openEdit(type, id) {
       <div class="form-group"><label>عنوان</label><input type="text" id="editTitle" value="${escapeHtml(item.title)}"></div>
       <div class="form-group"><label>مبلغ (تومان)</label><input type="text" id="editAmount" value="${item.amount ? item.amount.toLocaleString('en-US') : ''}" inputmode="numeric"></div>
     `;
+
     setTimeout(() => setupAmountInput('editAmount'), 50);
   }
+
   document.getElementById('editModal').classList.add('show');
 }
 
@@ -1760,9 +1461,9 @@ function saveEdit() {
   if (editingItem.type === 'appointments') {
     const editCheckboxes = document.querySelectorAll('#editServiceBox input[type="checkbox"]:checked');
     const editServices = Array.from(editCheckboxes).map(cb => cb.value);
-    if (editServices.length === 0) { showToast('⚠️ حداقل یه خدمات'); return; }
+    if (editServices.length === 0) { showToast('⚠️ حداقل یه خدمات انتخاب کنید'); return; }
+
     item.name = document.getElementById('editName').value.trim();
-    item.phone = document.getElementById('editPhone').value.trim();
     item.time = document.getElementById('editTime').value;
     item.amount = parseNum(document.getElementById('editAmount').value);
     item.services = editServices;
@@ -1771,15 +1472,6 @@ function saveEdit() {
     item.note = document.getElementById('editNote').value.trim();
     item.code = getCustomerCode(item.name);
   } else if (editingItem.type === 'notes') {
-    const dateStr = document.getElementById('editNoteDate').value.trim();
-    const parts = dateStr.split('/');
-    if (parts.length === 3) {
-      const jy = parseInt(parts[0]), jm = parseInt(parts[1]), jd = parseInt(parts[2]);
-      if (jy && jm && jd && jy >= 1300 && jy <= 1500 && jm >= 1 && jm <= 12 && jd >= 1 && jd <= 31) {
-        item.jy = jy; item.jm = jm; item.jd = jd;
-        item.key = jalaliKey(jy, jm, jd);
-      }
-    }
     item.title = document.getElementById('editTitle').value.trim();
     item.text = document.getElementById('editText').value.trim();
   } else if (editingItem.type === 'expenses') {
@@ -1814,36 +1506,53 @@ function markRepair(id, status) {
   a.repairStatus = status;
   save();
   renderCalendar();
+  renderWeeklyRepairs();
   if (document.getElementById('repairsPage').classList.contains('active')) renderRepairs();
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
+  if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
+
   showToast(status === 'missed' ? '❌ نیامد ثبت شد' : '✅ ثبت شد');
 }
 
+// ==================== Reschedule Repair Modal ====================
 function rescheduleRepair(id) {
   const a = data.appointments.find(x => x.id === id);
   if (!a) return;
+
   repairModalId = id;
   const currentRepair = getRepairDate(a);
   const currentStr = `${currentRepair[0]}/${String(currentRepair[1]).padStart(2,'0')}/${String(currentRepair[2]).padStart(2,'0')}`;
+
   document.getElementById('repairInfoBox').innerHTML = `
-    <b>👀 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
+    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
     📅 اکستنشن: ${formatJalali(a.jy, a.jm, a.jd)}<br>
-    🔧 موعد فعلی: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b><br>
-    👀 خدمات قبلی: <b>${escapeHtml(a.service)}</b>
+    🔧 موعد فعلی ترمیم: <b>${formatJalali(currentRepair[0], currentRepair[1], currentRepair[2])}</b><br>
+    💅 خدمات قبلی: <b>${escapeHtml(a.service)}</b>
   `;
+
   setRepairDays(0);
   document.getElementById('repairDaysCustom').value = '';
+
   document.querySelector('input[name="createNew"][value="yes"]').checked = true;
   toggleNewApptSection(true);
+
   document.getElementById('repairNewDate').value = currentStr;
   updateRepairDateHint();
+
   document.getElementById('repairNewTime').value = a.time || '14:30';
   document.getElementById('repairNewAmount').value = a.amount ? a.amount.toLocaleString('en-US') : '';
+
   const prevServices = a.services || (a.service ? a.service.split(' + ') : []);
-  document.querySelectorAll('#repairServiceBox input[type="checkbox"]').forEach(cb => { cb.checked = prevServices.includes(cb.value); });
+  document.querySelectorAll('#repairServiceBox input[type="checkbox"]').forEach(cb => {
+    cb.checked = prevServices.includes(cb.value);
+  });
+
   document.getElementById('repairNewPayment').value = 'pending';
+
   document.getElementById('repairNewDate').oninput = updateRepairDateHint;
+
   setTimeout(() => setupAmountInput('repairNewAmount'), 50);
+
   document.getElementById('repairModal').classList.add('show');
 }
 
@@ -1854,7 +1563,12 @@ function setRepairDays(days) {
   document.getElementById('repairDaysCustom').value = '';
   updateRepairDateHint();
 }
-function clearDaysBtns() { document.querySelectorAll('.days-btn').forEach(b => b.classList.remove('active')); updateRepairDateHint(); }
+
+function clearDaysBtns() {
+  document.querySelectorAll('.days-btn').forEach(b => b.classList.remove('active'));
+  updateRepairDateHint();
+}
+
 function getRepairDaysFromForm() {
   const custom = parseInt(document.getElementById('repairDaysCustom').value);
   if (!isNaN(custom) && custom >= 0) return custom;
@@ -1862,115 +1576,201 @@ function getRepairDaysFromForm() {
   if (activeBtn) return parseInt(activeBtn.dataset.days);
   return 0;
 }
+
 function updateRepairDateHint() {
   const a = data.appointments.find(x => x.id === repairModalId);
   if (!a) return;
+
   const days = getRepairDaysFromForm();
   const currentRepair = getRepairDate(a);
   const suggestedDate = addDaysToJalali(currentRepair[0], currentRepair[1], currentRepair[2], days);
+
   const hint = document.getElementById('repairNewDateHint');
-  if (hint) hint.innerHTML = `پیشنهاد: <b>${formatJalali(suggestedDate[0], suggestedDate[1], suggestedDate[2])}</b>`;
+  if (hint) {
+    hint.innerHTML = `پیشنهاد: <b>${formatJalali(suggestedDate[0], suggestedDate[1], suggestedDate[2])}</b> (${suggestedDate[0]}/${String(suggestedDate[1]).padStart(2,'0')}/${String(suggestedDate[2]).padStart(2,'0')})`;
+  }
 }
-function toggleNewApptSection(show) { document.getElementById('newApptSection').style.display = show ? 'block' : 'none'; }
-function closeRepairModal() { document.getElementById('repairModal').classList.remove('show'); repairModalId = null; }
+
+function toggleNewApptSection(show) {
+  document.getElementById('newApptSection').style.display = show ? 'block' : 'none';
+}
+
+function closeRepairModal() {
+  document.getElementById('repairModal').classList.remove('show');
+  repairModalId = null;
+}
 
 function submitRepairModal() {
   if (!repairModalId) return;
   const a = data.appointments.find(x => x.id === repairModalId);
   if (!a) return;
+
   const daysLate = getRepairDaysFromForm();
-  if (isNaN(daysLate) || daysLate < 0) { showToast('⚠️ تعداد روز معتبر'); return; }
-  if (daysLate === 0) { a.repairStatus = 'came'; a.repairLateDays = 0; }
-  else { a.repairStatus = 'late'; a.repairLateDays = daysLate; }
+  if (isNaN(daysLate) || daysLate < 0) {
+    showToast('⚠️ تعداد روز معتبر وارد کن');
+    return;
+  }
+
   const createNew = document.querySelector('input[name="createNew"]:checked').value === 'yes';
+
   if (createNew) {
     const dateStr = document.getElementById('repairNewDate').value.trim();
     const parts = dateStr.split('/');
-    if (parts.length !== 3) { showToast('⚠️ فرمت تاریخ درست نیست'); return; }
-    const jy = parseInt(parts[0]), jm = parseInt(parts[1]), jd = parseInt(parts[2]);
-    if (!jy || !jm || !jd || jy < 1300 || jy > 1500 || jm < 1 || jm > 12 || jd < 1 || jd > 31) { showToast('⚠️ تاریخ معتبر نیست'); return; }
+
+    if (parts.length !== 3) {
+      showToast('⚠️ فرمت تاریخ درست نیست (مثال: 1404/09/15)');
+      return;
+    }
+
+    const jy = parseInt(parts[0]);
+    const jm = parseInt(parts[1]);
+    const jd = parseInt(parts[2]);
+
+    if (!jy || !jm || !jd || jy < 1300 || jy > 1500 || jm < 1 || jm > 12 || jd < 1 || jd > jalaliMonthDays(jy, jm)) {
+      showToast('⚠️ تاریخ معتبر نیست');
+      return;
+    }
+
     const serviceCheckboxes = document.querySelectorAll('#repairServiceBox input[type="checkbox"]:checked');
     const services = Array.from(serviceCheckboxes).map(cb => cb.value);
-    if (services.length === 0) { showToast('⚠️ حداقل یه خدمات'); return; }
+
+    if (services.length === 0) {
+      showToast('⚠️ حداقل یه خدمات انتخاب کن');
+      return;
+    }
+
     const time = document.getElementById('repairNewTime').value || '14:30';
     const amount = parseNum(document.getElementById('repairNewAmount').value);
     const payment = document.getElementById('repairNewPayment').value;
+
+    a.repairStatus = daysLate === 0 ? 'came' : 'late';
+    a.repairLateDays = daysLate;
+
     data.appointments.push({
       id: Date.now().toString() + Math.random().toString(36).slice(2,6),
       key: jalaliKey(jy, jm, jd),
       jy, jm, jd,
-      name: a.name, phone: a.phone || '', time: time,
-      service: services.join(' + '), services: services, payment: payment,
+      name: a.name,
+      time: time,
+      service: services.join(' + '),
+      services: services,
+      payment: payment,
       note: `ترمیم از نوبت ${formatJalali(a.jy, a.jm, a.jd)}`,
-      amount: amount, code: a.code,
-      repairStatus: null, repairLateDays: null,
+      amount: amount,
+      code: a.code,
+      repairStatus: null,
+      repairLateDays: null,
       createdAt: Date.now()
     });
+
     save();
     closeRepairModal();
+
     renderCalendar();
+    renderWeeklyRepairs();
     if (document.getElementById('repairsPage').classList.contains('active')) renderRepairs();
     if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
-    showToast(`✅ ثبت شد + نوبت جدید`);
+    if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
+    if (document.getElementById('notesPage').classList.contains('active')) renderAllNotes();
+
+    const statusText = daysLate === 0 ? 'امروز' : `${daysLate} روز دیرتر`;
+    showToast(`✅ ${statusText} ثبت شد + نوبت جدید برای ${formatJalali(jy, jm, jd)}`);
   } else {
+    a.repairStatus = daysLate === 0 ? 'came' : 'late';
+    a.repairLateDays = daysLate;
     save();
     closeRepairModal();
+
     renderCalendar();
+    renderWeeklyRepairs();
     if (document.getElementById('repairsPage').classList.contains('active')) renderRepairs();
     if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
-    showToast('✅ ثبت شد');
+    if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
+
+    const statusText = daysLate === 0 ? 'ترمیم امروز انجام شد' : `${daysLate} روز دیرتر ثبت شد`;
+    showToast(`✅ ${statusText}`);
   }
+}
+
+function renderRepairAlert() {
+  const card = document.getElementById('repairAlertCard');
+  const list = document.getElementById('repairAlertList');
+  const alerts = [];
+
+  data.appointments.forEach(a => {
+    if (!isExtensionService(a)) return;
+    if (a.repairStatus) return;
+
+    const rd = getRepairDate(a);
+    const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
+
+    if (diff >= 0 && diff <= 7) alerts.push({ a, rd, diff, overdue: false });
+    else if (diff < 0 && diff >= -30) alerts.push({ a, rd, diff, overdue: true });
+  });
+
+  if (!alerts.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  alerts.sort((a, b) => a.diff - b.diff);
+
+  list.innerHTML = alerts.map(x => `
+    <div class="alert-box ${x.overdue ? 'overdue' : ''}">
+      <div class="alert-content">
+        <div class="name">💅 ${escapeHtml(x.a.name)} <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span></div>
+        <div class="info">
+          ${x.overdue
+            ? `⚠️ ${Math.abs(x.diff)} روز از موعد ترمیم گذشته! (موعد: ${formatJalali(x.rd[0], x.rd[1], x.rd[2])})`
+            : `🔔 ${x.diff === 0 ? 'امروز موعد ترمیم است' : `${x.diff} روز دیگر (${formatJalali(x.rd[0], x.rd[1], x.rd[2])})`}`}
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
+        <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
+        <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
+      </div>
+    </div>
+  `).join('');
 }
 
 function renderRepairs() {
   const c = document.getElementById('repairsList');
-  const items = data.appointments.filter(a => isExtensionService(a))
-    .map(a => { const rd = getRepairDate(a); const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]); return { a, rd, diff }; })
-        .sort((a, b) => {
-      // اولویت ۱: ترمیم‌های انجام نشده و آینده
-      // اولویت ۲: ترمیم‌های انجام نشده و گذشته (منفی)
-      // اولویت ۳: ترمیم‌های انجام شده/نیامده
-      const aDone = (a.a.repairStatus === 'came' || a.a.repairStatus === 'late' || a.a.repairStatus === 'missed') ? 1 : 0;
-      const bDone = (b.a.repairStatus === 'came' || b.a.repairStatus === 'late' || b.a.repairStatus === 'missed') ? 1 : 0;
-      
-      // انجام نشده‌ها اول بیان
-      if (aDone !== bDone) return aDone - bDone;
-      
-      // بین انجام نشده‌ها: نزدیک‌ترین (کمترین اختلاف مطلق) بالاتر
-      // یعنی اگه امروز و فردا و دیروز هست → امروز اول
-      if (aDone === 0) {
-        return Math.abs(a.diff) - Math.abs(b.diff);
-      }
-      
-      // انجام شده‌ها: جدیدترین اول
-      return b.a.jy - a.a.jy || b.a.jm - a.a.jm || b.a.jd - a.a.jd;
-    });
-  if (!items.length) { c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ یادآوری ترمیمی نیست</div>`; return; }
+  const items = data.appointments
+    .filter(a => isExtensionService(a))
+    .map(a => {
+      const rd = getRepairDate(a);
+      const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
+      return { a, rd, diff };
+    })
+    .sort((a, b) => a.diff - b.diff);
+
+  if (!items.length) {
+    c.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>هیچ یادآوری ترمیمی نیست</div>`;
+    return;
+  }
+
   c.innerHTML = items.map(x => {
     let statusBadge = '', boxClass = '';
-    if (x.a.repairStatus === 'came') { statusBadge = '<span class="badge badge-paid">✓ انجام شد</span>'; boxClass = 'done'; }
-    else if (x.a.repairStatus === 'late') { statusBadge = `<span class="badge badge-pending">⏰ ${x.a.repairLateDays} روز دیرتر</span>`; boxClass = 'done'; }
+    if (x.a.repairStatus === 'came') { statusBadge = '<span class="badge badge-paid">✓ ترمیم انجام شد</span>'; boxClass = 'done'; }
+    else if (x.a.repairStatus === 'late') { statusBadge = `<span class="badge badge-pending">⏰ ${x.a.repairLateDays} روز دیرتر آمد</span>`; boxClass = 'done'; }
     else if (x.a.repairStatus === 'missed') { statusBadge = '<span class="badge badge-pending" style="background:#ffcdd2;color:#c62828;">✗ نیامد</span>'; boxClass = 'overdue'; }
     else if (x.diff < 0) { statusBadge = '<span class="badge badge-pending" style="background:#ffcdd2;color:#c62828;">⚠️ از موعد گذشته</span>'; boxClass = 'overdue'; }
     else if (x.diff <= 7) { statusBadge = `<span class="badge badge-pending">🔔 ${x.diff === 0 ? 'امروز' : x.diff + ' روز دیگر'}</span>`; }
     else { statusBadge = `<span class="badge badge-code">${x.diff} روز مانده</span>`; }
+
     return `
       <div class="alert-box ${boxClass}">
         <div class="alert-content">
-          <div class="name">
-            <span class="name-link" onclick="openCustomerHistory('${escapeHtml(x.a.name)}')">👀 ${escapeHtml(x.a.name)}</span>
-            <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span>
-            ${x.a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(x.a.phone)}</span>` : ''}
-          </div>
+          <div class="name">💅 ${escapeHtml(x.a.name)} <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span></div>
           <div class="info">
-            📅 اکستنشن: ${formatJalali(x.a.jy, x.a.jm, x.a.jd)}<br>
-            🔧 موعد ترمیم: <b>${formatJalali(x.rd[0], x.rd[1], x.rd[2])}</b>
+            📅 تاریخ اکستنشن: ${formatJalali(x.a.jy, x.a.jm, x.a.jd)}<br>
+            🔧 موعد ترمیم: <b>${formatJalali(x.rd[0], x.rd[1], x.rd[2])}</b><br>
+            ${x.a.repairStatus !== 'came' && x.a.repairStatus !== 'late'
+              ? (x.diff < 0 ? `⚠️ ${Math.abs(x.diff)} روز از موعد گذشته` : (x.diff === 0 ? '🔔 امروز موعد ترمیم است' : `⏳ ${x.diff} روز دیگر`))
+              : ''}
           </div>
           <div style="margin-top:6px;">${statusBadge}</div>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          ${x.a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(x.a.phone)}')">📞</button>` : ''}
-          <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')">✉️</button>
+          <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
           ${!x.a.repairStatus ? `
             <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
             <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
@@ -1981,25 +1781,105 @@ function renderRepairs() {
   }).join('');
 }
 
-// ==================== Message ====================
+// ==================== Weekly Repairs ====================
+function getLastThursday(fromJY, fromJM, fromJD) {
+  let [jy, jm, jd] = [fromJY, fromJM, fromJD];
+  let dow = getDayOfWeekJalali(jy, jm, jd);
+  let diff = dow - 4;
+  if (diff < 0) diff += 7;
+  return addDaysToJalali(jy, jm, jd, -diff);
+}
+
+function renderWeeklyRepairs() {
+  const list = document.getElementById('weeklyRepairList');
+  const range = document.getElementById('weeklyRepairRange');
+  if (!list) return;
+
+  const startDay = getLastThursday(todayJ[0], todayJ[1], todayJ[2]);
+  const endDay = addDaysToJalali(startDay[0], startDay[1], startDay[2], 7);
+
+  range.textContent = `— از ${formatJalali(startDay[0], startDay[1], startDay[2])} تا ${formatJalali(endDay[0], endDay[1], endDay[2])}`;
+
+  const repairs = [];
+  data.appointments.forEach(a => {
+    if (!isExtensionService(a)) return;
+    if (a.repairStatus) return;
+
+    const rd = getRepairDate(a);
+    const diffFromStart = diffDaysJalali(startDay[0], startDay[1], startDay[2], rd[0], rd[1], rd[2]);
+    const diffFromEnd = diffDaysJalali(endDay[0], endDay[1], endDay[2], rd[0], rd[1], rd[2]);
+
+    if (diffFromStart >= 0 && diffFromEnd < 0) {
+      const todayDiff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
+      repairs.push({ a, rd, todayDiff });
+    }
+  });
+
+  repairs.sort((x, y) => x.todayDiff - y.todayDiff);
+
+  if (!repairs.length) {
+    list.innerHTML = `<div class="empty-state"><span class="icon">🌸</span>ترمیمی برای این هفته (پنجشنبه تا پنجشنبه) وجود نداره</div>`;
+    return;
+  }
+
+  list.innerHTML = repairs.map(x => {
+    let statusBadge = '', boxClass = '';
+    if (x.todayDiff < 0) {
+      statusBadge = `<span class="badge badge-pending" style="background:#ffcdd2;color:#c62828;">⚠️ ${Math.abs(x.todayDiff)} روز گذشته</span>`;
+      boxClass = 'overdue';
+    } else if (x.todayDiff === 0) {
+      statusBadge = `<span class="badge badge-pending">🔔 امروز</span>`;
+    } else if (x.todayDiff <= 3) {
+      statusBadge = `<span class="badge badge-pending">⏳ ${x.todayDiff} روز دیگر</span>`;
+    } else {
+      statusBadge = `<span class="badge badge-code">📅 ${x.todayDiff} روز دیگر</span>`;
+    }
+
+    return `
+      <div class="alert-box ${boxClass}">
+        <div class="alert-content">
+          <div class="name">💅 ${escapeHtml(x.a.name)} <span class="badge badge-code">${escapeHtml(x.a.code||'')}</span></div>
+          <div class="info">
+            📅 اکستنشن: ${formatJalali(x.a.jy, x.a.jm, x.a.jd)}<br>
+            🔧 موعد ترمیم: <b>${formatJalali(x.rd[0], x.rd[1], x.rd[2])}</b>
+          </div>
+          <div style="margin-top:6px;">${statusBadge}</div>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${x.a.id}')" title="ارسال پیام">✉️</button>
+          <button class="btn btn-sm btn-warn" onclick="rescheduleRepair('${x.a.id}')">⏰ ترمیم</button>
+          <button class="btn btn-sm btn-delete" onclick="markRepair('${x.a.id}','missed')">❌ نیامد</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ==================== Message Feature ====================
 function openMessageForAppointment(apptId) {
   const a = data.appointments.find(x => x.id === apptId);
   if (!a) return;
+
   messageCustomerName = a.name;
+  const firstName = a.name.trim().split(' ')[0];
   const rd = getRepairDate(a);
-  const msg = `سلام عزیزم🌸\n\n` +
-              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) ✔️\n` +
-              `اگه دوست داری تایم فیکس کنی، زودتر، روز و تایم آزادتو بهم بگو تا برات اوکی کنم 💗\n` +
-              `____\n` +
-              `📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}`;
+
+  const msg = `سلام ${firstName} جون 🌸\n\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
+              `———\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' - ساعت ' + a.time : ''}\n` +
+              `💅 خدمات: ${a.service}`;
+
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span>
-    ${a.phone ? `<span class="badge badge-phone">📱 ${escapeHtml(a.phone)}</span>` : ''}<br>
+    <b>💅 ${escapeHtml(a.name)}</b> <span class="badge badge-code">${escapeHtml(a.code||'')}</span><br>
     📅 آخرین مراجعه: ${formatJalali(a.jy, a.jm, a.jd)}${a.time ? ' — ⏰ ' + a.time : ''}<br>
     💅 خدمات: <b>${escapeHtml(a.service)}</b><br>
     🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
+
   document.getElementById('msgText').value = msg;
+
   document.getElementById('messageModal').classList.add('show');
 }
 
@@ -2009,137 +1889,141 @@ function openMessageForCustomer(name) {
     if (a.jm !== b.jm) return b.jm - a.jm;
     return b.jd - a.jd;
   });
-  if (!appts.length) { showToast('⚠️ نوبتی پیدا نشد'); return; }
+
+  if (!appts.length) {
+    showToast('⚠️ نوبتی برای این مشتری پیدا نشد');
+    return;
+  }
+
+  // Get latest extension appointment
   const lastExt = appts.find(a => isExtensionService(a));
   const target = lastExt || appts[0];
+
   messageCustomerName = name;
+  const firstName = name.trim().split(' ')[0];
   const rd = getRepairDate(target);
-  const phone = getCustomerPhone(name);
-  const msg = `سلام عزیزم🌸\n\n` +
-              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) ✔️\n` +
-              `اگه دوست داری تایم فیکس کنی، زودتر، روز و تایم آزادتو بهم بگو تا برات اوکی کنم 💗\n` +
-              `____\n` +
-              `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}`;
+
+  const msg = `سلام ${firstName} جون 🌸\n\n` +
+              `تایم ترمیمت رسیده (${formatJalali(rd[0], rd[1], rd[2])}) 💅\n` +
+              `اگه دوست داری تایم فیکس کنی، زودتر بهم بگو تا برات اوکی کنم 💜\n\n` +
+              `———\n` +
+              `📅 آخرین مراجعه‌ت: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' - ساعت ' + target.time : ''}\n` +
+              `💅 خدمات: ${target.service}`;
+
   document.getElementById('msgInfoBox').innerHTML = `
-    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span>
-    ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}<br>
+    <b>💅 ${escapeHtml(name)}</b> <span class="badge badge-code">${escapeHtml(target.code||'')}</span><br>
     📅 آخرین مراجعه: ${formatJalali(target.jy, target.jm, target.jd)}${target.time ? ' — ⏰ ' + target.time : ''}<br>
     💅 خدمات: <b>${escapeHtml(target.service)}</b><br>
     🔧 موعد ترمیم: <b>${formatJalali(rd[0], rd[1], rd[2])}</b>
   `;
+
   document.getElementById('msgText').value = msg;
+
   document.getElementById('messageModal').classList.add('show');
 }
-function closeMessageModal() { document.getElementById('messageModal').classList.remove('show'); messageCustomerName = null; }
+
+function closeMessageModal() {
+  document.getElementById('messageModal').classList.remove('show');
+  messageCustomerName = null;
+}
+
 function copyMessage() {
   const text = document.getElementById('msgText').value;
   if (!text) return;
-  navigator.clipboard.writeText(text).then(() => showToast('📋 متن کپی شد')).catch(() => {
-    const ta = document.getElementById('msgText'); ta.select(); ta.setSelectionRange(0, 99999);
-    try { document.execCommand('copy'); showToast('📋 کپی شد'); } catch(e) { showToast('⚠️ کپی نشد'); }
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('📋 متن کپی شد');
+  }).catch(() => {
+    // Fallback for iOS/older browsers
+    const ta = document.getElementById('msgText');
+    ta.select();
+    ta.setSelectionRange(0, 99999);
+    try {
+      document.execCommand('copy');
+      showToast('📋 متن کپی شد');
+    } catch(e) {
+      showToast('⚠️ کپی نشد، دستی انتخاب کن');
+    }
   });
 }
+
 function sendWhatsApp() {
   const text = document.getElementById('msgText').value;
   if (!text) return;
-  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-}
-function sendSMS() {
-  const text = document.getElementById('msgText').value;
-  if (!text) return;
-  const phone = messageCustomerName ? getCustomerPhone(messageCustomerName) : '';
-  document.getElementById('smsPhoneInput').value = phone;
-  document.getElementById('smsPhoneHint').textContent = phone || 'نامشخص';
-  document.getElementById('smsPhoneModal').classList.add('show');
-  setTimeout(() => { if (!phone) document.getElementById('smsPhoneInput').focus(); }, 100);
-}
-function confirmSendSMS() {
-  const rawPhone = document.getElementById('smsPhoneInput').value.trim();
-  const text = document.getElementById('msgText').value;
-  if (!text) return;
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const separator = isIOS ? '&' : '?';
-  let smsUrl;
-  if (rawPhone) smsUrl = 'sms:' + normalizePhone(rawPhone) + separator + 'body=' + encodeURIComponent(text);
-  else smsUrl = 'sms:' + separator + 'body=' + encodeURIComponent(text);
-  document.getElementById('smsPhoneModal').classList.remove('show');
-  document.getElementById('messageModal').classList.remove('show');
-  window.location.href = smsUrl;
-  showToast('📱 اپ باز شد');
-}
-function closeSMSModal() { document.getElementById('smsPhoneModal').classList.remove('show'); }
-function callCustomer(phone) {
-  if (!phone) { showToast('⚠️ شماره‌ای ثبت نشده'); return; }
-  window.location.href = 'tel:' + normalizePhone(phone);
+
+  const encoded = encodeURIComponent(text);
+  window.open('https://wa.me/?text=' + encoded, '_blank');
 }
 
-// ==================== Customer History ====================
-function openCustomerHistory(customerName) {
-  const name = customerName.trim();
-  const appts = data.appointments.filter(a => a.name.trim() === name).sort((a, b) => {
-    if (a.jy !== b.jy) return b.jy - a.jy;
-    if (a.jm !== b.jm) return b.jm - a.jm;
-    return b.jd - a.jd;
-  });
-  if (!appts.length) { showToast('⚠️ سابقه‌ای پیدا نشد'); return; }
-  const code = appts[0].code || '—';
-  const phone = getCustomerPhone(name);
-  const totalVisits = appts.length;
-  const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
-  const serviceCount = {};
-  appts.forEach(a => {
-    const svcs = a.services || (a.service ? a.service.split(' + ') : []);
-    svcs.forEach(s => serviceCount[s] = (serviceCount[s] || 0) + 1);
-  });
-  const servicesSummary = Object.entries(serviceCount).sort((a, b) => b[1] - a[1]).map(([s, c]) => `${s} (${c} بار)`).join(' • ');
-  const info = getLastVisitInfo(name);
-  const lastVisitText = info ? info.readable : 'ثبت نشده';
-  document.getElementById('historyModalContent').innerHTML = `
-    <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:14px;padding:14px;margin-bottom:14px;">
-      <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:8px;">
-        👀 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
-        ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
-      </div>
-      <div style="font-size:12px;color:#666;line-height:1.9;">
-        📊 مراجعات: <b>${totalVisits}</b> بار<br>
-        💰 کل پرداختی: <b style="color:#2e7d32;">${money(totalPaid)}</b><br>
-        📅 آخرین مراجعه: <b style="color:#2e7d32;">${lastVisitText}</b>
-      </div>
-      ${servicesSummary ? `<div style="margin-top:8px;padding:8px;background:white;border-radius:8px;font-size:11px;color:#6a1b9a;line-height:1.8;"><b>💅 خدمات:</b><br>${servicesSummary}</div>` : ''}
-      ${phone ? `<div style="margin-top:8px;display:flex;gap:6px;"><button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(phone)}')" style="flex:1;">📞 تماس</button><button class="btn btn-sm btn-msg" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="flex:1;">✉️ پیام</button></div>` : ''}
-    </div>
-    <div style="font-weight:bold;color:#ad1457;font-size:13px;margin-bottom:8px;">📜 لیست مراجعات:</div>
-    <div style="max-height:400px;overflow-y:auto;padding-right:5px;">
-      ${appts.map((a, idx) => {
-        const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓</span>' : '<span class="badge badge-pending">⏳</span>';
-        const isLatest = idx === 0;
-        let repairInfo = '';
-        if (isExtensionService(a)) {
-          const rd = getRepairDate(a);
-          if (a.repairStatus === 'came') repairInfo = `<div style="color:#2e7d32;font-size:11px;margin-top:3px;">🔧 انجام شد</div>`;
-          else if (a.repairStatus === 'late') repairInfo = `<div style="color:#ef6c00;font-size:11px;margin-top:3px;">🔧 ${a.repairLateDays} روز دیرتر</div>`;
-          else if (a.repairStatus === 'missed') repairInfo = `<div style="color:#c62828;font-size:11px;margin-top:3px;">🔧 نیامد</div>`;
-          else repairInfo = `<div style="color:#ef6c00;font-size:11px;margin-top:3px;">🔔 ترمیم: ${formatJalali(rd[0], rd[1], rd[2])}</div>`;
-        }
-        return `
-          <div style="background:${isLatest ? 'linear-gradient(135deg,#e8f5e9,#f1f8e9)' : '#fff9fb'};border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid ${isLatest ? '#2e7d32' : '#ad1457'};">
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
-              <span style="font-size:12px;font-weight:bold;color:#6a1b9a;">${isLatest ? '🆕 ' : ''}📅 ${formatJalali(a.jy, a.jm, a.jd)}</span>
-              ${paymentBadge}
-            </div>
-            ${a.time ? `<div style="font-size:11px;color:#ad1457;">⏰ ${a.time}</div>` : ''}
-            <div style="font-size:12px;color:#333;margin-top:4px;"><b>${escapeHtml(a.service)}</b></div>
-            ${a.amount ? `<div style="font-size:11px;color:#777;">💵 ${money(a.amount)}</div>` : ''}
-            ${a.note ? `<div style="font-size:11px;color:#666;margin-top:3px;background:white;padding:4px 8px;border-radius:6px;font-style:italic;">📝 ${escapeHtml(a.note)}</div>` : ''}
-            ${repairInfo}
+// ==================== Finance ====================
+function renderFinance() {
+  document.getElementById('financeMonthLabel').textContent = `— ${persianMonths[currentJM-1]} ${currentJY}`;
+
+  const filterName = (document.getElementById('finFilterName').value || '').trim().toLowerCase();
+  const filterService = document.getElementById('finFilterService').value;
+  const filterPayment = document.getElementById('finFilterPayment').value;
+
+  let appts = data.appointments.filter(a => a.jy === currentJY && a.jm === currentJM);
+  const exps = data.expenses.filter(e => e.jy === currentJY && e.jm === currentJM);
+
+  if (filterName) {
+    appts = appts.filter(a => a.name.toLowerCase().includes(filterName));
+  }
+  if (filterService) {
+    appts = appts.filter(a => {
+      if (a.services && Array.isArray(a.services)) return a.services.includes(filterService);
+      return a.service && a.service.includes(filterService);
+    });
+  }
+  if (filterPayment) {
+    appts = appts.filter(a => a.payment === filterPayment);
+  }
+
+  const income = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
+  const expense = exps.reduce((s, e) => s + (e.amount || 0), 0);
+  const pending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
+
+  document.getElementById('finIncome').textContent = money(income);
+  document.getElementById('finExpense').textContent = money(expense);
+  document.getElementById('finProfit').textContent = money(income - expense);
+  document.getElementById('finPending').textContent = money(pending);
+
+  const ac = document.getElementById('financeAppointments');
+  if (!appts.length) {
+    ac.innerHTML = `<div class="empty-state"><span class="icon">💵</span>نوبتی با این فیلتر پیدا نشد</div>`;
+  } else {
+    ac.innerHTML = appts.sort((a,b) => a.jd - b.jd).map(a => {
+      const badge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
+                    '<span class="badge badge-pending">⏳ در انتظار</span>';
+      return `
+        <div class="item ${a.payment === 'paid' ? 'paid' : 'pending'}">
+          <div class="item-content">
+            <div class="title">${escapeHtml(a.name)} ${badge}</div>
+            <div class="detail">📅 ${formatJalali(a.jy, a.jm, a.jd)} — ${escapeHtml(a.service)}</div>
+            <div class="detail">💵 <b>${money(a.amount)}</b></div>
           </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-  document.getElementById('historyModal').classList.add('show');
+          <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const ec = document.getElementById('financeExpenses');
+  if (!exps.length) {
+    ec.innerHTML = `<div class="empty-state"><span class="icon">💸</span>خرجی ثبت نشده</div>`;
+  } else {
+    ec.innerHTML = exps.sort((a,b) => a.jd - b.jd).map(e => `
+      <div class="item pending">
+        <div class="item-content">
+          <div class="title">${escapeHtml(e.title)}</div>
+          <div class="detail">📅 ${formatJalali(e.jy, e.jm, e.jd)}</div>
+          <div class="detail">💵 <b>${money(e.amount)}</b></div>
+        </div>
+        <button class="btn btn-sm btn-edit" onclick="openEdit('expense','${e.id}')">✏️</button>
+      </div>
+    `).join('');
+  }
 }
-function closeHistoryModal() { document.getElementById('historyModal').classList.remove('show'); }
 
 // ==================== Customers ====================
 function updateCustomerDatalist() {
@@ -2150,11 +2034,22 @@ function updateCustomerDatalist() {
 function renderCustomers() {
   const search = (document.getElementById('customerSearch').value || '').trim().toLowerCase();
   const c = document.getElementById('customersList');
-  const byName = {};
-  data.appointments.forEach(a => { const k = a.name.trim(); if (!byName[k]) byName[k] = []; byName[k].push(a); });
+
+  const byName = Object.create(null);
+  data.appointments.forEach(a => {
+    const key = a.name.trim();
+    if (!byName[key]) byName[key] = [];
+    byName[key].push(a);
+  });
+
   let names = Object.keys(byName);
-  if (search) names = names.filter(n => n.toLowerCase().includes(search) || (getCustomerPhone(n) && getCustomerPhone(n).includes(search)));
-  if (!names.length) { c.innerHTML = `<div class="empty-state"><span class="icon">👥</span>مشتری‌ای یافت نشد</div>`; return; }
+  if (search) names = names.filter(n => n.toLowerCase().includes(search));
+
+  if (!names.length) {
+    c.innerHTML = `<div class="empty-state"><span class="icon">👥</span>مشتری‌ای یافت نشد</div>`;
+    return;
+  }
+
   names.sort();
   c.innerHTML = names.map(name => {
     const appts = byName[name].sort((a, b) => {
@@ -2162,29 +2057,29 @@ function renderCustomers() {
       if (a.jm !== b.jm) return b.jm - a.jm;
       return b.jd - a.jd;
     });
+
     const code = appts[0].code || '—';
     const totalVisits = appts.length;
     const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
     const last = appts[0];
-    const phone = getCustomerPhone(name);
+
     let nextRepair = null;
     const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
-    if (lastExt) nextRepair = getRepairDate(lastExt);
+    if (lastExt) {
+      nextRepair = getRepairDate(lastExt);
+    }
+
     return `
       <div class="customer-card" style="cursor:pointer;">
-        <div class="cname" onclick="openCustomerProfile('${escapeHtml(name)}')">
-          👀 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
-          ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
-        </div>
-        <div class="cinfo" onclick="openCustomerProfile('${escapeHtml(name)}')">
-          📊 مراجعات: <b>${totalVisits}</b> | 💰 ${money(totalPaid)}<br>
-          📅 آخرین: ${formatJalali(last.jy, last.jm, last.jd)}
-          ${nextRepair ? ` | 🔧 ترمیم: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
+        <div class="cname" onclick="openCustomerProfile(${escapeInlineArg(name)})">💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span></div>
+        <div class="cinfo" onclick="openCustomerProfile(${escapeInlineArg(name)})">
+          📊 تعداد مراجعات: <b>${totalVisits}</b> بار &nbsp;|&nbsp; 💰 کل پرداختی: <b>${money(totalPaid)}</b><br>
+          📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
+          ${nextRepair ? `&nbsp;|&nbsp; 🔧 ترمیم بعدی: <b>${formatJalali(nextRepair[0], nextRepair[1], nextRepair[2])}</b>` : ''}
         </div>
         <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
-          ${phone ? `<button class="btn btn-sm btn-call" onclick="event.stopPropagation(); callCustomer('${escapeHtml(phone)}')">📞</button>` : ''}
-          <button class="btn btn-sm btn-msg" onclick="event.stopPropagation(); openMessageForCustomer('${escapeHtml(name)}')">✉️</button>
-          <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); openCustomerProfile('${escapeHtml(name)}')">👁️ سابقه</button>
+          <button class="btn btn-sm btn-msg" onclick="event.stopPropagation(); openMessageForCustomer(${escapeInlineArg(name)})">✉️ پیام</button>
+          <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation(); openCustomerProfile(${escapeInlineArg(name)})">👁️ مشاهده سابقه</button>
         </div>
       </div>
     `;
@@ -2195,62 +2090,95 @@ function openCustomerProfile(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('customerProfilePage').classList.add('active');
-  document.getElementById('customerProfileName').textContent = `👀 ${name}`;
+
+  document.getElementById('customerProfileName').textContent = `💅 ${name}`;
+
   const appts = data.appointments.filter(a => a.name.trim() === name.trim()).sort((a, b) => {
     if (a.jy !== b.jy) return b.jy - a.jy;
     if (a.jm !== b.jm) return b.jm - a.jm;
     return b.jd - a.jd;
   });
+
   const code = appts[0]?.code || '—';
   const totalVisits = appts.length;
   const totalPaid = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
-  const phone = getCustomerPhone(name);
-  const info = getLastVisitInfo(name);
-  const lastVisitText = info ? info.readable : '—';
+  const totalPending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
+  const first = appts[appts.length - 1];
+  const last = appts[0];
+
   const nextRepairInfo = (() => {
     const lastExt = appts.find(a => isExtensionService(a) && !a.repairStatus);
-    if (lastExt) { const rd = getRepairDate(lastExt); return formatJalali(rd[0], rd[1], rd[2]); }
+    if (lastExt) {
+      const rd = getRepairDate(lastExt);
+      return formatJalali(rd[0], rd[1], rd[2]);
+    }
     return null;
   })();
+
   document.getElementById('customerProfileContent').innerHTML = `
     <div style="background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-radius:16px;padding:16px;margin-bottom:18px;">
       <div style="font-size:15px;color:#6a1b9a;font-weight:bold;margin-bottom:10px;">
-        👀 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
-        ${phone ? `<span class="badge badge-phone">📱 ${escapeHtml(phone)}</span>` : ''}
+        💅 ${escapeHtml(name)} <span class="badge badge-code">${escapeHtml(code)}</span>
       </div>
       <div style="font-size:13px;line-height:2;color:#666;">
-        📊 مراجعات: <b>${totalVisits}</b> بار<br>
+        📊 تعداد مراجعات: <b>${totalVisits}</b> بار<br>
         💰 کل پرداختی: <b style="color:#2e7d32;">${money(totalPaid)}</b><br>
-        📅 آخرین: <b style="color:#2e7d32;">${lastVisitText}</b>
-        ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b>${nextRepairInfo}</b>` : ''}
+        ${totalPending > 0 ? `⏳ در انتظار: <b style="color:#ef6c00;">${money(totalPending)}</b><br>` : ''}
+        📅 اولین مراجعه: ${formatJalali(first.jy, first.jm, first.jd)}<br>
+        📅 آخرین مراجعه: ${formatJalali(last.jy, last.jm, last.jd)}
+        ${nextRepairInfo ? `<br>🔧 ترمیم بعدی: <b style="color:#ef6c00;">${nextRepairInfo}</b>` : ''}
       </div>
-      ${phone ? `<button class="btn btn-call btn-full" onclick="callCustomer('${escapeHtml(phone)}')" style="margin-top:12px;">📞 تماس</button>` : ''}
-      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer('${escapeHtml(name)}')" style="margin-top:8px;">✉️ پیام</button>
+      <button class="btn btn-msg btn-full" onclick="openMessageForCustomer(${escapeInlineArg(name)})" style="margin-top:12px;">
+        ✉️ ارسال پیام به ${escapeHtml(name)}
+      </button>
     </div>
-    <div style="font-weight:bold;color:#ad1457;font-size:15px;margin-bottom:12px;">📜 سابقه:</div>
+
+    <div style="font-weight:bold;color:#ad1457;font-size:15px;margin-bottom:12px;">📜 سابقه کامل مراجعات:</div>
+
     ${appts.map(a => {
-      const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓</span>' : '<span class="badge badge-pending">⏳</span>';
+      const paymentBadge = a.payment === 'paid' ? '<span class="badge badge-paid">✓ پرداخت شد</span>' :
+                           '<span class="badge badge-pending">⏳ در انتظار</span>';
+
+      const hInfo = getHolidayInfo(a.jy, a.jm, a.jd);
+      const holidayBadge = hInfo.isHoliday ? `<span class="badge badge-holiday">🎉 ${escapeHtml(hInfo.title)}</span>` : '';
+
       let repairInfo = '';
       if (isExtensionService(a)) {
-        if (a.repairStatus === 'came') repairInfo = `<div style="color:#2e7d32;font-size:12px;">🔧 انجام شد</div>`;
-        else if (a.repairStatus === 'late') repairInfo = `<div style="color:#ef6c00;font-size:12px;">🔧 ${a.repairLateDays} روز دیرتر</div>`;
-        else if (a.repairStatus === 'missed') repairInfo = `<div style="color:#c62828;font-size:12px;">🔧 نیامد</div>`;
-        else { const rd = getRepairDate(a); const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]); if (diff < 0) repairInfo = `<div style="color:#c62828;font-size:12px;">🔧 ${Math.abs(diff)} روز گذشته</div>`; else repairInfo = `<div style="color:#ef6c00;font-size:12px;">🔔 ترمیم: ${formatJalali(rd[0], rd[1], rd[2])}</div>`; }
+        if (a.repairStatus === 'came') {
+          repairInfo = `<div style="color:#2e7d32;font-size:12px;margin-top:4px;">🔧 ترمیم: انجام شد</div>`;
+        } else if (a.repairStatus === 'late') {
+          repairInfo = `<div style="color:#ef6c00;font-size:12px;margin-top:4px;">🔧 ترمیم: ${a.repairLateDays} روز دیرتر انجام شد</div>`;
+        } else if (a.repairStatus === 'missed') {
+          repairInfo = `<div style="color:#c62828;font-size:12px;margin-top:4px;">🔧 ترمیم: نیامد</div>`;
+        } else {
+          const rd = getRepairDate(a);
+          const diff = diffDaysJalali(todayJ[0], todayJ[1], todayJ[2], rd[0], rd[1], rd[2]);
+          if (diff < 0) {
+            repairInfo = `<div style="color:#c62828;font-size:12px;margin-top:4px;">🔧 ترمیم: ${Math.abs(diff)} روز از موعد گذشته (موعد: ${formatJalali(rd[0], rd[1], rd[2])})</div>`;
+          } else {
+            repairInfo = `<div style="color:#ef6c00;font-size:12px;margin-top:4px;">🔔 ترمیم بعدی: ${formatJalali(rd[0], rd[1], rd[2])} (${diff === 0 ? 'امروز' : diff + ' روز دیگر'})</div>`;
+          }
+        }
       }
+
       return `
         <div class="item appointment ${a.payment === 'paid' ? 'paid' : 'pending'}" style="margin-bottom:12px;">
           <div class="item-content">
-            <div class="title">📅 ${formatJalali(a.jy, a.jm, a.jd)} ${a.time ? `<span style="font-size:11px;color:#ad1457;">⏰ ${a.time}</span>` : ''} ${paymentBadge}</div>
+            <div class="title">
+              📅 ${formatJalali(a.jy, a.jm, a.jd)}
+              ${a.time ? `<span style="font-size:11px;color:#ad1457;">⏰ ${a.time}</span>` : ''}
+              ${holidayBadge}
+              ${paymentBadge}
+            </div>
             <div class="detail"><b>${escapeHtml(a.service)}</b></div>
             ${a.amount ? `<div class="detail">💵 ${money(a.amount)}</div>` : ''}
             ${a.note ? `<div class="detail" style="font-style:italic;">📝 ${escapeHtml(a.note)}</div>` : ''}
             ${repairInfo}
           </div>
           <div class="item-actions">
-            ${a.phone ? `<button class="btn btn-sm btn-call" onclick="callCustomer('${escapeHtml(a.phone)}')">📞</button>` : ''}
-            <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')">✉️</button>
+            <button class="btn btn-sm btn-msg" onclick="openMessageForAppointment('${a.id}')" title="پیام">✉️</button>
             <button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button>
-            <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}'); setTimeout(()=>openCustomerProfile('${escapeHtml(name)}'), 200);">🗑️</button>
+            <button class="btn btn-sm btn-delete" onclick="deleteItem('appointments','${a.id}'); setTimeout(()=>openCustomerProfile(${escapeInlineArg(name)}), 200);">🗑️</button>
           </div>
         </div>
       `;
@@ -2271,158 +2199,130 @@ function backToCustomers() {
 function renderWeekView() {
   const grid = document.getElementById('weekGrid');
   grid.innerHTML = '';
+
   const days = [];
   let jy = todayJ[0], jm = todayJ[1], jd = todayJ[2];
+
   for (let i = 0; i < 7; i++) {
     days.push({ jy, jm, jd });
     const md = jalaliMonthDays(jy, jm);
     jd++;
     if (jd > md) { jd = 1; jm++; if (jm > 12) { jm = 1; jy++; } }
   }
+
   const persianDayNames = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+
   days.forEach(day => {
     const el = document.createElement('div');
     el.className = 'week-day';
     const isToday = day.jy === todayJ[0] && day.jm === todayJ[1] && day.jd === todayJ[2];
     const hInfo = getHolidayInfo(day.jy, day.jm, day.jd);
     if (isToday) el.classList.add('today');
+
     const dow = getDayOfWeekJalali(day.jy, day.jm, day.jd);
     const dayName = persianDayNames[dow];
-    el.innerHTML = `<div class="day-name">${isToday ? 'امروز' : dayName} ${hInfo.isHoliday ? '🎉' : ''}</div><div class="day-date">${day.jd}</div><div class="events"></div>`;
-    if (hInfo.isHoliday) { el.style.background = 'linear-gradient(135deg, #fce4ec, #f8bbd0)'; el.style.borderColor = '#ec407a'; }
+
+    el.innerHTML = `
+      <div class="day-name">${isToday ? 'امروز' : dayName} ${hInfo.isHoliday ? '🎉' : ''}</div>
+      <div class="day-date">${day.jd}</div>
+      <div class="events"></div>
+    `;
+
+    if (hInfo.isHoliday) {
+      el.style.background = 'linear-gradient(135deg, #fce4ec, #f8bbd0)';
+      el.style.borderColor = '#ec407a';
+    }
+
     const ev = el.querySelector('.events');
     const key = jalaliKey(day.jy, day.jm, day.jd);
+
     const appts = data.appointments.filter(a => a.key === key);
     const notes = data.notes.filter(n => n.key === key);
     const repairs = getRepairsForDate(day.jy, day.jm, day.jd);
-    appts.forEach(a => { const e = document.createElement('div'); e.className = 'week-event appointment'; e.textContent = `💅 ${a.name} ${a.time ? a.time : ''}`; ev.appendChild(e); });
-    repairs.forEach(a => { const e = document.createElement('div'); e.className = 'week-event repair'; e.textContent = `🔧 ترمیم ${a.name}`; ev.appendChild(e); });
-    notes.forEach(n => { const e = document.createElement('div'); e.className = 'week-event note'; e.textContent = `📝 ${n.title}`; ev.appendChild(e); });
-    if (!appts.length && !notes.length && !repairs.length) { const e = document.createElement('div'); e.style.cssText = 'font-size:10px;color:#bbb;'; e.textContent = '—'; ev.appendChild(e); }
+
+    appts.forEach(a => {
+      const e = document.createElement('div');
+      e.className = 'week-event appointment';
+      e.textContent = `💅 ${a.name} ${a.time ? a.time : ''}`;
+      ev.appendChild(e);
+    });
+
+    repairs.forEach(a => {
+      const e = document.createElement('div');
+      e.className = 'week-event';
+      e.style.background = '#ff6f00';
+      e.textContent = `🔧 ترمیم ${a.name}`;
+      ev.appendChild(e);
+    });
+
+    notes.forEach(n => {
+      const e = document.createElement('div');
+      e.className = 'week-event';
+      e.textContent = `📝 ${n.title}`;
+      ev.appendChild(e);
+    });
+
+    if (!appts.length && !notes.length && !repairs.length) {
+      const e = document.createElement('div');
+      e.style.cssText = 'font-size:10px;color:#bbb;';
+      e.textContent = '—';
+      ev.appendChild(e);
+    }
+
     el.onclick = () => selectDay(day.jy, day.jm, day.jd);
     grid.appendChild(el);
   });
 }
 
-// ==================== Finance ====================
-let financeRange = { type: 'current_month', from: null, to: null };
-function setFinanceRange(type) { financeRange.type = type; financeRange.from = null; financeRange.to = null; renderFinance(); }
-function openFinanceDateModal() {
-  const modal = document.getElementById('financeDateModal');
-  const fromInput = document.getElementById('finFromDate');
-  const toInput = document.getElementById('finToDate');
-  if (financeRange.type === 'custom' && financeRange.from && financeRange.to) {
-    fromInput.value = `${financeRange.from.jy}/${String(financeRange.from.jm).padStart(2,'0')}/${String(financeRange.from.jd).padStart(2,'0')}`;
-    toInput.value = `${financeRange.to.jy}/${String(financeRange.to.jm).padStart(2,'0')}/${String(financeRange.to.jd).padStart(2,'0')}`;
-  } else {
-    const dim = jalaliMonthDays(todayJ[0], todayJ[1]);
-    fromInput.value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/01`;
-    toInput.value = `${todayJ[0]}/${String(todayJ[1]).padStart(2,'0')}/${String(dim).padStart(2,'0')}`;
-  }
-  modal.classList.add('show');
-  setTimeout(() => fromInput.focus(), 100);
-}
-function closeFinanceDateModal() { document.getElementById('financeDateModal').classList.remove('show'); }
-function applyFinanceDateRange() {
-  const fp = document.getElementById('finFromDate').value.trim().split('/');
-  const tp = document.getElementById('finToDate').value.trim().split('/');
-  if (fp.length !== 3 || tp.length !== 3) { showToast('⚠️ فرمت تاریخ درست نیست'); return; }
-  const fjy = parseInt(fp[0]), fjm = parseInt(fp[1]), fjd = parseInt(fp[2]);
-  const tjy = parseInt(tp[0]), tjm = parseInt(tp[1]), tjd = parseInt(tp[2]);
-  if (!fjy || !fjm || !fjd || fjy < 1300 || fjy > 1500 || fjm < 1 || fjm > 12 || fjd < 1 || fjd > 31) { showToast('⚠️ تاریخ شروع معتبر نیست'); return; }
-  if (!tjy || !tjm || !tjd || tjy < 1300 || tjy > 1500 || tjm < 1 || tjm > 12 || tjd < 1 || tjd > 31) { showToast('⚠️ تاریخ پایان معتبر نیست'); return; }
-  if (fjy*10000 + fjm*100 + fjd > tjy*10000 + tjm*100 + tjd) { showToast('⚠️ شروع باید قبل باشه'); return; }
-  financeRange.type = 'custom';
-  financeRange.from = { jy: fjy, jm: fjm, jd: fjd };
-  financeRange.to = { jy: tjy, jm: tjm, jd: tjd };
-  closeFinanceDateModal();
-  renderFinance();
-  showToast('✅ بازه اعمال شد');
-}
-function getFinanceRangeBounds() {
-  const t = todayJ;
-  if (financeRange.type === 'custom' && financeRange.from && financeRange.to) return { from: financeRange.from, to: financeRange.to, label: `${formatJalali(financeRange.from.jy, financeRange.from.jm, financeRange.from.jd)} تا ${formatJalali(financeRange.to.jy, financeRange.to.jm, financeRange.to.jd)}` };
-  if (financeRange.type === 'today') return { from: { jy: t[0], jm: t[1], jd: t[2] }, to: { jy: t[0], jm: t[1], jd: t[2] }, label: 'امروز' };
-  if (financeRange.type === 'last_month') {
-    let lm = t[1] - 1, ly = t[0];
-    if (lm < 1) { lm = 12; ly--; }
-    const dim = jalaliMonthDays(ly, lm);
-    return { from: { jy: ly, jm: lm, jd: 1 }, to: { jy: ly, jm: lm, jd: dim }, label: `ماه قبل` };
-  }
-  if (financeRange.type === 'last_3_months') {
-    let lm = t[1] - 2, ly = t[0];
-    while (lm < 1) { lm += 12; ly--; }
-    const dim = jalaliMonthDays(t[0], t[1]);
-    return { from: { jy: ly, jm: lm, jd: 1 }, to: { jy: t[0], jm: t[1], jd: dim }, label: '۳ ماه اخیر' };
-  }
-  if (financeRange.type === 'all') return { from: { jy: 1300, jm: 1, jd: 1 }, to: { jy: 1500, jm: 12, jd: 30 }, label: 'همه' };
-  const dim = jalaliMonthDays(t[0], t[1]);
-  return { from: { jy: t[0], jm: t[1], jd: 1 }, to: { jy: t[0], jm: t[1], jd: dim }, label: `این ماه` };
-}
-function isDateInRange(jy, jm, jd, from, to) {
-  const key = jy*10000 + jm*100 + jd;
-  return key >= from.jy*10000 + from.jm*100 + from.jd && key <= to.jy*10000 + to.jm*100 + to.jd;
-}
-function renderFinance() {
-  const bounds = getFinanceRangeBounds();
-  document.getElementById('financeRangeLabel').textContent = `— ${bounds.label}`;
-  document.getElementById('finFromDisplay').textContent = formatJalali(bounds.from.jy, bounds.from.jm, bounds.from.jd);
-  document.getElementById('finToDisplay').textContent = formatJalali(bounds.to.jy, bounds.to.jm, bounds.to.jd);
-  document.querySelectorAll('#rangeBtnCurrent, #rangeBtnLast, #rangeBtn3, #rangeBtnToday, #rangeBtnAll').forEach(b => { b.style.background = 'white'; b.style.color = '#ad1457'; b.style.borderColor = '#f8bbd0'; });
-  const btnMap = { 'current_month': 'rangeBtnCurrent', 'last_month': 'rangeBtnLast', 'last_3_months': 'rangeBtn3', 'today': 'rangeBtnToday', 'all': 'rangeBtnAll' };
-  if (financeRange.type !== 'custom' && btnMap[financeRange.type]) { const btn = document.getElementById(btnMap[financeRange.type]); if (btn) { btn.style.background = 'linear-gradient(135deg, #ad1457, #6a1b9a)'; btn.style.color = 'white'; btn.style.borderColor = 'transparent'; } }
-  const filterName = (document.getElementById('finFilterName').value || '').trim().toLowerCase();
-  const filterService = document.getElementById('finFilterService').value;
-  const filterPayment = document.getElementById('finFilterPayment').value;
-  let appts = data.appointments.filter(a => isDateInRange(a.jy, a.jm, a.jd, bounds.from, bounds.to));
-  let exps = data.expenses.filter(e => isDateInRange(e.jy, e.jm, e.jd, bounds.from, bounds.to));
-  if (filterName) appts = appts.filter(a => a.name.toLowerCase().includes(filterName));
-  if (filterService) appts = appts.filter(a => (a.services || (a.service ? a.service.split(' + ') : [])).includes(filterService));
-  if (filterPayment) appts = appts.filter(a => a.payment === filterPayment);
-  const income = appts.filter(a => a.payment === 'paid').reduce((s, a) => s + (a.amount || 0), 0);
-  const expense = exps.reduce((s, e) => s + (e.amount || 0), 0);
-  const pending = appts.filter(a => a.payment === 'pending').reduce((s, a) => s + (a.amount || 0), 0);
-  document.getElementById('finIncome').textContent = money(income);
-  document.getElementById('finExpense').textContent = money(expense);
-  document.getElementById('finProfit').textContent = money(income - expense);
-  document.getElementById('finPending').textContent = money(pending);
-  const ac = document.getElementById('financeAppointments');
-  if (!appts.length) ac.innerHTML = `<div class="empty-state"><span class="icon">💵</span>نوبتی پیدا نشد</div>`;
-  else ac.innerHTML = appts.sort((a,b) => a.jd - b.jd).map(a => {
-    const badge = a.payment === 'paid' ? '<span class="badge badge-paid">✓</span>' : '<span class="badge badge-pending">⏳</span>';
-    return `<div class="item ${a.payment === 'paid' ? 'paid' : 'pending'}"><div class="item-content"><div class="title"><span class="name-link" onclick="openCustomerHistory('${escapeHtml(a.name)}')">${escapeHtml(a.name)}</span> ${badge}</div><div class="detail">📅 ${formatJalali(a.jy, a.jm, a.jd)} — ${escapeHtml(a.service)}</div><div class="detail">💵 <b>${money(a.amount)}</b></div></div><button class="btn btn-sm btn-edit" onclick="openEdit('appointment','${a.id}')">✏️</button></div>`;
-  }).join('');
-  const ec = document.getElementById('financeExpenses');
-  if (!exps.length) ec.innerHTML = `<div class="empty-state"><span class="icon">💸</span>خرجی نیست</div>`;
-  else ec.innerHTML = exps.sort((a,b) => a.jd - b.jd).map(e => `<div class="item pending"><div class="item-content"><div class="title">${escapeHtml(e.title)}</div><div class="detail">📅 ${formatJalali(e.jy, e.jm, e.jd)}</div><div class="detail">💵 <b>${money(e.amount)}</b></div></div><button class="btn btn-sm btn-edit" onclick="openEdit('expense','${e.id}')">✏️</button></div>`).join('');
-}
-
 // ==================== Holidays ====================
 function renderHolidaysList() {
   const c = document.getElementById('holidaysList');
-  if (!data.holidays.length) { c.innerHTML = `<div class="empty-state">هیچ تعطیلی نیست</div>`; return; }
+  if (!data.holidays.length) {
+    c.innerHTML = `<div class="empty-state">هیچ تعطیلی ثبت نشده</div>`;
+    return;
+  }
+
   const sorted = [...data.holidays].sort((a, b) => (a.jm - b.jm) || (a.jd - b.jd));
+
   c.innerHTML = sorted.map(h => {
     const idx = data.holidays.indexOf(h);
-    return `<div class="item" style="border-right-color: #ec407a;"><div class="item-content"><div class="title">🎉 ${escapeHtml(h.title)}</div><div class="detail">📅 ${h.jd} ${persianMonths[h.jm-1]}</div></div><div class="item-actions"><button class="btn btn-sm btn-delete" onclick="deleteHoliday(${idx})">🗑️</button></div></div>`;
+    return `
+      <div class="item" style="border-right-color: #ec407a;">
+        <div class="item-content">
+          <div class="title">🎉 ${escapeHtml(h.title)}</div>
+          <div class="detail">📅 ${h.jd} ${persianMonths[h.jm-1]}</div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-sm btn-delete" onclick="deleteHoliday(${idx})">🗑️</button>
+        </div>
+      </div>
+    `;
   }).join('');
 }
+
 function addHoliday() {
   const jm = parseInt(document.getElementById('holidayMonth').value);
   const jd = parseInt(document.getElementById('holidayDay').value);
   const title = document.getElementById('holidayTitle').value.trim();
-  if (!jd || jd < 1 || jd > 31) { showToast('⚠️ روز معتبر'); return; }
-  if (!title) { showToast('⚠️ عنوان'); return; }
-  if (data.holidays.some(h => h.jm === jm && h.jd === jd)) { showToast('⚠️ قبلاً ثبت شده'); return; }
+
+  if (!jd || jd < 1 || jd > 31) { showToast('⚠️ روز معتبر وارد کنید'); return; }
+  if (!title) { showToast('⚠️ عنوان را وارد کنید'); return; }
+  if (data.holidays.some(h => h.jm === jm && h.jd === jd)) {
+    showToast('⚠️ این تاریخ قبلاً ثبت شده');
+    return;
+  }
+
   data.holidays.push({ jm, jd, title });
   save();
+
   document.getElementById('holidayDay').value = '';
   document.getElementById('holidayTitle').value = '';
   renderHolidaysList();
   renderCalendar();
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
-  showToast('✅ اضافه شد');
+  showToast('✅ تعطیلی افزوده شد');
 }
+
 function deleteHoliday(idx) {
   if (!confirm('مطمئنی؟')) return;
   data.holidays.splice(idx, 1);
@@ -2433,49 +2333,119 @@ function deleteHoliday(idx) {
   showToast('🗑️ حذف شد');
 }
 
+// ==================== Tabs ====================
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  if (tab === 'appointment') { document.querySelectorAll('.tab')[0].classList.add('active'); document.getElementById('appointmentTab').classList.add('active'); }
-  else if (tab === 'expense') { document.querySelectorAll('.tab')[1].classList.add('active'); document.getElementById('expenseTab').classList.add('active'); }
+
+  if (tab === 'appointment') {
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('appointmentTab').classList.add('active');
+  } else if (tab === 'note') {
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('noteTab').classList.add('active');
+  } else if (tab === 'expense') {
+    document.querySelectorAll('.tab')[2].classList.add('active');
+    document.getElementById('expenseTab').classList.add('active');
+  }
 }
 
-// ==================== Backup ====================
+// ==================== Backup & Restore ====================
 function renderBackupStats() {
   const stats = document.getElementById('backupStats');
   if (!stats) return;
+
+  const apptCount = data.appointments.length;
+  const noteCount = data.notes.length;
+  const expCount = data.expenses.length;
+  const holCount = data.holidays.length;
+
   stats.innerHTML = `
-    <div class="stat-card"><div class="stat-label">📌 نوبت‌ها</div><div class="stat-value">${data.appointments.length}</div></div>
-    <div class="stat-card"><div class="stat-label">📝 یادداشت‌ها</div><div class="stat-value">${data.notes.length}</div></div>
-    <div class="stat-card"><div class="stat-label">💸 خرج‌ها</div><div class="stat-value">${data.expenses.length}</div></div>
-    <div class="stat-card"><div class="stat-label">🎉 تعطیلات</div><div class="stat-value">${data.holidays.length}</div></div>
+    <div class="stat-card"><div class="stat-label">📌 نوبت‌ها</div><div class="stat-value">${apptCount}</div></div>
+    <div class="stat-card"><div class="stat-label">📝 یادداشت‌ها</div><div class="stat-value">${noteCount}</div></div>
+    <div class="stat-card"><div class="stat-label">💸 خرج‌ها</div><div class="stat-value">${expCount}</div></div>
+    <div class="stat-card"><div class="stat-label">🎉 تعطیلات</div><div class="stat-value">${holCount}</div></div>
   `;
 }
+
 function exportBackup() {
-  const backup = { version: '1.0', appName: 'خدمات اکستنشن مژه زهرا مطهری', exportDate: new Date().toISOString(), exportDateJalali: formatJalali(todayJ[0], todayJ[1], todayJ[2]), data };
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const backup = {
+    version: '1.0',
+    appName: 'خدمات اکستنشن مژه زهرا مطهری',
+    exportDate: new Date().toISOString(),
+    exportDateJalali: formatJalali(todayJ[0], todayJ[1], todayJ[2]),
+    data: data
+  };
+
+  const json = JSON.stringify(backup, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
+
   const a = document.createElement('a');
   a.href = url;
-  a.download = `backup-mashe-zahra-${todayJ[0]}-${String(todayJ[1]).padStart(2,'0')}-${String(todayJ[2]).padStart(2,'0')}.json`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  const fileName = `backup-mashe-zahra-${todayJ[0]}-${String(todayJ[1]).padStart(2,'0')}-${String(todayJ[2]).padStart(2,'0')}.json`;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
   showToast('💾 بکاپ دانلود شد');
 }
-function importBackup() { document.getElementById('backupFileInput').click(); }
+
+function importBackup() {
+  document.getElementById('backupFileInput').click();
+}
+
 function handleBackupFile(event) {
   const file = event.target.files[0];
   if (!file) return;
+
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
       const backup = JSON.parse(e.target.result);
-      if (!backup.data || !backup.data.appointments) { showToast('⚠️ فایل معتبر نیست'); event.target.value = ''; return; }
-      if (!confirm('مطمئنی؟ اطلاعات فعلی پاک می‌شه')) { event.target.value = ''; return; }
-      data = { appointments: backup.data.appointments || [], notes: backup.data.notes || [], expenses: backup.data.expenses || [], holidays: backup.data.holidays || [...DEFAULT_HOLIDAYS] };
+
+      if (!backup || !backup.data || !Array.isArray(backup.data.appointments) ||
+          (backup.data.notes !== undefined && !Array.isArray(backup.data.notes)) ||
+          (backup.data.expenses !== undefined && !Array.isArray(backup.data.expenses)) ||
+          (backup.data.holidays !== undefined && !Array.isArray(backup.data.holidays))) {
+        showToast('⚠️ فایل بکاپ معتبر نیست');
+        event.target.value = '';
+        return;
+      }
+
+      const apptCount = backup.data.appointments?.length || 0;
+      const noteCount = backup.data.notes?.length || 0;
+      const expCount = backup.data.expenses?.length || 0;
+      const holCount = backup.data.holidays?.length || 0;
+
+      const msg = `📂 اطلاعات فایل بکاپ:\n\n` +
+                  `📅 تاریخ بکاپ: ${backup.exportDateJalali || 'نامشخص'}\n\n` +
+                  `📌 نوبت‌ها: ${apptCount}\n` +
+                  `📝 یادداشت‌ها: ${noteCount}\n` +
+                  `💸 خرج‌ها: ${expCount}\n` +
+                  `🎉 تعطیلات: ${holCount}\n\n` +
+                  `⚠️ توجه: با تأیید، تمام اطلاعات فعلی پاک می‌شه و اطلاعات بکاپ جایگزین می‌شه!\n\n` +
+                  `مطمئنی؟`;
+
+      if (!confirm(msg)) {
+        event.target.value = '';
+        return;
+      }
+
+      data = normalizeData(backup.data);
+
       save();
+
       const t = getTodayJalali();
-      currentJY = t[0]; currentJM = t[1]; mainCurrentJY = t[0]; mainCurrentJM = t[1]; selJY = t[0]; selJM = t[1]; selJD = t[2];
-      updateCustomerDatalist(); renderCalendar(); updateHolidayWarning();
+      currentJY = t[0]; currentJM = t[1];
+      mainCurrentJY = t[0]; mainCurrentJM = t[1];
+      selJY = t[0]; selJM = t[1]; selJD = t[2];
+
+      updateCustomerDatalist();
+      renderCalendar();
+      updateHolidayWarning();
       if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
       if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
       if (document.getElementById('financePage').classList.contains('active')) renderFinance();
@@ -2483,21 +2453,57 @@ function handleBackupFile(event) {
       if (document.getElementById('holidaysPage').classList.contains('active')) renderHolidaysList();
       if (document.getElementById('backupPage').classList.contains('active')) renderBackupStats();
       if (document.getElementById('notesPage').classList.contains('active')) renderAllNotes();
+
       showToast('✅ بکاپ بازگردانی شد');
-    } catch (err) { showToast('⚠️ خطا'); }
+    } catch (err) {
+      console.error(err);
+      showToast('⚠️ خطا در خواندن فایل');
+    }
     event.target.value = '';
   };
   reader.readAsText(file);
 }
+
 function resetAll() {
-  if (data.appointments.length === 0 && data.notes.length === 0 && data.expenses.length === 0) { showToast('ℹ️ اطلاعاتی نیست'); return; }
-  if (!confirm('همه اطلاعات پاک می‌شه. مطمئنی؟')) return;
-  if (!confirm('آخرین تأیید؟')) return;
-  data = { appointments: [], notes: [], expenses: [], holidays: [...DEFAULT_HOLIDAYS] };
+  const totalAppts = data.appointments.length;
+  const totalNotes = data.notes.length;
+  const totalExps = data.expenses.length;
+
+  if (totalAppts === 0 && totalNotes === 0 && totalExps === 0) {
+    showToast('ℹ️ اطلاعاتی برای پاک کردن وجود نداره');
+    return;
+  }
+
+  const msg = `⚠️ هشدار مهم!\n\n` +
+              `می‌خوای همه اطلاعات رو پاک کنی؟\n\n` +
+              `📌 نوبت‌ها: ${totalAppts}\n` +
+              `📝 یادداشت‌ها: ${totalNotes}\n` +
+              `💸 خرج‌ها: ${totalExps}\n\n` +
+              `❗️ این کار قابل برگشت نیست!\n\n` +
+              `💡 پیشنهاد: قبلش یه بکاپ بگیر.\n\n` +
+              `مطمئنی؟`;
+
+  if (!confirm(msg)) return;
+
+  if (!confirm('آخرین تأیید: واقعاً مطمئنی؟ همه چیز پاک می‌شه!')) return;
+
+  data = {
+    appointments: [],
+    notes: [],
+    expenses: [],
+    holidays: [...DEFAULT_HOLIDAYS]
+  };
+
   save();
+
   const t = getTodayJalali();
-  currentJY = t[0]; currentJM = t[1]; mainCurrentJY = t[0]; mainCurrentJM = t[1]; selJY = t[0]; selJM = t[1]; selJD = t[2];
-  updateCustomerDatalist(); renderCalendar(); updateHolidayWarning();
+  currentJY = t[0]; currentJM = t[1];
+  mainCurrentJY = t[0]; mainCurrentJM = t[1];
+  selJY = t[0]; selJM = t[1]; selJD = t[2];
+
+  updateCustomerDatalist();
+  renderCalendar();
+  updateHolidayWarning();
   if (document.getElementById('calendarPage').classList.contains('active')) renderCalendarMain();
   if (document.getElementById('customersPage').classList.contains('active')) renderCustomers();
   if (document.getElementById('financePage').classList.contains('active')) renderFinance();
@@ -2505,7 +2511,8 @@ function resetAll() {
   if (document.getElementById('holidaysPage').classList.contains('active')) renderHolidaysList();
   if (document.getElementById('backupPage').classList.contains('active')) renderBackupStats();
   if (document.getElementById('notesPage').classList.contains('active')) renderAllNotes();
-  showToast('🔄 همه پاک شد');
+
+  showToast('🔄 همه اطلاعات بازنشانی شد');
 }
 
 // ==================== Init ====================
@@ -2516,3 +2523,4 @@ updateHolidayWarning();
 
 </body>
 </html>
+
